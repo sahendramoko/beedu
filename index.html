@@ -1,84 +1,201 @@
-<script type="text/javascript">
-        var gk_isXlsx = false;
-        var gk_xlsxFileLookup = {};
-        var gk_fileData = {};
-        function filledCell(cell) {
-          return cell !== '' && cell != null;
-        }
-        function loadFileData(filename) {
-        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
-            try {
-                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
-                var firstSheetName = workbook.SheetNames[0];
-                var worksheet = workbook.Sheets[firstSheetName];
-
-                // Convert sheet to JSON to filter blank rows
-                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
-                // Filter out blank rows (rows where all cells are empty, null, or undefined)
-                var filteredData = jsonData.filter(row => row.some(filledCell));
-
-                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
-                var headerRowIndex = filteredData.findIndex((row, index) =>
-                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
-                );
-                // Fallback
-                if (headerRowIndex === -1 || headerRowIndex > 25) {
-                  headerRowIndex = 0;
-                }
-
-                // Convert filtered JSON back to CSV
-                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
-                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
-                return csv;
-            } catch (e) {
-                console.error(e);
-                return "";
-            }
-        }
-        return gk_fileData[filename] || "";
-        }
-        </script><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="BeEdu: Platform les privat online yang personal dan interaktif untuk siswa SD-SMA dan mahasiswa. Belajar jadi lebih menyenangkan dengan teknologi AI dan gamifikasi.">
+  <meta name="keywords" content="les privat online, pembelajaran personal, edtech Indonesia, belajar online, AI pendidikan">
+  <meta name="author" content="BeEdu Team">
   <title>BeEdu: Learn, Grow, Succeed</title>
-  <!-- Bootstrap CSS via CDN -->
+  <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Google Fonts: Poppins -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <!-- AOS (Animate On Scroll) -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <!-- Swiper CSS -->
+  <link href="https://unpkg.com/swiper/swiper-bundle.min.css" rel="stylesheet">
+  <!-- FontAwesome for Icons -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <!-- Custom CSS -->
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Poppins', sans-serif;
+      background-color: #f5f7fa;
+      color: #333;
     }
+    /* Navbar */
+    .navbar {
+      background-color: #ffffff;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    .navbar-brand {
+      font-weight: 700;
+      color: #007bff !important;
+    }
+    .nav-link {
+      color: #333 !important;
+      font-weight: 500;
+    }
+    .nav-link:hover {
+      color: #007bff !important;
+    }
+    /* Hero Section */
     .hero-section {
-      background-color: #007bff;
+      background: linear-gradient(135deg, #007bff 0%, #00c4b4 100%);
       color: white;
-      padding: 60px 0;
-      text-align: center;
+      padding: 100px 0;
+      position: relative;
+      overflow: hidden;
     }
+    .hero-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('https://source.unsplash.com/1600x900/?education,learning') no-repeat center center/cover;
+      opacity: 0.2;
+    }
+    .hero-section h1 {
+      font-size: 3rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+    .hero-section p {
+      font-size: 1.2rem;
+      margin-bottom: 30px;
+    }
+    .btn-hero {
+      background-color: #ffd700;
+      color: #333;
+      font-weight: 600;
+      padding: 12px 30px;
+      border-radius: 30px;
+      transition: transform 0.3s ease;
+    }
+    .btn-hero:hover {
+      transform: scale(1.05);
+      background-color: #ffca28;
+    }
+    /* Features Section */
     .feature-card {
       padding: 20px;
       text-align: center;
+      background-color: #fff;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease;
     }
-    .feature-card img {
-      max-width: 100px;
+    .feature-card:hover {
+      transform: translateY(-10px);
+    }
+    .feature-card i {
+      font-size: 2.5rem;
+      color: #007bff;
       margin-bottom: 15px;
     }
-    .form-section {
-      background-color: #f8f9fa;
-      padding: 40px 0;
+    /* Testimonial Section */
+    .testimonial-section {
+      background-color: #e9ecef;
+      padding: 60px 0;
     }
+    .swiper-slide {
+      text-align: center;
+      padding: 20px;
+    }
+    .testimonial-card {
+      background-color: #fff;
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+    /* FAQ Section */
+    .faq-section {
+      padding: 60px 0;
+    }
+    .accordion-button {
+      font-weight: 600;
+    }
+    /* Form Section */
+    .form-section {
+      background-color: #fff;
+      padding: 60px 0;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+    /* Footer */
     footer {
       background-color: #343a40;
       color: white;
-      padding: 20px 0;
+      padding: 30px 0;
       text-align: center;
+    }
+    footer a {
+      color: #ffd700;
+      text-decoration: none;
+    }
+    footer a:hover {
+      color: #ffca28;
+    }
+    /* WhatsApp Button */
+    .whatsapp-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #25d366;
+      color: white;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+      transition: transform 0.3s ease;
+    }
+    .whatsapp-btn:hover {
+      transform: scale(1.1);
+    }
+    /* Scroll to Top Button */
+    .scroll-to-top {
+      position: fixed;
+      bottom: 90px;
+      right: 20px;
+      background-color: #007bff;
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+      transition: opacity 0.3s ease;
+    }
+    .scroll-to-top.show {
+      display: flex;
+    }
+    .scroll-to-top:hover {
+      background-color: #0056b3;
+    }
+    /* Modal Pop-Up */
+    .modal-content {
+      border-radius: 15px;
+      text-align: center;
+    }
+    .modal-header {
+      background-color: #007bff;
+      color: white;
+      border-radius: 15px 15px 0 0;
     }
   </style>
 </head>
 <body>
   <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <nav class="navbar navbar-expand-lg navbar-light fixed-top">
     <div class="container">
       <a class="navbar-brand" href="#">BeEdu</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -90,10 +207,13 @@
             <a class="nav-link" href="#home">Beranda</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#about">Tentang</a>
+            <a class="nav-link" href="#features">Fitur</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#features">Fitur</a>
+            <a class="nav-link" href="#testimonials">Testimoni</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#faq">FAQ</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#contact">Kontak</a>
@@ -105,40 +225,121 @@
 
   <!-- Hero Section -->
   <section id="home" class="hero-section">
-    <div class="container">
-      <h1>BeEdu: Learn, Grow, Succeed</h1>
-      <p>Les privat online yang personal dan interaktif untuk membantu kamu mencapai potensi maksimal!</p>
-      <a href="#contact" class="btn btn-light btn-lg">Daftar Sesi Gratis</a>
-    </div>
-  </section>
-
-  <!-- About Section -->
-  <section id="about" class="py-5">
-    <div class="container">
-      <h2 class="text-center mb-4">Tentang BeEdu</h2>
-      <p class="text-center">BeEdu adalah platform pembelajaran online yang menawarkan les privat interaktif dengan pendekatan personalisasi berbasis teknologi. Kami membantu siswa dari SD hingga SMA, serta mahasiswa, untuk belajar dengan cara yang menyenangkan dan efektif.</p>
+    <div class="container position-relative">
+      <div class="row align-items-center">
+        <div class="col-md-7" data-aos="fade-right">
+          <h1>BeEdu: Learn, Grow, Succeed</h1>
+          <p>Les privat online yang personal dan interaktif untuk membantu kamu mencapai potensi maksimal!</p>
+          <a href="#contact" class="btn btn-hero">Daftar Sesi Gratis</a>
+        </div>
+        <div class="col-md-5" data-aos="fade-left">
+          <img src="https://source.unsplash.com/600x400/?student,learning" alt="Student Learning" class="img-fluid rounded">
+        </div>
+      </div>
     </div>
   </section>
 
   <!-- Features Section -->
-  <section id="features" class="py-5 bg-light">
+  <section id="features" class="py-5">
     <div class="container">
-      <h2 class="text-center mb-4">Fitur Unggulan</h2>
+      <h2 class="text-center mb-5" data-aos="fade-up">Fitur Unggulan</h2>
       <div class="row">
-        <div class="col-md-4 feature-card">
-          <img src="https://via.placeholder.com/100" alt="Personalisasi">
-          <h3>Personalisasi AI</h3>
-          <p>Materi dan metode belajar disesuaikan dengan kebutuhan dan gaya belajar kamu.</p>
+        <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="100">
+          <div class="feature-card">
+            <i class="fas fa-robot"></i>
+            <h3>Personalisasi AI</h3>
+            <p>Materi dan metode belajar disesuaikan dengan kebutuhan dan gaya belajar kamu.</p>
+          </div>
         </div>
-        <div class="col-md-4 feature-card">
-          <img src="https://via.placeholder.com/100" alt="Fleksibel">
-          <h3>Akses Fleksibel</h3>
-          <p>Les privat 1-on-1 atau kelompok kecil, tersedia 24/7 dengan rekaman sesi.</p>
+        <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="200">
+          <div class="feature-card">
+            <i class="fas fa-clock"></i>
+            <h3>Akses Fleksibel</h3>
+            <p>Les privat 1-on-1 atau kelompok kecil, tersedia 24/7 dengan rekaman sesi.</p>
+          </div>
         </div>
-        <div class="col-md-4 feature-card">
-          <img src="https://via.placeholder.com/100" alt="Gamifikasi">
-          <h3>Gamifikasi</h3>
-          <p>Dapatkan poin, badge, dan hadiah untuk meningkatkan motivasi belajar.</p>
+        <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="300">
+          <div class="feature-card">
+            <i class="fas fa-trophy"></i>
+            <h3>Gamifikasi</h3>
+            <p>Dapatkan poin, badge, dan hadiah untuk meningkatkan motivasi belajar.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonial Section -->
+  <section id="testimonials" class="testimonial-section">
+    <div class="container">
+      <h2 class="text-center mb-5" data-aos="fade-up">Apa Kata Mereka</h2>
+      <div class="swiper-container">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide">
+            <div class="testimonial-card" data-aos="zoom-in">
+              <p>"BeEdu membantu saya paham matematika dengan cara yang menyenangkan. Tutornya sabar dan materinya pas untuk saya!"</p>
+              <h5>Alya, Siswa SMA</h5>
+            </div>
+          </div>
+          <div class="swiper-slide">
+            <div class="testimonial-card" data-aos="zoom-in">
+              <p>"Saya suka fitur gamifikasinya! Belajar jadi tidak membosankan, dan saya lebih termotivasi."</p>
+              <h5>Rio, Siswa SMP</h5>
+            </div>
+          </div>
+          <div class="swiper-slide">
+            <div class="testimonial-card" data-aos="zoom-in">
+              <p>"Sebagai orang tua, saya senang melihat laporan kemajuan anak saya. BeEdu sangat membantu!"</p>
+              <h5>Ibu Sari, Orang Tua</h5>
+            </div>
+          </div>
+        </div>
+        <!-- Add Pagination -->
+        <div class="swiper-pagination"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section id="faq" class="faq-section">
+    <div class="container">
+      <h2 class="text-center mb-5" data-aos="fade-up">Pertanyaan Umum</h2>
+      <div class="accordion" id="faqAccordion" data-aos="fade-up">
+        <div class="accordion-item">
+          <h2 class="accordion-header">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+              Apa itu BeEdu?
+            </button>
+          </h2>
+          <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+            <div class="accordion-body">
+              BeEdu adalah platform les privat online yang menawarkan pembelajaran personal dan interaktif dengan teknologi AI dan gamifikasi.
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+              Bagaimana cara mendaftar?
+            </button>
+          </h2>
+          <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+            <div class="accordion-body">
+              Kamu bisa mendaftar dengan mengisi formulir di bagian kontak. Kami akan menghubungi kamu untuk sesi gratis pertama!
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+              Apakah ada biaya?
+            </button>
+          </h2>
+          <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+            <div class="accordion-body">
+              Kami menawarkan sesi gratis untuk pengenalan. Setelah itu, kamu bisa memilih paket bulanan atau per sesi dengan harga terjangkau.
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -147,8 +348,8 @@
   <!-- Contact/Form Section -->
   <section id="contact" class="form-section">
     <div class="container">
-      <h2 class="text-center mb-4">Daftar Sekarang</h2>
-      <form action="https://formsubmit.co/saptohendratmoko@gmail.com" method="POST" class="w-50 mx-auto">
+      <h2 class="text-center mb-5" data-aos="fade-up">Daftar Sekarang</h2>
+      <form action="https://formsubmit.co/your-email@example.com" method="POST" class="w-50 mx-auto" data-aos="fade-up">
         <div class="mb-3">
           <label for="name" class="form-label">Nama</label>
           <input type="text" class="form-control" id="name" name="name" required>
@@ -161,7 +362,7 @@
           <label for="needs" class="form-label">Kebutuhan Belajar</label>
           <textarea class="form-control" id="needs" name="needs" rows="4"></textarea>
         </div>
-        <button type="submit" class="btn btn-primary">Kirim</button>
+        <button type="submit" class="btn btn-primary w-100">Kirim</button>
       </form>
     </div>
   </section>
@@ -169,11 +370,78 @@
   <!-- Footer -->
   <footer>
     <div class="container">
-      <p>&copy; 2025 BeEdu. Kontak kami: <a href="mailto:info@beedu.com">info@beedu.com</a> | <a href="https://wa.me/081367315144">WhatsApp</a> | <a href="https://t.me/081367315144">Telegram</a></p>
+      <p>© 2025 BeEdu. Kontak kami: <a href="mailto:info@beedu.com">info@beedu.com</a> | <a href="https://wa.me/1234567890">WhatsApp</a> | <a href="https://t.me/beedu">Telegram</a></p>
     </div>
   </footer>
 
-  <!-- Bootstrap JS via CDN -->
+  <!-- WhatsApp Floating Button -->
+  <a href="https://wa.me/1234567890" class="whatsapp-btn" target="_blank">
+    <i class="fab fa-whatsapp"></i>
+  </a>
+
+  <!-- Scroll to Top Button -->
+  <a href="#home" class="scroll-to-top">
+    <i class="fas fa-chevron-up"></i>
+  </a>
+
+  <!-- Modal Pop-Up -->
+  <div class="modal fade" id="welcomeModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Selamat Datang di BeEdu!</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>Dapatkan sesi les gratis pertama kamu! Daftar sekarang dan mulai belajar dengan cara yang menyenangkan.</p>
+          <a href="#contact" class="btn btn-primary" data-bs-dismiss="modal">Daftar Sekarang</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- AOS JS -->
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <!-- Swiper JS -->
+  <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+  <!-- Custom JS -->
+  <script>
+    // Initialize AOS
+    AOS.init({
+      duration: 1000,
+      once: true
+    });
+
+    // Initialize Swiper
+    const swiper = new Swiper('.swiper-container', {
+      loop: true,
+      autoplay: {
+        delay: 3000,
+        disableOnInteraction: false,
+      },
+      pagination: {
+        el: '.swiper-pagination',
+        clickable: true,
+      },
+    });
+
+    // Show Modal on Page Load
+    window.onload = function() {
+      const welcomeModal = new bootstrap.Modal(document.getElementById('welcomeModal'));
+      welcomeModal.show();
+    };
+
+    // Scroll to Top Button
+    const scrollToTopBtn = document.querySelector('.scroll-to-top');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 300) {
+        scrollToTopBtn.classList.add('show');
+      } else {
+        scrollToTopBtn.classList.remove('show');
+      }
+    });
+  </script>
 </body>
 </html>
