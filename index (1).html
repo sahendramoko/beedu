@@ -1,43 +1,4 @@
-<script type="text/javascript">
-        var gk_isXlsx = false;
-        var gk_xlsxFileLookup = {};
-        var gk_fileData = {};
-        function filledCell(cell) {
-          return cell !== '' && cell != null;
-        }
-        function loadFileData(filename) {
-        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
-            try {
-                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
-                var firstSheetName = workbook.SheetNames[0];
-                var worksheet = workbook.Sheets[firstSheetName];
-
-                // Convert sheet to JSON to filter blank rows
-                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
-                // Filter out blank rows (rows where all cells are empty, null, or undefined)
-                var filteredData = jsonData.filter(row => row.some(filledCell));
-
-                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
-                var headerRowIndex = filteredData.findIndex((row, index) =>
-                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
-                );
-                // Fallback
-                if (headerRowIndex === -1 || headerRowIndex > 25) {
-                  headerRowIndex = 0;
-                }
-
-                // Convert filtered JSON back to CSV
-                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
-                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
-                return csv;
-            } catch (e) {
-                console.error(e);
-                return "";
-            }
-        }
-        return gk_fileData[filename] || "";
-        }
-        </script><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8">
@@ -47,15 +8,15 @@
   <meta name="author" content="BeEdu Team">
   <title>BeEdu: Learn, Grow, Succeed</title>
   <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" onerror="this.href='https://stackpath.bootstrapcdn.com/bootstrap/5.3.2/css/bootstrap.min.css'; this.onerror=null;">
   <!-- Google Fonts: Poppins -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet" onerror="this.href='https://fonts.cdnfonts.com/css/poppins'; this.onerror=null;">
   <!-- AOS (Animate On Scroll) -->
-  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" onerror="this.href='https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.1/aos.css'; this.onerror=null;">
   <!-- Swiper CSS -->
-  <link href="https://unpkg.com/swiper/swiper-bundle.min.css" rel="stylesheet">
+  <link href="https://unpkg.com/swiper/swiper-bundle.min.css" rel="stylesheet" onerror="this.href='https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css'; this.onerror=null;">
   <!-- FontAwesome for Icons -->
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" onerror="this.href='https://use.fontawesome.com/releases/v6.4.0/css/all.css'; this.onerror=null;">
   <!-- Custom CSS -->
   <style>
     body {
@@ -63,7 +24,6 @@
       background-color: #f5f7fa;
       color: #333;
     }
-    /* Navbar */
     .navbar {
       background-color: #ffffff;
       box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -79,7 +39,6 @@
     .nav-link:hover {
       color: #007bff !important;
     }
-    /* Hero Section */
     .hero-section {
       background: linear-gradient(135deg, #007bff 0%, #00c4b4 100%);
       color: white;
@@ -94,7 +53,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: url('https://source.unsplash.com/1600x900/?education,learning') no-repeat center center/cover;
+      background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==') no-repeat center center/cover;
       opacity: 0.2;
     }
     .hero-section h1 {
@@ -118,7 +77,6 @@
       transform: scale(1.05);
       background-color: #ffca28;
     }
-    /* Features Section */
     .feature-card {
       padding: 20px;
       text-align: center;
@@ -135,7 +93,6 @@
       color: #007bff;
       margin-bottom: 15px;
     }
-    /* Testimonial Section */
     .testimonial-section {
       background-color: #e9ecef;
       padding: 60px 0;
@@ -150,20 +107,17 @@
       padding: 20px;
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
     }
-    /* FAQ Section */
-    .faq-section {
+    .faq-section, .blog-section, .payment-section, .profile-section, .parent-section {
       padding: 60px 0;
     }
     .accordion-button {
       font-weight: 600;
     }
-    /* Form Section */
     .form-section {
       background-color: #fff;
       padding: 60px 0;
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
     }
-    /* Footer */
     footer {
       background-color: #343a40;
       color: white;
@@ -177,8 +131,7 @@
     footer a:hover {
       color: #ffca28;
     }
-    /* WhatsApp Button */
-    .whatsapp-btn {
+    .whatsapp-btn, .login-btn {
       position: fixed;
       bottom: 20px;
       right: 20px;
@@ -193,11 +146,15 @@
       font-size: 1.5rem;
       box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
       transition: transform 0.3s ease;
+      z-index: 1000;
     }
-    .whatsapp-btn:hover {
+    .login-btn {
+      background-color: #007bff;
+      right: 100px;
+    }
+    .whatsapp-btn:hover, .login-btn:hover {
       transform: scale(1.1);
     }
-    /* Scroll to Top Button */
     .scroll-to-top {
       position: fixed;
       bottom: 90px;
@@ -220,7 +177,6 @@
     .scroll-to-top:hover {
       background-color: #0056b3;
     }
-    /* Modal Pop-Up */
     .modal-content {
       border-radius: 15px;
       text-align: center;
@@ -229,6 +185,51 @@
       background-color: #007bff;
       color: white;
       border-radius: 15px 15px 0 0;
+    }
+    .blog-card {
+      background-color: #fff;
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+    }
+    .payment-section img {
+      max-width: 200px;
+      margin: 20px 0;
+    }
+    #userProfile {
+      display: none;
+      color: green;
+      text-align: center;
+      margin-top: 10px;
+    }
+    .profile-card, .parent-card {
+      background-color: #fff;
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .progress-bar {
+      height: 20px;
+      background-color: #e9ecef;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .progress {
+      height: 100%;
+      background-color: #007bff;
+      text-align: right;
+      padding-right: 10px;
+      color: white;
+      transition: width 0.3s ease;
+    }
+    .edit-form {
+      display: none;
+    }
+    .edit-form.show {
+      display: block;
     }
   </style>
 </head>
@@ -241,7 +242,7 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto">
+        <ul class="navbar-nav ms-auto" id="navItems">
           <li class="nav-item">
             <a class="nav-link" href="#home">Beranda</a>
           </li>
@@ -255,7 +256,19 @@
             <a class="nav-link" href="#faq">FAQ</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#contact">Kontak</a>
+            <a class="nav-link" href="#blog">Blog</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#payment">Pembayaran</a>
+          </li>
+          <li class="nav-item" id="profileItem" style="display: none;">
+            <a class="nav-link" href="#" id="userProfileNav">Profil</a>
+          </li>
+          <li class="nav-item" id="logoutItem" style="display: none;">
+            <a class="nav-link" href="#" id="logoutBtn">Logout</a>
+          </li>
+          <li class="nav-item" id="parentItem" style="display: none;">
+            <a class="nav-link" href="#" id="parentDashboardNav">Monitoring Anak</a>
           </li>
         </ul>
       </div>
@@ -272,7 +285,7 @@
           <a href="#contact" class="btn btn-hero">Daftar Sesi Gratis</a>
         </div>
         <div class="col-md-5" data-aos="fade-left">
-          <img src="https://source.unsplash.com/600x400/?student,learning" alt="Student Learning" class="img-fluid rounded">
+          <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==" alt="Student Learning" class="img-fluid rounded" onerror="this.style.display='none';">
         </div>
       </div>
     </div>
@@ -304,6 +317,27 @@
             <p>Dapatkan poin, badge, dan hadiah untuk meningkatkan motivasi belajar.</p>
           </div>
         </div>
+        <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="400">
+          <div class="feature-card">
+            <i class="fas fa-eye"></i>
+            <h3>Monitoring Orang Tua</h3>
+            <p>Orang tua dapat memantau progress, poin, dan riwayat belajar anak secara real-time.</p>
+          </div>
+        </div>
+        <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="500">
+          <div class="feature-card">
+            <i class="fas fa-chalkboard-teacher"></i>
+            <h3>Saran dari Tentor</h3>
+            <p>Tentor dapat memberikan saran perkembangan anak langsung ke orang tua via WhatsApp.</p>
+          </div>
+        </div>
+        <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="600">
+          <div class="feature-card">
+            <i class="fas fa-edit"></i>
+            <h3>Edit Profil</h3>
+            <p>Kelola dan perbarui data profil kamu dengan mudah kapan saja.</p>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -333,7 +367,6 @@
             </div>
           </div>
         </div>
-        <!-- Add Pagination -->
         <div class="swiper-pagination"></div>
       </div>
     </div>
@@ -364,7 +397,7 @@
           </h2>
           <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
             <div class="accordion-body">
-              Kamu bisa mendaftar dengan mengisi formulir di bagian kontak. Kami akan menghubungi kamu untuk sesi gratis pertama!
+              Kamu bisa mendaftar sebagai siswa dengan mengisi formulir di bagian kontak.
             </div>
           </div>
         </div>
@@ -384,11 +417,55 @@
     </div>
   </section>
 
+  <!-- Blog Section -->
+  <section id="blog" class="blog-section">
+    <div class="container">
+      <h2 class="text-center mb-5" data-aos="fade-up">Berita & Prestasi</h2>
+      <div class="row">
+        <div class="col-md-6" data-aos="fade-up">
+          <div class="blog-card">
+            <h4>Siswa Terbaik Bulan Ini: Alya!</h4>
+            <p>Alya berhasil meraih poin tertinggi dalam gamifikasi bulan ini dengan menyelesaikan 20 sesi belajar dan mendapatkan badge "Super Learner". Selamat, Alya!</p>
+            <small>6 Juni 2025</small>
+          </div>
+        </div>
+        <div class="col-md-6" data-aos="fade-up" data-aos-delay="100">
+          <div class="blog-card">
+            <h4>Peringkat Gamifikasi Minggu Ini</h4>
+            <p>5 siswa teratas: 1. Alya (1200 poin), 2. Rio (1100 poin), 3. Siti (1000 poin), 4. Budi (900 poin), 5. Dika (850 poin). Teruskan semangat belajarnya!</p>
+            <small>6 Juni 2025</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Payment Section -->
+  <section id="payment" class="payment-section">
+    <div class="container">
+      <h2 class="text-center mb-5" data-aos="fade-up">Metode Pembayaran</h2>
+      <div class="row">
+        <div class="col-md-6" data-aos="fade-up">
+          <h4>Transfer Bank</h4>
+          <p>Silakan transfer ke rekening berikut:</p>
+          <p><strong>Bank:</strong> BCA<br>
+             <strong>Nomor Rekening:</strong> 123-456-7890<br>
+             <strong>Atas Nama:</strong> BeEdu Indonesia</p>
+        </div>
+        <div class="col-md-6" data-aos="fade-up" data-aos-delay="100">
+          <h4>QRIS</h4>
+          <p>Scan kode QRIS berikut untuk pembayaran cepat:</p>
+          <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==" alt="QRIS BeEdu" class="img-fluid" onerror="this.style.display='none';">
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- Contact/Form Section -->
   <section id="contact" class="form-section">
     <div class="container">
       <h2 class="text-center mb-5" data-aos="fade-up">Daftar Sekarang</h2>
-      <form action="https://formsubmit.co/your-email@example.com" method="POST" class="w-50 mx-auto" data-aos="fade-up">
+      <form id="registrationForm" class="w-50 mx-auto" data-aos="fade-up">
         <div class="mb-3">
           <label for="name" class="form-label">Nama</label>
           <input type="text" class="form-control" id="name" name="name" required>
@@ -398,30 +475,167 @@
           <input type="email" class="form-control" id="email" name="email" required>
         </div>
         <div class="mb-3">
+          <label for="whatsapp" class="form-label">Nomor WhatsApp</label>
+          <input type="text" class="form-control" id="whatsapp" name="whatsapp" pattern="^08[1-9][0-9]{8,11}$" placeholder="Contoh: 081367315144" required>
+        </div>
+        <input type="hidden" id="role" name="role" value="student">
+        <div class="mb-3">
           <label for="needs" class="form-label">Kebutuhan Belajar</label>
-          <textarea class="form-control" id="needs" name="needs" rows="4"></textarea>
+          <textarea class="form-control" id="needs" name="needs" rows="4" required></textarea>
         </div>
         <button type="submit" class="btn btn-primary w-100">Kirim</button>
       </form>
+      <div id="successMessage" class="text-center mt-3" style="display: none; color: green;">
+        Data berhasil disimpan! Kami akan segera menghubungi kamu di saptohendratmoko@gmail.com.
+      </div>
+      <div id="errorMessage" class="text-center mt-3" style="display: none; color: red;"></div>
+    </div>
+  </section>
+
+  <!-- Profile Section -->
+  <section id="profile" class="profile-section" style="display: none;">
+    <div class="container">
+      <h2 class="text-center mb-5" data-aos="fade-up">Profil Saya</h2>
+      <div class="row">
+        <div class="col-md-12" data-aos="fade-up">
+          <div class="profile-card" id="profileContent">
+            <h4 id="profileName"></h4>
+            <p id="profileEmail"></p>
+            <p id="profileRole"></p>
+            <p id="profileWhatsapp"></p>
+            <div class="mb-3">
+              <h5>Progress Belajar</h5>
+              <div class="progress-bar">
+                <div class="progress" id="progressBar" style="width: 0%;">0%</div>
+              </div>
+            </div>
+            <div class="mb-3" id="gamificationStats">
+              <h5>Poin Gamifikasi: <span id="gamificationPoints">0</span></h5>
+            </div>
+            <div class="mb-3" id="learningHistory">
+              <h5>Riwayat Belajar</h5>
+              <ul id="historyList"></ul>
+            </div>
+            <div class="mb-3" id="teachingSchedule" style="display: none;">
+              <h5>Jadwal Mengajar</h5>
+              <ul id="scheduleList"></ul>
+              <button class="btn btn-success mt-3" id="sendAdviceBtn" style="display: none;">Kirim Saran ke Orang Tua</button>
+            </div>
+            <div class="mb-3">
+              <button class="btn btn-primary" id="editProfileBtn">Edit Profil</button>
+            </div>
+            <div class="edit-form" id="editForm">
+              <form id="editProfileForm">
+                <div class="mb-3">
+                  <label for="editName" class="form-label">Nama</label>
+                  <input type="text" class="form-control" id="editName" required>
+                </div>
+                <div class="mb-3">
+                  <label for="editEmail" class="form-label">Email</label>
+                  <input type="email" class="form-control" id="editEmail" required>
+                </div>
+                <div class="mb-3">
+                  <label for="editWhatsapp" class="form-label">Nomor WhatsApp</label>
+                  <input type="text" class="form-control" id="editWhatsapp" pattern="^08[1-9][0-9]{8,11}$" placeholder="Contoh: 081367315144" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                <button type="button" class="btn btn-secondary ms-2" id="cancelEditBtn">Batal</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Parent Monitoring Section -->
+  <section id="parent" class="parent-section" style="display: none;">
+    <div class="container">
+      <h2 class="text-center mb-5" data-aos="fade-up">Monitoring Perkembangan Anak</h2>
+      <div class="row">
+        <div class="col-md-12" data-aos="fade-up">
+          <div class="parent-card" id="parentContent">
+            <h4 id="childName"></h4>
+            <p id="childProgress"></p>
+            <p id="childPoints"></p>
+            <h5>Riwayat Belajar Anak</h5>
+            <ul id="childHistoryList"></ul>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
   <!-- Footer -->
   <footer>
     <div class="container">
-      <p>© 2025 BeEdu. Kontak kami: <a href="mailto:info@beedu.com">info@beedu.com</a> | <a href="https://wa.me/1234567890">WhatsApp</a> | <a href="https://t.me/beedu">Telegram</a></p>
-    </div>
-  </footer>
+      <p>© 2025 BeEdu. Kontak kami: <a href="mailto:saptohendratmoko@gmail.com">saptohendratmoko@gmail.com</a> | <a href="https://wa.me/6281367315144">WhatsApp</a> | <a href="https://t.me/6281367315144">Telegram</a></p>
+    </footer>
 
   <!-- WhatsApp Floating Button -->
-  <a href="https://wa.me/1234567890" class="whatsapp-btn" target="_blank">
+  <a href="https://wa.me/6281367315144" class="whatsapp-btn" target="_blank">
     <i class="fab fa-whatsapp"></i>
+  </a>
+
+  <!-- Login Floating Button -->
+  <a href="#" class="login-btn" data-bs-toggle="modal" data-bs-target="#loginModal">
+    <i class="fas fa-sign-in-alt"></i>
   </a>
 
   <!-- Scroll to Top Button -->
   <a href="#home" class="scroll-to-top">
     <i class="fas fa-chevron-up"></i>
   </a>
+
+  <!-- Login Modal -->
+  <div class="modal fade" id="loginModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Login</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <button id="googleLoginStudent" class="btn btn-primary w-100 mb-3">Login sebagai Siswa</button>
+          <button id="googleLoginTutor" class="btn btn-primary w-100 mb-3">Login sebagai Tentor</button>
+          <button id="googleLoginParent" class="btn btn-primary w-100 mb-3">Login sebagai Orang Tua</button>
+          <div class="mb-3">
+            <label for="loginEmail" class="form-label">Email</label>
+            <input type="email" class="form-control" id="loginEmail" required>
+          </div>
+          <div class="mb-3">
+            <label for="loginPassword" class="form-label">Password</label>
+            <input type="password" class="form-control" id="loginPassword" required>
+          </div>
+          <button id="emailLogin" class="btn btn-primary w-100">Login</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Register Modal -->
+  <div class="modal fade" id="registerModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Daftar Akun</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <button id="googleRegister" class="btn btn-danger w-100 mb-3">Daftar with Google</button>
+          <div class="mb-3">
+            <label for="registerEmail" class="form-label">Email</label>
+            <input type="email" class="form-control" id="registerEmail" required>
+          </div>
+          <div class="mb-3">
+            <label for="registerPassword" class="form-label">Password</label>
+            <input type="password" class="form-control" id="registerPassword" required>
+          </div>
+          <button id="emailRegister" class="btn btn-primary w-100">Daftar</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- Modal Pop-Up -->
   <div class="modal fade" id="welcomeModal" tabindex="-1" aria-hidden="true">
@@ -439,14 +653,399 @@
     </div>
   </div>
 
+  <!-- Package Selection Modal -->
+  <div class="modal fade" id="packageModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Pilih Paket Belajar</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row" id="packageList"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js" onerror="this.src='https://cdn.jsdelivr.net/npm/firebase@9.22.0/dist/firebase-app-compat.js'; this.onerror=null;"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js" onerror="this.src='https://cdn.jsdelivr.net/npm/firebase@9.22.0/dist/firebase-auth-compat.js'; this.onerror=null;"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js" onerror="this.src='https://cdn.jsdelivr.net/npm/firebase@9.22.0/dist/firebase-firestore-compat.js'; this.onerror=null;"></script>
   <!-- Bootstrap JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" onerror="this.src='https://stackpath.bootstrapcdn.com/bootstrap/5.3.2/js/bootstrap.bundle.min.js'; this.onerror=null;"></script>
   <!-- AOS JS -->
-  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js" onerror="this.src='https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.1/aos.js'; this.onerror=null;"></script>
   <!-- Swiper JS -->
-  <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+  <script src="https://unpkg.com/swiper/swiper-bundle.min.js" onerror="this.src='https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js'; this.onerror=null;"></script>
   <!-- Custom JS -->
   <script>
+    // Initialize Firebase
+    let app, auth, db;
+    try {
+      const firebaseConfig = {
+        apiKey: "AIzaSyC_fhbF2b-Tg2an3fN-sn2p6nYbMYC3bRQ",
+        authDomain: "beeduwithme.firebaseapp.com",
+        projectId: "beeduwithme",
+        storageBucket: "beeduwithme.firebasestorage.app",
+        messagingSenderId: "1097577891574",
+        appId: "1:1097577891574:web:81cef1772cc41427930ed7",
+        measurementId: "G-X0GTPEGZ40"
+      };
+      app = firebase.initializeApp(firebaseConfig);
+      auth = firebase.auth();
+      db = firebase.firestore();
+    } catch (error) {
+      handleError(new Error('Firebase initialization failed: ' + error.message));
+    }
+
+    // Validate Email Function
+    function isValidEmail(email) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return emailRegex.test(email);
+    }
+
+    // Validate WhatsApp Number
+    function isValidWhatsapp(whatsapp) {
+      const whatsappRegex = /^08[1-9][0-9]{8,11}$/;
+      return whatsappRegex.test(whatsapp);
+    }
+
+    // Handle Google Login/Register
+    const googleProvider = new firebase.auth.GoogleAuthProvider();
+    document.getElementById('googleLoginStudent')?.addEventListener('click', () => {
+      if (auth) auth.signInWithPopup(googleProvider).then((result) => {
+        const user = result.user;
+        saveUserToFirestore(user, 'student');
+        loadUserData(user.uid);
+        updateUI(user);
+      }).catch(handleError);
+    });
+
+    document.getElementById('googleLoginTutor')?.addEventListener('click', () => {
+      if (auth) auth.signInWithPopup(googleProvider).then((result) => {
+        const user = result.user;
+        saveUserToFirestore(user, 'tutor');
+        loadUserData(user.uid);
+        updateUI(user);
+      }).catch(handleError);
+    });
+
+    document.getElementById('googleLoginParent')?.addEventListener('click', () => {
+      if (auth) auth.signInWithPopup(googleProvider).then((result) => {
+        const user = result.user;
+        saveUserToFirestore(user, 'parent');
+        loadUserData(user.uid);
+        updateUI(user);
+      }).catch(handleError);
+    });
+
+    // Handle Email/Password Register
+    document.getElementById('emailRegister')?.addEventListener('click', () => {
+      if (!auth) return;
+      const email = document.getElementById('registerEmail').value.trim();
+      const password = document.getElementById('registerPassword').value;
+      if (!isValidEmail(email) || password.length < 6) {
+        handleError(new Error('Format email tidak valid atau password kurang dari 6 karakter!'));
+        return;
+      }
+      auth.createUserWithEmailAndPassword(email, password).then((userCredential) => {
+        const user = userCredential.user;
+        saveUserToFirestore(user, 'student'); // Default to student for registration
+        updateUI(user);
+        document.getElementById('registerModal').querySelector('.btn-close')?.click();
+      }).catch(handleError);
+    });
+
+    // Handle Email/Password Login
+    document.getElementById('emailLogin')?.addEventListener('click', () => {
+      if (!auth) return;
+      const email = document.getElementById('loginEmail').value.trim();
+      const password = document.getElementById('loginPassword').value;
+      if (!isValidEmail(email)) {
+        handleError(new Error('Format email tidak valid!'));
+        return;
+      }
+      auth.signInWithEmailAndPassword(email, password).then((userCredential) => {
+        const user = userCredential.user;
+        updateUI(user);
+        document.getElementById('loginModal').querySelector('.btn-close')?.click();
+      }).catch(handleError);
+    });
+
+    // Save User to Firestore with WhatsApp
+    function saveUserToFirestore(user, role = 'student') {
+      if (!db) return;
+      const whatsapp = document.getElementById('whatsapp')?.value.trim();
+      if (whatsapp && !isValidWhatsapp(whatsapp)) {
+        handleError(new Error('Nomor WhatsApp tidak valid! Gunakan format 08xxxxxxxxxx.'));
+        return;
+      }
+      db.collection('users').doc(user.uid).set({
+        name: user.displayName || 'User',
+        email: user.email,
+        uid: user.uid,
+        createdAt: new Date().toISOString(),
+        activePackage: null,
+        schedules: [],
+        role: role,
+        whatsapp: whatsapp || null,
+        progress: 0,
+        gamificationPoints: 0,
+        learningHistory: [],
+        childId: role === 'parent' ? null : '' // For parent to link child
+      }, { merge: true }).catch(handleError);
+    }
+
+    // Update UI based on Auth State and Role
+    function updateUI(user) {
+      const profileItem = document.getElementById('profileItem');
+      const logoutItem = document.getElementById('logoutItem');
+      const profileSection = document.getElementById('profile');
+      const parentItem = document.getElementById('parentItem');
+      const parentSection = document.getElementById('parent');
+
+      if (user) {
+        profileItem.style.display = 'block';
+        logoutItem.style.display = 'block';
+        profileSection.style.display = 'block';
+        if (user.role === 'tutor') {
+          document.getElementById('sendAdviceBtn').style.display = 'block';
+        }
+        if (user.role === 'parent') {
+          parentItem.style.display = 'block';
+          parentSection.style.display = 'block';
+        } else {
+          parentItem.style.display = 'none';
+          parentSection.style.display = 'none';
+        }
+        loadUserData(user.uid);
+      } else {
+        profileItem.style.display = 'none';
+        logoutItem.style.display = 'none';
+        profileSection.style.display = 'none';
+        parentItem.style.display = 'none';
+        parentSection.style.display = 'none';
+      }
+    }
+
+    // Logout
+    document.getElementById('logoutBtn')?.addEventListener('click', () => {
+      if (auth) auth.signOut().then(() => updateUI(null)).catch(handleError);
+    });
+
+    // Load User Data (Profile, Packages, Schedules)
+    function loadUserData(uid) {
+      if (!db) return;
+      db.collection('users').doc(uid).get().then((doc) => {
+        if (doc.exists) {
+          const userData = doc.data();
+          document.getElementById('profileName').textContent = userData.name;
+          document.getElementById('profileEmail').textContent = `Email: ${userData.email}`;
+          document.getElementById('profileRole').textContent = `Peran: ${userData.role}`;
+          document.getElementById('profileWhatsapp').textContent = `WhatsApp: ${userData.whatsapp || 'Tidak diisi'}`;
+          document.getElementById('progressBar').style.width = `${userData.progress}%`;
+          document.getElementById('progressBar').textContent = `${userData.progress}%`;
+          document.getElementById('gamificationPoints').textContent = userData.gamificationPoints;
+          const historyList = document.getElementById('historyList');
+          historyList.innerHTML = (userData.learningHistory || []).map(item => `<li>${item}</li>`).join('') || '<li>Tidak ada riwayat</li>';
+
+          const teachingSchedule = document.getElementById('teachingSchedule');
+          if (userData.role === 'tutor') {
+            teachingSchedule.style.display = 'block';
+            displaySchedules(userData.schedules);
+          } else {
+            teachingSchedule.style.display = 'none';
+          }
+
+          displayPackages(userData.activePackage);
+          loadParentData(uid, userData.role);
+          document.getElementById('editName').value = userData.name;
+          document.getElementById('editEmail').value = userData.email;
+          document.getElementById('editWhatsapp').value = userData.whatsapp || '';
+        }
+      }).catch(handleError);
+    }
+
+    // Load Parent Data
+    function loadParentData(uid, role) {
+      if (role !== 'parent' || !db) return;
+      db.collection('users').where('parentId', '==', uid).get().then((querySnapshot) => {
+        if (!querySnapshot.empty) {
+          const childData = querySnapshot.docs[0].data();
+          document.getElementById('childName').textContent = childData.name;
+          document.getElementById('childProgress').textContent = `Progress: ${childData.progress}%`;
+          document.getElementById('childPoints').textContent = `Poin: ${childData.gamificationPoints}`;
+          const childHistoryList = document.getElementById('childHistoryList');
+          childHistoryList.innerHTML = (childData.learningHistory || []).map(item => `<li>${item}</li>`).join('') || '<li>Tidak ada riwayat</li>';
+        }
+      }).catch(handleError);
+    }
+
+    // Display Packages with Auto Payment
+    function displayPackages(activePackage) {
+      if (!db) return;
+      const packageList = document.getElementById('packageList');
+      packageList.innerHTML = '';
+      const packages = [
+        { id: 'basic', name: 'Basic', price: 'Rp 200.000/bulan', features: ['5 sesi/minggu', 'Personalisasi AI', 'Gamifikasi dasar'] },
+        { id: 'pro', name: 'Pro', price: 'Rp 400.000/bulan', features: ['10 sesi/minggu', 'Personalisasi AI', 'Gamifikasi lengkap', 'Rekaman sesi'] },
+        { id: 'premium', name: 'Premium', price: 'Rp 600.000/bulan', features: ['15 sesi/minggu', 'Personalisasi AI', 'Gamifikasi lengkap', 'Rekaman sesi', 'Support 24/7'] }
+      ];
+
+      packages.forEach(pkg => {
+        const col = document.createElement('div');
+        col.className = 'col-md-4 mb-3';
+        col.innerHTML = `
+          <div class="package-card ${activePackage === pkg.id ? 'active' : ''}">
+            <h4>${pkg.name}</h4>
+            <p>${pkg.price}</p>
+            <ul>
+              ${pkg.features.map(feature => `<li>${feature}</li>`).join('')}
+            </ul>
+            <button class="btn btn-primary mt-2" onclick="selectPackage('${pkg.id}')">Pilih Paket</button>
+          </div>
+        `;
+        packageList.appendChild(col);
+      });
+    }
+
+    // Select Package with Auto Payment
+    function selectPackage(packageId) {
+      if (!db || !auth.currentUser) return;
+      db.collection('users').doc(auth.currentUser.uid).update({
+        activePackage: packageId,
+        paymentStatus: 'paid'
+      }).then(() => {
+        generateSchedule(auth.currentUser.uid, packageId);
+        new bootstrap.Modal(document.getElementById('packageModal')).hide();
+        loadUserData(auth.currentUser.uid);
+      }).catch(handleError);
+    }
+
+    // Generate Schedule
+    function generateSchedule(uid, packageId) {
+      if (!db) return;
+      const schedules = [];
+      const now = new Date();
+      const days = ['Senin', 'Rabu', 'Jumat'];
+      if (packageId === 'pro') days.push('Selasa', 'Kamis');
+      if (packageId === 'premium') days.push('Sabtu', 'Minggu');
+
+      days.forEach(day => {
+        const time = new Date(now);
+        time.setHours(19, 0, 0, 0);
+        schedules.push({ day: day, time: time.toISOString(), status: 'Scheduled' });
+      });
+
+      db.collection('users').doc(uid).update({
+        schedules: schedules
+      }).catch(handleError);
+    }
+
+    // Display Schedules
+    function displaySchedules(schedules) {
+      const scheduleList = document.getElementById('scheduleList');
+      scheduleList.innerHTML = '';
+      (schedules || []).forEach(schedule => {
+        const li = document.createElement('li');
+        li.innerHTML = `
+          ${schedule.day} - Jam: ${new Date(schedule.time).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })} (Status: ${schedule.status})
+        `;
+        scheduleList.appendChild(li);
+      });
+    }
+
+    // Handle Form Submission with WhatsApp
+    document.getElementById('registrationForm')?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const whatsapp = document.getElementById('whatsapp').value.trim();
+      const role = document.getElementById('role').value;
+      const needs = document.getElementById('needs').value.trim();
+      const successMessage = document.getElementById('successMessage');
+      const errorMessage = document.getElementById('errorMessage');
+
+      if (!name || !email || !whatsapp || !needs) {
+        handleError(new Error('Semua field harus diisi!'));
+        return;
+      }
+      if (!isValidEmail(email) || !isValidWhatsapp(whatsapp)) {
+        handleError(new Error('Format email atau WhatsApp tidak valid!'));
+        return;
+      }
+
+      try {
+        await db.collection('registrations').add({
+          name: name,
+          email: email,
+          whatsapp: whatsapp,
+          role: role,
+          needs: needs,
+          timestamp: new Date().toISOString()
+        });
+        successMessage.style.display = 'block';
+        errorMessage.style.display = 'none';
+        document.getElementById('registrationForm').reset();
+      } catch (error) {
+        handleError(error);
+      }
+    });
+
+    // Edit Profile
+    document.getElementById('editProfileBtn')?.addEventListener('click', () => {
+      document.getElementById('editForm').classList.add('show');
+    });
+
+    document.getElementById('cancelEditBtn')?.addEventListener('click', () => {
+      document.getElementById('editForm').classList.remove('show');
+    });
+
+    document.getElementById('editProfileForm')?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (!auth.currentUser || !db) return;
+      const name = document.getElementById('editName').value.trim();
+      const email = document.getElementById('editEmail').value.trim();
+      const whatsapp = document.getElementById('editWhatsapp').value.trim();
+
+      if (!name || !email || !whatsapp || !isValidEmail(email) || !isValidWhatsapp(whatsapp)) {
+        handleError(new Error('Data tidak valid!'));
+        return;
+      }
+
+      db.collection('users').doc(auth.currentUser.uid).update({
+        name: name,
+        email: email,
+        whatsapp: whatsapp
+      }).then(() => {
+        loadUserData(auth.currentUser.uid);
+        document.getElementById('editForm').classList.remove('show');
+      }).catch(handleError);
+    });
+
+    // Send Advice to Parent
+    document.getElementById('sendAdviceBtn')?.addEventListener('click', () => {
+      if (!auth.currentUser || !db) return;
+      db.collection('users').where('role', '==', 'parent').get().then((querySnapshot) => {
+        querySnapshot.forEach(doc => {
+          const parentData = doc.data();
+          if (parentData.whatsapp) {
+            const advice = `Halo, ini saran dari tentor untuk perkembangan ${parentData.name || 'anak Anda'}: Pertahankan semangat belajar! Progress: ${auth.currentUser.progress}%, Poin: ${auth.currentUser.gamificationPoints}.`;
+            window.open(`https://wa.me/${parentData.whatsapp}?text=${encodeURIComponent(advice)}`, '_blank');
+          }
+        });
+      }).catch(handleError);
+    });
+
+    // Error Handler
+    function handleError(error) {
+      console.error('Error:', error);
+      const errorMessage = document.getElementById('errorMessage');
+      errorMessage.textContent = error.message || 'Terjadi kesalahan. Silakan coba lagi atau hubungi kami di 6281367315144.';
+      errorMessage.style.display = 'block';
+    }
+
     // Initialize AOS
     AOS.init({
       duration: 1000,
@@ -468,8 +1067,12 @@
 
     // Show Modal on Page Load
     window.onload = function() {
-      const welcomeModal = new bootstrap.Modal(document.getElementById('welcomeModal'));
-      welcomeModal.show();
+      try {
+        const welcomeModal = new bootstrap.Modal(document.getElementById('welcomeModal'));
+        welcomeModal.show();
+      } catch (error) {
+        handleError(error);
+      }
     };
 
     // Scroll to Top Button
@@ -479,6 +1082,30 @@
         scrollToTopBtn.classList.add('show');
       } else {
         scrollToTopBtn.classList.remove('show');
+      }
+    });
+
+    // Open Profile Modal
+    document.getElementById('userProfileNav')?.addEventListener('click', (e) => {
+      e.preventDefault();
+      const profileSection = document.getElementById('profile');
+      profileSection.style.display = profileSection.style.display === 'none' ? 'block' : 'none';
+      if (auth.currentUser) loadUserData(auth.currentUser.uid);
+    });
+
+    // Open Parent Dashboard
+    document.getElementById('parentDashboardNav')?.addEventListener('click', (e) => {
+      e.preventDefault();
+      const parentSection = document.getElementById('parent');
+      parentSection.style.display = parentSection.style.display === 'none' ? 'block' : 'none';
+      if (auth.currentUser) loadParentData(auth.currentUser.uid, auth.currentUser.role);
+    });
+
+    // Auth State Change Listener
+    auth?.onAuthStateChanged((user) => {
+      updateUI(user);
+      if (user) {
+        loadUserData(user.uid);
       }
     });
   </script>
