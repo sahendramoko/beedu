@@ -63,7 +63,6 @@
       background-color: #f5f7fa;
       color: #333;
     }
-    /* Navbar */
     .navbar {
       background-color: #ffffff;
       box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -79,7 +78,6 @@
     .nav-link:hover {
       color: #007bff !important;
     }
-    /* Hero Section */
     .hero-section {
       background: linear-gradient(135deg, #007bff 0%, #00c4b4 100%);
       color: white;
@@ -118,7 +116,6 @@
       transform: scale(1.05);
       background-color: #ffca28;
     }
-    /* Features Section */
     .feature-card {
       padding: 20px;
       text-align: center;
@@ -135,7 +132,6 @@
       color: #007bff;
       margin-bottom: 15px;
     }
-    /* Testimonial Section */
     .testimonial-section {
       background-color: #e9ecef;
       padding: 60px 0;
@@ -150,20 +146,17 @@
       padding: 20px;
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
     }
-    /* FAQ Section */
-    .faq-section {
+    .faq-section, .blog-section, .payment-section {
       padding: 60px 0;
     }
     .accordion-button {
       font-weight: 600;
     }
-    /* Form Section */
     .form-section {
       background-color: #fff;
       padding: 60px 0;
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
     }
-    /* Footer */
     footer {
       background-color: #343a40;
       color: white;
@@ -177,7 +170,6 @@
     footer a:hover {
       color: #ffca28;
     }
-    /* WhatsApp Button */
     .whatsapp-btn {
       position: fixed;
       bottom: 20px;
@@ -197,7 +189,6 @@
     .whatsapp-btn:hover {
       transform: scale(1.1);
     }
-    /* Scroll to Top Button */
     .scroll-to-top {
       position: fixed;
       bottom: 90px;
@@ -220,7 +211,6 @@
     .scroll-to-top:hover {
       background-color: #0056b3;
     }
-    /* Modal Pop-Up */
     .modal-content {
       border-radius: 15px;
       text-align: center;
@@ -229,6 +219,17 @@
       background-color: #007bff;
       color: white;
       border-radius: 15px 15px 0 0;
+    }
+    .blog-card {
+      background-color: #fff;
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+    }
+    .payment-section img {
+      max-width: 200px;
+      margin: 20px 0;
     }
   </style>
 </head>
@@ -253,6 +254,12 @@
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#faq">FAQ</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#blog">Blog</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#payment">Pembayaran</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#contact">Kontak</a>
@@ -333,7 +340,6 @@
             </div>
           </div>
         </div>
-        <!-- Add Pagination -->
         <div class="swiper-pagination"></div>
       </div>
     </div>
@@ -384,11 +390,59 @@
     </div>
   </section>
 
+  <!-- Blog Section -->
+  <section id="blog" class="blog-section">
+    <div class="container">
+      <h2 class="text-center mb-5" data-aos="fade-up">Berita & Prestasi</h2>
+      <div class="row">
+        <div class="col-md-6" data-aos="fade-up">
+          <div class="blog-card">
+            <h4>Siswa Terbaik Bulan Ini: Alya!</h4>
+            <p>Alya berhasil meraih poin tertinggi dalam gamifikasi bulan ini dengan menyelesaikan 20 sesi belajar dan mendapatkan badge "Super Learner". Selamat, Alya!</p>
+            <small>6 Juni 2025</small>
+          </div>
+        </div>
+        <div class="col-md-6" data-aos="fade-up" data-aos-delay="100">
+          <div class="blog-card">
+            <h4>Peringkat Gamifikasi Minggu Ini</h4>
+            <p>5 siswa teratas: 1. Alya (1200 poin), 2. Rio (1100 poin), 3. Siti (1000 poin), 4. Budi (900 poin), 5. Dika (850 poin). Teruskan semangat belajarnya!</p>
+            <small>6 Juni 2025</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Payment Section -->
+  <section id="payment" class="payment-section">
+    <div class="container">
+      <h2 class="text-center mb-5" data-aos="fade-up">Metode Pembayaran</h2>
+      <div class="row">
+        <div class="col-md-6" data-aos="fade-up">
+          <h4>Transfer Bank</h4>
+          <p>Silakan transfer ke rekening berikut:</p>
+          <p><strong>Bank:</strong> BCA<br>
+             <strong>Nomor Rekening:</strong> 123-456-7890<br>
+             <strong>Atas Nama:</strong> BeEdu Indonesia</p>
+          <p>Setelah transfer, konfirmasi pembayaran via WhatsApp dengan mengirimkan bukti transfer.</p>
+          <a href="https://wa.me/081367315144?text=Saya%20telah%20melakukan%20pembayaran%20via%20transfer%20bank" class="btn btn-primary" target="_blank">Konfirmasi via WhatsApp</a>
+        </div>
+        <div class="col-md-6" data-aos="fade-up" data-aos-delay="100">
+          <h4>QRIS</h4>
+          <p>Scan kode QRIS berikut untuk pembayaran cepat:</p>
+          <img src="https://via.placeholder.com/200x200.png?text=QRIS+BeEdu" alt="QRIS BeEdu" class="img-fluid">
+          <p>Setelah pembayaran, konfirmasi via WhatsApp.</p>
+          <a href="https://wa.me/081367315144?text=Saya%20telah%20melakukan%20pembayaran%20via%20QRIS" class="btn btn-primary" target="_blank">Konfirmasi via WhatsApp</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- Contact/Form Section -->
   <section id="contact" class="form-section">
     <div class="container">
       <h2 class="text-center mb-5" data-aos="fade-up">Daftar Sekarang</h2>
-      <form action="https://formsubmit.co/your-email@example.com" method="POST" class="w-50 mx-auto" data-aos="fade-up">
+      <form id="registrationForm" class="w-50 mx-auto" data-aos="fade-up">
         <div class="mb-3">
           <label for="name" class="form-label">Nama</label>
           <input type="text" class="form-control" id="name" name="name" required>
@@ -403,18 +457,23 @@
         </div>
         <button type="submit" class="btn btn-primary w-100">Kirim</button>
       </form>
+      <div id="successMessage" class="text-center mt-3" style="display: none; color: green;">
+        Data berhasil disimpan! Kami akan segera menghubungi kamu di saptohendratmoko@gmail.com.
+      </div>
+      <div id="errorMessage" class="text-center mt-3" style="display: none; color: red;">
+        Terjadi kesalahan. Silakan coba lagi atau hubungi kami di 081367315144.
+      </div>
     </div>
   </section>
 
   <!-- Footer -->
   <footer>
     <div class="container">
-      <p>© 2025 BeEdu. Kontak kami: <a href="mailto:info@beedu.com">info@beedu.com</a> | <a href="https://wa.me/1234567890">WhatsApp</a> | <a href="https://t.me/beedu">Telegram</a></p>
-    </div>
-  </footer>
+      <p>© 2025 BeEdu. Kontak kami: <a href="mailto:saptohendratmoko@gmail.com">saptohendratmoko@gmail.com</a> | <a href="https://wa.me/081367315144">WhatsApp</a> | <a href="https://t.me/081367315144">Telegram</a></p>
+    </footer>
 
   <!-- WhatsApp Floating Button -->
-  <a href="https://wa.me/1234567890" class="whatsapp-btn" target="_blank">
+  <a href="https://wa.me/081367315144" class="whatsapp-btn" target="_blank">
     <i class="fab fa-whatsapp"></i>
   </a>
 
@@ -439,6 +498,9 @@
     </div>
   </div>
 
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   <!-- AOS JS -->
@@ -447,6 +509,55 @@
   <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
   <!-- Custom JS -->
   <script>
+    // Initialize Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyC_fhbF2b-Tg2an3fN-sn2p6nYbMYC3bRQ",
+      authDomain: "beeduwithme.firebaseapp.com",
+      projectId: "beeduwithme",
+      storageBucket: "beeduwithme.firebasestorage.app",
+      messagingSenderId: "1097577891574",
+      appId: "1:1097577891574:web:81cef1772cc41427930ed7",
+      measurementId: "G-X0GTPEGZ40"
+    };
+
+    // Initialize Firebase App
+    const app = firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore(); // Using compat version for easier integration
+
+    // Handle Form Submission and Save to Firestore
+    document.getElementById('registrationForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const needs = document.getElementById('needs').value.trim();
+      const successMessage = document.getElementById('successMessage');
+      const errorMessage = document.getElementById('errorMessage');
+
+      // Validasi input
+      if (!name || !email || !needs) {
+        errorMessage.textContent = 'Semua field harus diisi!';
+        errorMessage.style.display = 'block';
+        return;
+      }
+
+      try {
+        await db.collection('registrations').add({
+          name: name,
+          email: email,
+          needs: needs,
+          timestamp: new Date().toISOString()
+        });
+        successMessage.style.display = 'block';
+        errorMessage.style.display = 'none';
+        document.getElementById('registrationForm').reset();
+      } catch (error) {
+        console.error('Error saving data: ', error);
+        errorMessage.textContent = 'Terjadi kesalahan. Silakan coba lagi atau hubungi kami di 081367315144.';
+        errorMessage.style.display = 'block';
+        successMessage.style.display = 'none';
+      }
+    });
+
     // Initialize AOS
     AOS.init({
       duration: 1000,
