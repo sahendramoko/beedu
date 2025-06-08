@@ -11,7 +11,6 @@
                 var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
                 var firstSheetName = workbook.SheetNames[0];
                 var worksheet = workbook.Sheets[firstSheetName];
-
                 // Convert sheet to JSON to filter blank rows
                 var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
                 // Filter out blank rows (rows where all cells are empty, null, or undefined)
@@ -425,14 +424,14 @@
              <strong>Nomor Rekening:</strong> 123-456-7890<br>
              <strong>Atas Nama:</strong> BeEdu Indonesia</p>
           <p>Setelah transfer, konfirmasi pembayaran via WhatsApp dengan mengirimkan bukti transfer.</p>
-          <a href="https://wa.me/081367315144?text=Saya%20telah%20melakukan%20pembayaran%20via%20transfer%20bank" class="btn btn-primary" target="_blank">Konfirmasi via WhatsApp</a>
+          <a href="https://wa.me/6281367315144?text=Saya%20telah%20melakukan%20pembayaran%20via%20transfer%20bank" class="btn btn-primary" target="_blank">Konfirmasi via WhatsApp</a>
         </div>
         <div class="col-md-6" data-aos="fade-up" data-aos-delay="100">
           <h4>QRIS</h4>
           <p>Scan kode QRIS berikut untuk pembayaran cepat:</p>
           <img src="https://via.placeholder.com/200x200.png?text=QRIS+BeEdu" alt="QRIS BeEdu" class="img-fluid">
           <p>Setelah pembayaran, konfirmasi via WhatsApp.</p>
-          <a href="https://wa.me/081367315144?text=Saya%20telah%20melakukan%20pembayaran%20via%20QRIS" class="btn btn-primary" target="_blank">Konfirmasi via WhatsApp</a>
+          <a href="https://wa.me/6281367315144?text=Saya%20telah%20melakukan%20pembayaran%20via%20QRIS" class="btn btn-primary" target="_blank">Konfirmasi via WhatsApp</a>
         </div>
       </div>
     </div>
@@ -461,7 +460,7 @@
         Data berhasil disimpan! Kami akan segera menghubungi kamu di saptohendratmoko@gmail.com.
       </div>
       <div id="errorMessage" class="text-center mt-3" style="display: none; color: red;">
-        Terjadi kesalahan. Silakan coba lagi atau hubungi kami di 081367315144.
+        Terjadi kesalahan. Silakan coba lagi atau hubungi kami di 6281367315144.
       </div>
     </div>
   </section>
@@ -469,11 +468,11 @@
   <!-- Footer -->
   <footer>
     <div class="container">
-      <p>© 2025 BeEdu. Kontak kami: <a href="mailto:saptohendratmoko@gmail.com">saptohendratmoko@gmail.com</a> | <a href="https://wa.me/081367315144">WhatsApp</a> | <a href="https://t.me/081367315144">Telegram</a></p>
+      <p>© 2025 BeEdu. Kontak kami: <a href="mailto:saptohendratmoko@gmail.com">saptohendratmoko@gmail.com</a> | <a href="https://wa.me/6281367315144">WhatsApp</a> | <a href="https://t.me/6281367315144">Telegram</a></p>
     </footer>
 
   <!-- WhatsApp Floating Button -->
-  <a href="https://wa.me/081367315144" class="whatsapp-btn" target="_blank">
+  <a href="https://wa.me/6281367315144" class="whatsapp-btn" target="_blank">
     <i class="fab fa-whatsapp"></i>
   </a>
 
@@ -552,7 +551,7 @@
         document.getElementById('registrationForm').reset();
       } catch (error) {
         console.error('Error saving data: ', error);
-        errorMessage.textContent = 'Terjadi kesalahan. Silakan coba lagi atau hubungi kami di 081367315144.';
+        errorMessage.textContent = 'Terjadi kesalahan. Silakan coba lagi atau hubungi kami di 6281367315144.';
         errorMessage.style.display = 'block';
         successMessage.style.display = 'none';
       }
