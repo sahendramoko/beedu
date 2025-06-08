@@ -281,7 +281,7 @@
     <div class="container">
       <h1>BeEdu: Learn, Grow, Succeed</h1>
       <p>Les privat online personal untuk siswa SD-SMA dan mahasiswa!</p>
-      <a href="kontak.html" class="btn btn-hero">Daftar Sesi Gratis</a>
+      <a href="#" class="btn btn-hero" data-bs-toggle="modal" data-bs-target="#registerModal">Daftar Sesi Gratis</a>
     </div>
   </section>
 
@@ -427,22 +427,35 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">Daftar</h5>
+          <h5 class="modal-title">Daftar Sesi Gratis</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <button id="googleRegisterStudent" class="btn btn-success w-100 mb-3">Daftar sebagai Siswa</button>
-          <button id="googleRegisterTutor" class="btn btn-success w-100 mb-3">Daftar sebagai Tentor</button>
-          <button id="googleRegisterParent" class="btn btn-success w-100 mb-3">Daftar sebagai Orang Tua</button>
-          <div class="mb-3">
-            <label for="registerEmail" class="form-label">Email</label>
-            <input type="email" class="form-control" id="registerEmail" required>
-          </div>
-          <div class="mb-3">
-            <label for="registerPassword" class="form-label">Password</label>
-            <input type="password" class="form-control" id="registerPassword" required>
-          </div>
-          <button id="emailRegister" class="btn btn-success w-100">Daftar</button>
+          <form id="registrationForm">
+            <div class="mb-3">
+              <label for="name" class="form-label">Nama Lengkap</label>
+              <input type="text" class="form-control" id="name" required>
+            </div>
+            <div class="mb-3">
+              <label for="email" class="form-label">Email</label>
+              <input type="email" class="form-control" id="email" required>
+            </div>
+            <div class="mb-3">
+              <label for="phone" class="form-label">Nomor Telepon</label>
+              <input type="tel" class="form-control" id="phone" required>
+            </div>
+            <div class="mb-3">
+              <label for="level" class="form-label">Tingkat Pendidikan</label>
+              <select class="form-select" id="level" required>
+                <option value="">Pilih Tingkat</option>
+                <option value="SD">SD</option>
+                <option value="SMP">SMP</option>
+                <option value="SMA">SMA</option>
+                <option value="Mahasiswa">Mahasiswa</option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-success w-100">Daftar Sekarang</button>
+          </form>
         </div>
       </div>
     </div>
@@ -787,6 +800,23 @@
     // Logout
     document.getElementById('logoutBtn')?.addEventListener('click', () => {
       if (auth) auth.signOut().then(() => updateUI(null)).catch(handleError);
+    });
+
+    // Handle Registration Form
+    document.getElementById('registrationForm')?.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+      const phone = document.getElementById('phone').value;
+      const level = document.getElementById('level').value;
+
+      if (name && email && phone && level) {
+        alert(`Terima kasih, ${name}! Pendaftaran sesi gratis untuk ${level} telah diterima. Kami akan menghubungi Anda di ${email} atau ${phone}.`);
+        this.reset();
+        bootstrap.Modal.getInstance(document.getElementById('registerModal')).hide();
+      } else {
+        alert('Silakan isi semua kolom!');
+      }
     });
 
     // Error Handler
