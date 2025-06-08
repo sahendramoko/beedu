@@ -13,15 +13,16 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet" onerror="this.href='https://fonts.cdnfonts.com/css/poppins'; this.onerror=null;">
   <!-- FontAwesome for Icons -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" onerror="this.href='https://use.fontawesome.com/releases/v6.4.0/css/all.css'; this.onerror=null;">
-  <!-- Custom CSS -->
+  <!-- AOS (Animate On Scroll) -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" onerror="this.href='https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.1/aos.css'; this.onerror=null;">
   <style>
     body {
       font-family: 'Poppins', sans-serif;
       background-color: #f5f7fa;
       color: #333;
-      transition: background-color 0.3s;
       margin: 0;
       padding: 0;
+      transition: background-color 0.3s;
     }
     .navbar {
       background-color: #ffffff;
@@ -42,7 +43,27 @@
       background: linear-gradient(135deg, #007bff 0%, #00c4b4 100%);
       color: white;
       padding: 100px 0;
-      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==') no-repeat center center/cover;
+      opacity: 0.2;
+    }
+    .hero-section h1 {
+      font-size: 3rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+    .hero-section p {
+      font-size: 1.2rem;
+      margin-bottom: 30px;
     }
     .btn-hero {
       background-color: #ffd700;
@@ -55,6 +76,22 @@
     .btn-hero:hover {
       transform: scale(1.05);
       background-color: #ffca28;
+    }
+    .feature-card {
+      padding: 20px;
+      text-align: center;
+      background-color: #fff;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease;
+    }
+    .feature-card:hover {
+      transform: translateY(-10px);
+    }
+    .feature-card i {
+      font-size: 2.5rem;
+      color: #007bff;
+      margin-bottom: 15px;
     }
     .content-section {
       padding: 60px 0;
@@ -88,37 +125,6 @@
     .whatsapp-btn:hover, .login-btn:hover, .register-btn:hover {
       transform: scale(1.1);
     }
-    .scroll-to-top {
-      position: fixed;
-      bottom: 90px;
-      right: 20px;
-      background-color: #007bff;
-      color: white;
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.2rem;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-      transition: opacity 0.3s ease;
-    }
-    .scroll-to-top.show {
-      display: flex;
-    }
-    .scroll-to-top:hover {
-      background-color: #0056b3;
-    }
-    .modal-content {
-      border-radius: 15px;
-      text-align: center;
-    }
-    .modal-header {
-      background-color: #007bff;
-      color: white;
-      border-radius: 15px 15px 0 0;
-    }
     footer {
       background-color: #343a40;
       color: white;
@@ -132,12 +138,37 @@
     footer a:hover {
       color: #ffca28;
     }
-    .profile-card {
+    .testimonial-card {
       background-color: #fff;
       border-radius: 15px;
       padding: 20px;
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
       text-align: center;
+    }
+    .blog-card {
+      background-color: #fff;
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+    }
+    .faq-item {
+      background-color: #fff;
+      border-radius: 15px;
+      padding: 15px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      margin-bottom: 10px;
+    }
+    .payment-card {
+      background-color: #fff;
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+    .card-img {
+      max-width: 100%;
+      border-radius: 10px;
     }
   </style>
 </head>
@@ -145,58 +176,68 @@
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg navbar-light fixed-top">
     <div class="container">
-      <a class="navbar-brand" href="/">BeEdu</a>
+      <a class="navbar-brand" href="#home">BeEdu</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
           <li class="nav-item">
-            <a class="nav-link" href="/fitur">Fitur</a>
+            <a class="nav-link" href="#home">Beranda</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/testimoni">Testimoni</a>
+            <a class="nav-link" href="#fitur">Fitur</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/faq">FAQ</a>
+            <a class="nav-link" href="#testimoni">Testimoni</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/blog">Blog</a>
+            <a class="nav-link" href="#faq">FAQ</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/pembayaran">Pembayaran</a>
+            <a class="nav-link" href="#blog">Blog</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#pembayaran">Pembayaran</a>
           </li>
           <li class="nav-item" id="profileItem" style="display: none;">
-            <a class="nav-link" href="/profil">Profil</a>
+            <a class="nav-link" href="#profil">Profil</a>
           </li>
           <li class="nav-item" id="logoutItem" style="display: none;">
             <a class="nav-link" href="#" id="logoutBtn">Logout</a>
           </li>
           <li class="nav-item" id="parentItem" style="display: none;">
-            <a class="nav-link" href="/parent">Monitoring Anak</a>
+            <a class="nav-link" href="#parent">Monitoring Anak</a>
           </li>
         </ul>
       </div>
     </div>
   </nav>
 
+  <!-- Hero Section (Beranda) -->
+  <section id="home" class="hero-section">
+    <div class="container position-relative">
+      <div class="row align-items-center">
+        <div class="col-md-7" data-aos="fade-right">
+          <h1>BeEdu: Learn, Grow, Succeed</h1>
+          <p>Les privat online yang personal dan interaktif untuk membantu kamu mencapai potensi maksimal!</p>
+          <a href="#kontak" class="btn btn-hero">Daftar Sesi Gratis</a>
+        </div>
+        <div class="col-md-5" data-aos="fade-left">
+          <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==" alt="Student Learning" class="img-fluid rounded" onerror="this.style.display='none';">
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- Main Content -->
   <div id="main-content" class="content-section">
     <div class="container">
-      <div id="page-content">
+      <div id="page-content" style="display: none;">
         <!-- Content will be loaded dynamically here -->
       </div>
     </div>
   </div>
-
-  <!-- Hero Section (Home) -->
-  <section id="home" class="hero-section" style="display: none;">
-    <div class="container position-relative">
-      <h1>BeEdu: Learn, Grow, Succeed</h1>
-      <p>Les privat online yang personal dan interaktif untuk membantu kamu mencapai potensi maksimal!</p>
-      <a href="/kontak" class="btn btn-hero">Daftar Sesi Gratis</a>
-    </div>
-  </section>
 
   <!-- Footer -->
   <footer>
@@ -217,11 +258,6 @@
   <!-- Register Floating Button -->
   <a href="#" class="register-btn" data-bs-toggle="modal" data-bs-target="#registerModal">
     <i class="fas fa-user-plus"></i>
-  </a>
-
-  <!-- Scroll to Top Button -->
-  <a href="#home" class="scroll-to-top">
-    <i class="fas fa-chevron-up"></i>
   </a>
 
   <!-- Login Modal -->
@@ -282,6 +318,8 @@
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js" onerror="this.src='https://cdn.jsdelivr.net/npm/firebase@9.22.0/dist/firebase-firestore-compat.js'; this.onerror=null;"></script>
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" onerror="this.src='https://stackpath.bootstrapcdn.com/bootstrap/5.3.2/js/bootstrap.bundle.min.js'; this.onerror=null;"></script>
+  <!-- AOS JS -->
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js" onerror="this.src='https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.1/aos.js'; this.onerror=null;"></script>
   <!-- Custom JS -->
   <script>
     // Initialize Firebase
@@ -303,17 +341,9 @@
       handleError(new Error('Firebase initialization failed: ' + error.message));
     }
 
-    // Validate Email Function
-    function isValidEmail(email) {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      return emailRegex.test(email);
-    }
-
-    // Validate WhatsApp Number
-    function isValidWhatsapp(whatsapp) {
-      const whatsappRegex = /^08[1-9][0-9]{8,11}$/;
-      return whatsappRegex.test(whatsapp);
-    }
+    // Validate Email and WhatsApp
+    function isValidEmail(email) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email); }
+    function isValidWhatsapp(whatsapp) { return /^08[1-9][0-9]{8,11}$/.test(whatsapp); }
 
     // Handle Google Login/Register
     const googleProvider = new firebase.auth.GoogleAuthProvider();
@@ -322,7 +352,6 @@
         if (auth) auth.signInWithPopup(googleProvider).then((result) => {
           const user = result.user;
           saveUserToFirestore(user, role.toLowerCase());
-          loadUserData(user.uid);
           updateUI(user);
         }).catch(handleError);
       });
@@ -341,7 +370,7 @@
       const email = document.getElementById('registerEmail').value.trim();
       const password = document.getElementById('registerPassword').value;
       if (!isValidEmail(email) || password.length < 6) {
-        handleError(new Error('Format email tidak valid atau password kurang dari 6 karakter!'));
+        handleError(new Error('Email atau password tidak valid!'));
         return;
       }
       auth.createUserWithEmailAndPassword(email, password).then((userCredential) => {
@@ -358,7 +387,7 @@
       const email = document.getElementById('loginEmail').value.trim();
       const password = document.getElementById('loginPassword').value;
       if (!isValidEmail(email)) {
-        handleError(new Error('Format email tidak valid!'));
+        handleError(new Error('Email tidak valid!'));
         return;
       }
       auth.signInWithEmailAndPassword(email, password).then((userCredential) => {
@@ -375,14 +404,8 @@
         name: user.displayName || 'User',
         email: user.email,
         uid: user.uid,
-        createdAt: new Date().toISOString(),
-        activePackage: null,
-        schedules: [],
         role: role,
-        progress: 0,
-        gamificationPoints: 0,
-        learningHistory: [],
-        childId: role === 'parent' ? null : ''
+        createdAt: new Date().toISOString()
       }, { merge: true }).catch(handleError);
     }
 
@@ -391,21 +414,17 @@
       const profileItem = document.getElementById('profileItem');
       const logoutItem = document.getElementById('logoutItem');
       const parentItem = document.getElementById('parentItem');
-
       if (user) {
         profileItem.style.display = 'block';
         logoutItem.style.display = 'block';
-        if (user.role === 'parent') {
-          parentItem.style.display = 'block';
-        } else {
-          parentItem.style.display = 'none';
-        }
-        loadUserData(user.uid);
+        if (user.role === 'parent') parentItem.style.display = 'block';
+        else parentItem.style.display = 'none';
       } else {
         profileItem.style.display = 'none';
         logoutItem.style.display = 'none';
         parentItem.style.display = 'none';
       }
+      loadPage();
     }
 
     // Logout
@@ -413,157 +432,219 @@
       if (auth) auth.signOut().then(() => updateUI(null)).catch(handleError);
     });
 
-    // Load User Data
-    function loadUserData(uid) {
-      if (!db) return;
-      db.collection('users').doc(uid).get().then((doc) => {
-        if (doc.exists) {
-          const userData = doc.data();
-          // Placeholder for future use
-        }
-      }).catch(handleError);
-    }
-
-    // Error Handler
-    function handleError(error) {
-      console.error('Error:', error);
-      alert(error.message || 'Terjadi kesalahan. Coba lagi!');
-    }
-
-    // Routing Logic
+    // Load Page Content
     function loadPage() {
-      const path = window.location.pathname.split('/').pop() || 'home';
+      const hash = window.location.hash.substring(1) || 'home';
       const contentDiv = document.getElementById('page-content');
       const homeSection = document.getElementById('home');
 
-      contentDiv.innerHTML = '';
+      contentDiv.style.display = 'none';
       homeSection.style.display = 'none';
 
-      switch (path.toLowerCase()) {
-        case 'home':
-          homeSection.style.display = 'block';
-          break;
-        case 'fitur':
-          contentDiv.innerHTML = `
-            <h2>Fitur Unggulan BeEdu</h2>
-            <p>BeEdu menawarkan berbagai fitur untuk mendukung pembelajaranmu:</p>
-            <ul>
-              <li><strong>Personalisasi AI:</strong> Materi disesuaikan dengan kebutuhanmu.</li>
-              <li><strong>Akses Fleksibel:</strong> Belajar kapan saja dengan rekaman 24/7.</li>
-              <li><strong>Gamifikasi:</strong> Dapatkan poin dan badge untuk motivasi.</li>
-              <li><strong>Monitoring Orang Tua:</strong> Pantau progress anak secara real-time.</li>
-              <li><strong>Saran dari Tentor:</strong> Dapatkan saran via WhatsApp.</li>
-              <li><strong>Edit Profil:</strong> Kustomisasi profil dengan gaya pribadimu.</li>
-            </ul>
-          `;
-          break;
-        case 'testimoni':
-          contentDiv.innerHTML = `
-            <h2>Testimoni Pengguna</h2>
-            <p>Pengalaman nyata dari pengguna BeEdu:</p>
-            <ul>
-              <li><strong>Alya, Siswa SMA:</strong> "Matematika jadi menyenangkan dengan BeEdu!"</li>
-              <li><strong>Ibu Sari, Orang Tua:</strong> "Gamifikasi meningkatkan motivasi anak saya."</li>
-            </ul>
-          `;
-          break;
-        case 'faq':
-          contentDiv.innerHTML = `
-            <h2>Pertanyaan Umum</h2>
-            <p>Jawaban atas pertanyaanmu:</p>
-            <ul>
-              <li><strong>Apa itu BeEdu?</strong> Platform les privat online dengan AI dan gamifikasi.</li>
-              <li><strong>Bagaimana cara mendaftar?</strong> Isi formulir di "Daftar Sekarang".</li>
-            </ul>
-          `;
-          break;
-        case 'blog':
-          contentDiv.innerHTML = `
-            <h2>Berita & Prestasi</h2>
-            <p>Update terbaru:</p>
-            <ul>
-              <li><strong>Siswa Terbaik:</strong> Alya raih badge "Super Learner" (6 Juni 2025).</li>
-            </ul>
-          `;
-          break;
-        case 'pembayaran':
-          contentDiv.innerHTML = `
-            <h2>Metode Pembayaran</h2>
-            <p>Pilih opsi pembayaran:</p>
-            <ul>
-              <li><strong>Transfer Bank:</strong> BCA, No. Rek: 123-456-7890, A/n: BeEdu Indonesia.</li>
-            </ul>
-          `;
-          break;
-        case 'profil':
-          if (auth.currentUser) {
+      if (hash === 'home') {
+        homeSection.style.display = 'block';
+      } else {
+        contentDiv.style.display = 'block';
+        contentDiv.innerHTML = '';
+        switch (hash.toLowerCase()) {
+          case 'fitur':
             contentDiv.innerHTML = `
-              <div class="profile-card">
-                <h2>Profil Saya</h2>
-                <p><strong>Nama:</strong> <span id="profileName"></span></p>
-                <p><strong>Email:</strong> <span id="profileEmail"></span></p>
-                <p><strong>Peran:</strong> <span id="profileRole"></span></p>
-                <p><strong>WhatsApp:</strong> <span id="profileWhatsapp"></span></p>
-                <button class="btn btn-primary mt-3" id="editProfileBtn">Edit Profil</button>
+              <div class="section-title" data-aos="fade-up">
+                <h2>Fitur Unggulan BeEdu</h2>
+                <p>Jelajahi fitur-fitur menarik yang membuat belajar jadi lebih seru dan efektif!</p>
+              </div>
+              <div class="row">
+                <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="100">
+                  <div class="feature-card">
+                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==" alt="AI Icon" class="card-img">
+                    <h3>Personalisasi AI</h3>
+                    <p>Materi disesuaikan dengan gaya belajarmu menggunakan kecerdasan buatan.</p>
+                  </div>
+                </div>
+                <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="200">
+                  <div class="feature-card">
+                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==" alt="Clock Icon" class="card-img">
+                    <h3>Akses Fleksibel</h3>
+                    <p>Belajar kapan saja dengan rekaman sesi 24/7 dan jadwal fleksibel.</p>
+                  </div>
+                </div>
+                <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="300">
+                  <div class="feature-card">
+                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==" alt="Trophy Icon" class="card-img">
+                    <h3>Gamifikasi</h3>
+                    <p>Kumpulkan poin dan badge untuk meningkatkan motivasi belajarmu.</p>
+                  </div>
+                </div>
+                <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="400">
+                  <div class="feature-card">
+                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==" alt="Eye Icon" class="card-img">
+                    <h3>Monitoring Orang Tua</h3>
+                    <p>Pantau progress anak secara real-time dengan laporan interaktif.</p>
+                  </div>
+                </div>
+                <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="500">
+                  <div class="feature-card">
+                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==" alt="Teacher Icon" class="card-img">
+                    <h3>Saran dari Tentor</h3>
+                    <p>Dapatkan saran pribadi via WhatsApp untuk perkembangan terbaik.</p>
+                  </div>
+                </div>
+                <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="600">
+                  <div class="feature-card">
+                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==" alt="Edit Icon" class="card-img">
+                    <h3>Edit Profil</h3>
+                    <p>Kustomisasi profil dengan foto dan tema yang kamu suka.</p>
+                  </div>
+                </div>
               </div>
             `;
-            loadUserData(auth.currentUser.uid);
-          } else {
-            contentDiv.innerHTML = '<h2>Silakan Login untuk melihat profil.</h2>';
-          }
-          break;
-        case 'parent':
-          if (auth.currentUser && auth.currentUser.role === 'parent') {
+            break;
+          case 'testimoni':
             contentDiv.innerHTML = `
-              <div class="profile-card">
-                <h2>Monitoring Perkembangan Anak</h2>
-                <p><strong>Nama Anak:</strong> <span id="childName"></span></p>
-                <p><strong>Progress:</strong> <span id="childProgress"></span></p>
-                <p><strong>Poin:</strong> <span id="childPoints"></span></p>
+              <div class="section-title" data-aos="fade-up">
+                <h2>Testimoni Pengguna</h2>
+                <p>Dengar cerita sukses dari pengguna BeEdu!</p>
+              </div>
+              <div class="row">
+                <div class="col-md-6 mb-4" data-aos="fade-up" data-aos-delay="100">
+                  <div class="testimonial-card">
+                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==" alt="Student Testimonial" class="card-img">
+                    <p>"BeEdu membuat pelajaran matematika jadi menyenangkan dan mudah dipahami!"</p>
+                    <h5>Alya, Siswa SMA</h5>
+                  </div>
+                </div>
+                <div class="col-md-6 mb-4" data-aos="fade-up" data-aos-delay="200">
+                  <div class="testimonial-card">
+                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==" alt="Parent Testimonial" class="card-img">
+                    <p>"Anak saya semakin termotivasi berkat gamifikasi di BeEdu!"</p>
+                    <h5>Ibu Sari, Orang Tua</h5>
+                  </div>
+                </div>
               </div>
             `;
-            loadParentData(auth.currentUser.uid, 'parent');
-          } else {
-            contentDiv.innerHTML = '<h2>Silakan Login sebagai Orang Tua.</h2>';
-          }
-          break;
-        case 'kontak':
-          contentDiv.innerHTML = `
-            <h2>Daftar Sekarang</h2>
-            <form id="registrationForm">
-              <div class="mb-3"><input type="text" class="form-control" id="name" placeholder="Nama" required></div>
-              <div class="mb-3"><input type="email" class="form-control" id="email" placeholder="Email" required></div>
-              <div class="mb-3"><input type="text" class="form-control" id="whatsapp" placeholder="Nomor WhatsApp" required></div>
-              <div class="mb-3"><textarea class="form-control" id="needs" placeholder="Kebutuhan Belajar" required></textarea></div>
-              <button type="submit" class="btn btn-primary w-100">Kirim</button>
-            </form>
-            <div id="successMessage" class="text-center mt-3" style="display: none; color: green;"></div>
-            <div id="errorMessage" class="text-center mt-3" style="display: none; color: red;"></div>
-          `;
-          document.getElementById('registrationForm')?.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const name = document.getElementById('name').value.trim();
-            const email = document.getElementById('email').value.trim();
-            const whatsapp = document.getElementById('whatsapp').value.trim();
-            const needs = document.getElementById('needs').value.trim();
-            if (!name || !email || !whatsapp || !needs || !isValidEmail(email) || !isValidWhatsapp(whatsapp)) {
-              handleError(new Error('Data tidak valid!'));
-              return;
+            break;
+          case 'faq':
+            contentDiv.innerHTML = `
+              <div class="section-title" data-aos="fade-up">
+                <h2>Pertanyaan Umum</h2>
+                <p>Jelajahi jawaban atas pertanyaanmu tentang BeEdu!</p>
+              </div>
+              <div class="row">
+                <div class="col-md-12" data-aos="fade-up">
+                  <div class="faq-item">
+                    <h4>Apa itu BeEdu?</h4>
+                    <p>BeEdu adalah platform les privat online dengan AI dan gamifikasi untuk belajar yang lebih menyenangkan.</p>
+                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==" alt="FAQ Icon" class="card-img">
+                  </div>
+                  <div class="faq-item" data-aos="fade-up" data-aos-delay="100">
+                    <h4>Bagaimana cara mendaftar?</h4>
+                    <p>Klik "Daftar Sesi Gratis" di Beranda dan isi formulir sederhana.</p>
+                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==" alt="Register Icon" class="card-img">
+                  </div>
+                </div>
+              </div>
+            `;
+            break;
+          case 'blog':
+            contentDiv.innerHTML = `
+              <div class="section-title" data-aos="fade-up">
+                <h2>Berita & Prestasi</h2>
+                <p>Ikuti update terbaru dari komunitas BeEdu!</p>
+              </div>
+              <div class="row">
+                <div class="col-md-6 mb-4" data-aos="fade-up" data-aos-delay="100">
+                  <div class="blog-card">
+                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==" alt="Blog Image" class="card-img">
+                    <h4>Siswa Terbaik: Alya</h4>
+                    <p>Alya meraih badge "Super Learner" setelah menyelesaikan 20 sesi (6 Juni 2025).</p>
+                  </div>
+                </div>
+                <div class="col-md-6 mb-4" data-aos="fade-up" data-aos-delay="200">
+                  <div class="blog-card">
+                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==" alt="Blog Image" class="card-img">
+                    <h4>Tips Belajar Efektif</h4>
+                    <p>5 strategi dari tentor BeEdu untuk sukses di ujian (9 Juni 2025).</p>
+                  </div>
+                </div>
+              </div>
+            `;
+            break;
+          case 'pembayaran':
+            contentDiv.innerHTML = `
+              <div class="section-title" data-aos="fade-up">
+                <h2>Metode Pembayaran</h2>
+                <p>Pilih opsi pembayaran yang mudah dan aman!</p>
+              </div>
+              <div class="row">
+                <div class="col-md-6 mb-4" data-aos="fade-up" data-aos-delay="100">
+                  <div class="payment-card">
+                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==" alt="Bank Transfer" class="card-img">
+                    <h4>Transfer Bank</h4>
+                    <p>BCA, No. Rek: 123-456-7890, A/n: BeEdu Indonesia. Proses cepat dalam 1x24 jam.</p>
+                  </div>
+                </div>
+                <div class="col-md-6 mb-4" data-aos="fade-up" data-aos-delay="200">
+                  <div class="payment-card">
+                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==" alt="E-Wallet" class="card-img">
+                    <h4>E-Wallet</h4>
+                    <p>Dukungan OVO dan GoPay dengan konfirmasi instan.</p>
+                  </div>
+                </div>
+              </div>
+            `;
+            break;
+          case 'profil':
+            if (auth.currentUser) {
+              contentDiv.innerHTML = '<h2>Profil Saya</h2><p>Silakan edit profil Anda di sini.</p>';
+            } else {
+              contentDiv.innerHTML = '<h2>Silakan Login untuk melihat profil.</h2>';
             }
-            try {
-              await db.collection('registrations').add({
-                name, email, whatsapp, role: 'student', needs, timestamp: new Date().toISOString()
-              });
-              document.getElementById('successMessage').style.display = 'block';
-              document.getElementById('errorMessage').style.display = 'none';
-              document.getElementById('registrationForm').reset();
-            } catch (error) {
-              handleError(error);
+            break;
+          case 'parent':
+            if (auth.currentUser && auth.currentUser.role === 'parent') {
+              contentDiv.innerHTML = '<h2>Monitoring Perkembangan Anak</h2><p>Lihat progress anak Anda di sini.</p>';
+            } else {
+              contentDiv.innerHTML = '<h2>Silakan Login sebagai Orang Tua.</h2>';
             }
-          });
-          break;
-        default:
-          contentDiv.innerHTML = '<h2>Halaman Tidak Ditemukan</h2><p>Kembali ke <a href="/">Beranda</a>.</p>';
+            break;
+          case 'kontak':
+            contentDiv.innerHTML = `
+              <h2>Daftar Sekarang</h2>
+              <form id="registrationForm">
+                <div class="mb-3"><input type="text" class="form-control" id="name" placeholder="Nama" required></div>
+                <div class="mb-3"><input type="email" class="form-control" id="email" placeholder="Email" required></div>
+                <div class="mb-3"><input type="text" class="form-control" id="whatsapp" placeholder="Nomor WhatsApp" required></div>
+                <div class="mb-3"><textarea class="form-control" id="needs" placeholder="Kebutuhan Belajar" required></textarea></div>
+                <button type="submit" class="btn btn-primary w-100">Kirim</button>
+              </form>
+              <div id="successMessage" class="text-center mt-3" style="display: none; color: green;"></div>
+              <div id="errorMessage" class="text-center mt-3" style="display: none; color: red;"></div>
+            `;
+            document.getElementById('registrationForm')?.addEventListener('submit', async (e) => {
+              e.preventDefault();
+              const name = document.getElementById('name').value.trim();
+              const email = document.getElementById('email').value.trim();
+              const whatsapp = document.getElementById('whatsapp').value.trim();
+              const needs = document.getElementById('needs').value.trim();
+              if (!name || !email || !whatsapp || !needs || !isValidEmail(email) || !isValidWhatsapp(whatsapp)) {
+                handleError(new Error('Data tidak valid!'));
+                return;
+              }
+              try {
+                await db.collection('registrations').add({
+                  name, email, whatsapp, role: 'student', needs, timestamp: new Date().toISOString()
+                });
+                document.getElementById('successMessage').style.display = 'block';
+                document.getElementById('errorMessage').style.display = 'none';
+                document.getElementById('registrationForm').reset();
+              } catch (error) {
+                handleError(error);
+              }
+            });
+            break;
+          default:
+            contentDiv.innerHTML = '<h2>Halaman Tidak Ditemukan</h2><p>Kembali ke <a href="#home">Beranda</a>.</p>';
+        }
       }
     }
 
@@ -571,30 +652,34 @@
     document.querySelectorAll('.nav-link').forEach(link => {
       link.addEventListener('click', (e) => {
         e.preventDefault();
-        const href = link.getAttribute('href');
-        window.history.pushState({}, '', href);
+        const href = link.getAttribute('href').substring(1); // Remove '#'
+        window.location.hash = href;
         loadPage();
       });
     });
 
-    // Handle Back/Forward Browser
-    window.onpopstate = loadPage;
+    // Handle Hash Change
+    window.addEventListener('hashchange', loadPage);
 
     // Initial Load
     window.addEventListener('load', loadPage);
 
-    // Scroll to Top
-    const scrollToTopBtn = document.querySelector('.scroll-to-top');
-    window.addEventListener('scroll', () => {
-      if (window.scrollY > 300) scrollToTopBtn.classList.add('show');
-      else scrollToTopBtn.classList.remove('show');
+    // Initialize AOS
+    AOS.init({
+      duration: 1000,
+      once: true
     });
 
     // Auth State Change
     auth?.onAuthStateChanged((user) => {
       updateUI(user);
-      loadPage(); // Reload content based on auth state
     });
+
+    // Error Handler
+    function handleError(error) {
+      console.error('Error:', error);
+      alert(error.message || 'Terjadi kesalahan. Coba lagi!');
+    }
   </script>
 </body>
 </html>
