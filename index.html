@@ -34,33 +34,125 @@
       display: flex;
       align-items: center;
     }
-    .logo {
-      width: 30px;
-      height: 30px;
-      background-color: #007bff;
+    .logo-nav {
+      width: 35px;
+      height: 35px;
+      background: linear-gradient(45deg, #007bff, #00c4b4);
       border-radius: 50%;
       position: relative;
       margin-right: 10px;
     }
-    .logo::before {
+    .logo-nav::before {
+      content: '';
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      background: #fff;
+      border-radius: 50%;
+      top: 6px;
+      left: 12px;
+      box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.1);
+    }
+    .logo-personal {
+      width: 35px;
+      height: 35px;
+      background: radial-gradient(circle, #ff6f61, #6b48ff);
+      border-radius: 50%;
+      position: relative;
+      display: block;
+      margin: 0 auto;
+    }
+    .logo-personal::before {
+      content: '';
+      position: absolute;
+      width: 15px;
+      height: 15px;
+      background: #fff;
+      clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+      top: 10px;
+      left: 10px;
+    }
+    .logo-access {
+      width: 35px;
+      height: 35px;
+      background: linear-gradient(135deg, #00c4b4, #007bff);
+      border-radius: 20% 80% 20% 80% / 20% 80% 20% 80%;
+      position: relative;
+      display: block;
+      margin: 0 auto;
+    }
+    .logo-access::before {
       content: '';
       position: absolute;
       width: 10px;
       height: 10px;
-      background-color: white;
+      background: #fff;
       border-radius: 50%;
-      top: 5px;
-      left: 10px;
+      top: 12px;
+      left: 12px;
+      animation: pulse 2s infinite;
     }
-    .logo::after {
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+      100% { transform: scale(1); }
+    }
+    .logo-gami {
+      width: 35px;
+      height: 35px;
+      background: radial-gradient(circle, #ffd700, #ffca28);
+      border-radius: 50%;
+      position: relative;
+      display: block;
+      margin: 0 auto;
+    }
+    .logo-gami::before {
       content: '';
       position: absolute;
-      width: 6px;
-      height: 6px;
-      background-color: white;
-      border-radius: 50%;
-      top: 15px;
-      left: 12px;
+      width: 8px;
+      height: 8px;
+      background: #fff;
+      clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+      top: 14px;
+      left: 14px;
+    }
+    .logo-monitor {
+      width: 35px;
+      height: 35px;
+      background: linear-gradient(45deg, #28a745, #ffd700);
+      border-radius: 10px;
+      position: relative;
+      display: block;
+      margin: 0 auto;
+    }
+    .logo-monitor::before {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 10px;
+      background: #fff;
+      border-radius: 5px;
+      top: 12px;
+      left: 7px;
+    }
+    .logo-saran {
+      width: 35px;
+      height: 35px;
+      background: radial-gradient(circle, #25d366, #28a745);
+      border-radius: 50% / 60%;
+      position: relative;
+      display: block;
+      margin: 0 auto;
+    }
+    .logo-saran::before {
+      content: '';
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      background: #fff;
+      clip-path: polygon(50% 0%, 80% 10%, 100% 35%, 80% 60%, 50% 70%, 20% 60%, 0% 35%, 20% 10%);
+      top: 11px;
+      left: 11px;
     }
     .nav-link {
       color: #333 !important;
@@ -131,7 +223,7 @@
       text-align: center;
       margin-bottom: 20px;
       transition: transform 0.3s ease;
-      color: #333; /* Teks hitam agar terlihat jelas */
+      color: #333;
     }
     .testimonial-mini:hover, .feature-mini:hover {
       transform: translateY(-5px);
@@ -198,6 +290,19 @@
     .section-title h2 {
       font-weight: 700;
     }
+    .dropdown-menu {
+      background-color: #fff;
+      border: none;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+    .dropdown-item {
+      color: #333;
+      padding: 10px 20px;
+    }
+    .dropdown-item:hover {
+      background-color: #f8f9fa;
+      color: #007bff;
+    }
   </style>
 </head>
 <body>
@@ -205,7 +310,7 @@
   <nav class="navbar navbar-expand-lg navbar-light fixed-top">
     <div class="container">
       <a class="navbar-brand" href="#home">
-        <span class="logo"></span>
+        <span class="logo-nav"></span>
         BeEdu
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -230,6 +335,16 @@
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#pembayaran">Pembayaran</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="paketDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Paket Belajar
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="paketDropdown">
+              <li><a class="dropdown-item" href="#paket-sd">Paket Belajar SD</a></li>
+              <li><a class="dropdown-item" href="#paket-sma">Paket Belajar SMA</a></li>
+              <li><a class="dropdown-item" href="#paket-perguruan-tinggi">Paket Belajar Perguruan Tinggi</a></li>
+            </ul>
           </li>
           <li class="nav-item" id="profileItem" style="display: none;">
             <a class="nav-link" href="#profil">Profil</a>
@@ -337,35 +452,35 @@
       <div class="row">
         <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="100">
           <div class="feature-mini">
-            <span class="logo" style="margin: 0 auto; display: block;"></span>
+            <span class="logo-personal"></span>
             <h3>Personalisasi AI</h3>
             <p>Materi disesuaikan dengan kebutuhan dan gaya belajarmu.</p>
           </div>
         </div>
         <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="200">
           <div class="feature-mini">
-            <span class="logo" style="margin: 0 auto; display: block;"></span>
+            <span class="logo-access"></span>
             <h3>Akses Fleksibel</h3>
             <p>Belajar kapan saja dengan rekaman 24/7.</p>
           </div>
         </div>
         <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="300">
           <div class="feature-mini">
-            <span class="logo" style="margin: 0 auto; display: block;"></span>
+            <span class="logo-gami"></span>
             <h3>Gamifikasi</h3>
             <p>Motivasi belajar dengan poin dan badge.</p>
           </div>
         </div>
         <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="400">
           <div class="feature-mini">
-            <span class="logo" style="margin: 0 auto; display: block;"></span>
+            <span class="logo-monitor"></span>
             <h3>Monitoring Orang Tua</h3>
             <p>Pantau progress anak secara real-time dengan laporan interaktif.</p>
           </div>
         </div>
         <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="500">
           <div class="feature-mini">
-            <span class="logo" style="margin: 0 auto; display: block;"></span>
+            <span class="logo-saran"></span>
             <h3>Saran dari Tentor</h3>
             <p>Dapatkan saran pribadi via WhatsApp untuk perkembangan terbaik.</p>
           </div>
@@ -387,7 +502,7 @@
   <footer>
     <div class="container">
       <p>© 2025 BeEdu. Kontak kami: <a href="mailto:saptohendratmoko@gmail.com">saptohendratmoko@gmail.com</a> | <a href="https://wa.me/6281367315144">WhatsApp</a></p>
-      <span class="logo" style="margin: 0 auto; display: block;"></span>
+      <span class="logo-nav" style="margin: 0 auto; display: block;"></span>
     </footer>
 
   <!-- WhatsApp Floating Button -->
@@ -588,6 +703,9 @@
 
       if (hash === 'home') {
         homeSection.style.display = 'block';
+      } else if (hash.startsWith('paket-')) {
+        contentDiv.style.display = 'block';
+        contentDiv.innerHTML = getPaketContent(hash.replace('paket-', ''));
       } else {
         contentDiv.style.display = 'block';
         contentDiv.innerHTML = '';
@@ -601,42 +719,42 @@
               <div class="row">
                 <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="100">
                   <div class="feature-card">
-                    <span class="logo" style="margin: 0 auto; display: block;"></span>
+                    <span class="logo-personal"></span>
                     <h3>Personalisasi AI</h3>
                     <p>Materi disesuaikan dengan gaya belajarmu menggunakan kecerdasan buatan.</p>
                   </div>
                 </div>
                 <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="200">
                   <div class="feature-card">
-                    <span class="logo" style="margin: 0 auto; display: block;"></span>
+                    <span class="logo-access"></span>
                     <h3>Akses Fleksibel</h3>
                     <p>Belajar kapan saja dengan rekaman sesi 24/7 dan jadwal fleksibel.</p>
                   </div>
                 </div>
                 <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="300">
                   <div class="feature-card">
-                    <span class="logo" style="margin: 0 auto; display: block;"></span>
+                    <span class="logo-gami"></span>
                     <h3>Gamifikasi</h3>
                     <p>Kumpulkan poin dan badge untuk meningkatkan motivasi belajarmu.</p>
                   </div>
                 </div>
                 <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="400">
                   <div class="feature-card">
-                    <span class="logo" style="margin: 0 auto; display: block;"></span>
+                    <span class="logo-monitor"></span>
                     <h3>Monitoring Orang Tua</h3>
                     <p>Pantau progress anak secara real-time dengan laporan interaktif.</p>
                   </div>
                 </div>
                 <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="500">
                   <div class="feature-card">
-                    <span class="logo" style="margin: 0 auto; display: block;"></span>
+                    <span class="logo-saran"></span>
                     <h3>Saran dari Tentor</h3>
                     <p>Dapatkan saran pribadi via WhatsApp untuk perkembangan terbaik.</p>
                   </div>
                 </div>
                 <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="600">
                   <div class="feature-card">
-                    <span class="logo" style="margin: 0 auto; display: block;"></span>
+                    <span class="logo-personal"></span>
                     <h3>Edit Profil</h3>
                     <p>Kustomisasi profil dengan foto dan tema yang kamu suka.</p>
                   </div>
@@ -653,14 +771,14 @@
               <div class="row">
                 <div class="col-md-6 mb-4" data-aos="fade-up" data-aos-delay="100">
                   <div class="testimonial-card">
-                    <span class="logo" style="margin: 0 auto; display: block;"></span>
+                    <span class="logo-personal"></span>
                     <p>"BeEdu membuat pelajaran matematika jadi menyenangkan dan mudah dipahami!"</p>
                     <h5>Alya, Siswa SMA</h5>
                   </div>
                 </div>
                 <div class="col-md-6 mb-4" data-aos="fade-up" data-aos-delay="200">
                   <div class="testimonial-card">
-                    <span class="logo" style="margin: 0 auto; display: block;"></span>
+                    <span class="logo-monitor"></span>
                     <p>"Anak saya semakin termotivasi berkat gamifikasi di BeEdu!"</p>
                     <h5>Ibu Sari, Orang Tua</h5>
                   </div>
@@ -677,12 +795,12 @@
               <div class="row">
                 <div class="col-md-12" data-aos="fade-up">
                   <div class="faq-item">
-                    <span class="logo" style="margin: 0 auto; display: block;"></span>
+                    <span class="logo-nav"></span>
                     <h4>Apa itu BeEdu?</h4>
                     <p>BeEdu adalah platform les privat online dengan AI dan gamifikasi untuk belajar yang lebih menyenangkan.</p>
                   </div>
                   <div class="faq-item" data-aos="fade-up" data-aos-delay="100">
-                    <span class="logo" style="margin: 0 auto; display: block;"></span>
+                    <span class="logo-nav"></span>
                     <h4>Bagaimana cara mendaftar?</h4>
                     <p>Klik "Daftar Sesi Gratis" di Beranda dan isi formulir sederhana.</p>
                   </div>
@@ -699,14 +817,14 @@
               <div class="row">
                 <div class="col-md-6 mb-4" data-aos="fade-up" data-aos-delay="100">
                   <div class="blog-card">
-                    <span class="logo" style="margin: 0 auto; display: block;"></span>
+                    <span class="logo-gami"></span>
                     <h4>Siswa Terbaik: Alya</h4>
                     <p>Alya meraih badge "Super Learner" setelah menyelesaikan 20 sesi (6 Juni 2025).</p>
                   </div>
                 </div>
                 <div class="col-md-6 mb-4" data-aos="fade-up" data-aos-delay="200">
                   <div class="blog-card">
-                    <span class="logo" style="margin: 0 auto; display: block;"></span>
+                    <span class="logo-saran"></span>
                     <h4>Tips Belajar Efektif</h4>
                     <p>5 strategi dari tentor BeEdu untuk sukses di ujian (9 Juni 2025).</p>
                   </div>
@@ -723,14 +841,14 @@
               <div class="row">
                 <div class="col-md-6 mb-4" data-aos="fade-up" data-aos-delay="100">
                   <div class="payment-card">
-                    <span class="logo" style="margin: 0 auto; display: block;"></span>
+                    <span class="logo-nav"></span>
                     <h4>Transfer Bank</h4>
                     <p>BCA, No. Rek: 123-456-7890, A/n: BeEdu Indonesia. Proses cepat dalam 1x24 jam.</p>
                   </div>
                 </div>
                 <div class="col-md-6 mb-4" data-aos="fade-up" data-aos-delay="200">
                   <div class="payment-card">
-                    <span class="logo" style="margin: 0 auto; display: block;"></span>
+                    <span class="logo-nav"></span>
                     <h4>E-Wallet</h4>
                     <p>Dukungan OVO dan GoPay dengan konfirmasi instan.</p>
                   </div>
@@ -793,8 +911,43 @@
       }
     }
 
+    function getPaketContent(paket) {
+      let content = `
+        <div class="section-title" data-aos="fade-up">
+          <h2>Paket Belajar ${paket.charAt(0).toUpperCase() + paket.slice(1)}</h2>
+          <p>Pilih paket yang sesuai dengan kebutuhan belajar Anda!</p>
+        </div>
+        <div class="row">
+      `;
+      const packages = {
+        'sd': { standar: '10 sesi/bulan, materi dasar, akses 24/7', pro: '20 sesi/bulan, materi lanjutan, akses 24/7, saran pribadi' },
+        'sma': { standar: '12 sesi/bulan, fokus ujian, akses 24/7', pro: '25 sesi/bulan, simulasi ujian, akses 24/7, saran pribadi' },
+        'perguruan-tinggi': { standar: '15 sesi/bulan, materi akademik, akses 24/7', pro: '30 sesi/bulan, bimbingan tugas, akses 24/7, saran pribadi' }
+      };
+      content += `
+        <div class="col-md-6 mb-4" data-aos="fade-up" data-aos-delay="100">
+          <div class="feature-card">
+            <span class="logo-nav"></span>
+            <h3>Standar</h3>
+            <p>${packages[paket].standar}</p>
+            <button class="btn btn-primary">Beli Sekarang</button>
+          </div>
+        </div>
+        <div class="col-md-6 mb-4" data-aos="fade-up" data-aos-delay="200">
+          <div class="feature-card">
+            <span class="logo-nav"></span>
+            <h3>Pro</h3>
+            <p>${packages[paket].pro}</p>
+            <button class="btn btn-success">Beli Sekarang</button>
+          </div>
+        </div>
+      `;
+      content += '</div>';
+      return content;
+    }
+
     // Handle Navigation
-    document.querySelectorAll('.nav-link').forEach(link => {
+    document.querySelectorAll('.nav-link, .dropdown-item').forEach(link => {
       link.addEventListener('click', (e) => {
         e.preventDefault();
         const href = link.getAttribute('href').substring(1); // Remove '#'
@@ -810,6 +963,14 @@
     AOS.init({
       duration: 1000,
       once: true
+    });
+
+    // Fix Carousel Manual Control
+    document.querySelectorAll('.carousel-control-prev, .carousel-control-next').forEach(button => {
+      button.addEventListener('click', () => {
+        const carousel = new bootstrap.Carousel(document.getElementById(button.dataset.bsTarget.replace('#', '')));
+        carousel.cycle(); // Ensure carousel continues cycling after manual control
+      });
     });
 
     // Auth State Change
