@@ -131,7 +131,7 @@
     footer a:hover {
       color: #ffca28;
     }
-    .whatsapp-btn {
+    .whatsapp-btn, .login-btn {
       position: fixed;
       bottom: 20px;
       right: 20px;
@@ -146,8 +146,13 @@
       font-size: 1.5rem;
       box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
       transition: transform 0.3s ease;
+      z-index: 1000;
     }
-    .whatsapp-btn:hover {
+    .login-btn {
+      background-color: #007bff;
+      right: 100px;
+    }
+    .whatsapp-btn:hover, .login-btn:hover {
       transform: scale(1.1);
     }
     .scroll-to-top {
@@ -256,12 +261,6 @@
           <li class="nav-item">
             <a class="nav-link" href="#payment">Pembayaran</a>
           </li>
-          <li class="nav-item" id="loginItem">
-            <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">Login</a>
-          </li>
-          <li class="nav-item" id="registerItem">
-            <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#registerModal">Daftar</a>
-          </li>
           <li class="nav-item" id="profileItem" style="display: none;">
             <a class="nav-link" href="#" id="userProfileNav">Profil</a>
           </li>
@@ -316,6 +315,27 @@
             <i class="fas fa-trophy"></i>
             <h3>Gamifikasi</h3>
             <p>Dapatkan poin, badge, dan hadiah untuk meningkatkan motivasi belajar.</p>
+          </div>
+        </div>
+        <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="400">
+          <div class="feature-card">
+            <i class="fas fa-eye"></i>
+            <h3>Monitoring Orang Tua</h3>
+            <p>Orang tua dapat memantau progress, poin, dan riwayat belajar anak secara real-time.</p>
+          </div>
+        </div>
+        <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="500">
+          <div class="feature-card">
+            <i class="fas fa-chalkboard-teacher"></i>
+            <h3>Saran dari Tentor</h3>
+            <p>Tentor dapat memberikan saran perkembangan anak langsung ke orang tua via WhatsApp.</p>
+          </div>
+        </div>
+        <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="600">
+          <div class="feature-card">
+            <i class="fas fa-edit"></i>
+            <h3>Edit Profil</h3>
+            <p>Kelola dan perbarui data profil kamu dengan mudah kapan saja.</p>
           </div>
         </div>
       </div>
@@ -377,7 +397,7 @@
           </h2>
           <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
             <div class="accordion-body">
-              Kamu bisa mendaftar dengan mengisi formulir di bagian kontak atau membuat akun melalui login/daftar di navbar.
+              Kamu bisa mendaftar sebagai siswa dengan mengisi formulir di bagian kontak.
             </div>
           </div>
         </div>
@@ -458,17 +478,10 @@
           <label for="whatsapp" class="form-label">Nomor WhatsApp</label>
           <input type="text" class="form-control" id="whatsapp" name="whatsapp" pattern="^08[1-9][0-9]{8,11}$" placeholder="Contoh: 081367315144" required>
         </div>
-        <div class="mb-3">
-          <label for="role" class="form-label">Peran</label>
-          <select class="form-control" id="role" name="role" required>
-            <option value="student">Siswa</option>
-            <option value="tutor">Tentor</option>
-            <option value="parent">Orang Tua</option>
-          </select>
-        </div>
+        <input type="hidden" id="role" name="role" value="student">
         <div class="mb-3">
           <label for="needs" class="form-label">Kebutuhan Belajar</label>
-          <textarea class="form-control" id="needs" name="needs" rows="4"></textarea>
+          <textarea class="form-control" id="needs" name="needs" rows="4" required></textarea>
         </div>
         <button type="submit" class="btn btn-primary w-100">Kirim</button>
       </form>
@@ -525,14 +538,6 @@
                   <label for="editWhatsapp" class="form-label">Nomor WhatsApp</label>
                   <input type="text" class="form-control" id="editWhatsapp" pattern="^08[1-9][0-9]{8,11}$" placeholder="Contoh: 081367315144" required>
                 </div>
-                <div class="mb-3">
-                  <label for="editRole" class="form-label">Peran</label>
-                  <select class="form-control" id="editRole" required>
-                    <option value="student">Siswa</option>
-                    <option value="tutor">Tentor</option>
-                    <option value="parent">Orang Tua</option>
-                  </select>
-                </div>
                 <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
                 <button type="button" class="btn btn-secondary ms-2" id="cancelEditBtn">Batal</button>
               </form>
@@ -572,6 +577,11 @@
     <i class="fab fa-whatsapp"></i>
   </a>
 
+  <!-- Login Floating Button -->
+  <a href="#" class="login-btn" data-bs-toggle="modal" data-bs-target="#loginModal">
+    <i class="fas fa-sign-in-alt"></i>
+  </a>
+
   <!-- Scroll to Top Button -->
   <a href="#home" class="scroll-to-top">
     <i class="fas fa-chevron-up"></i>
@@ -586,7 +596,9 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <button id="googleLogin" class="btn btn-danger w-100 mb-3">Login with Google</button>
+          <button id="googleLoginStudent" class="btn btn-primary w-100 mb-3">Login sebagai Siswa</button>
+          <button id="googleLoginTutor" class="btn btn-primary w-100 mb-3">Login sebagai Tentor</button>
+          <button id="googleLoginParent" class="btn btn-primary w-100 mb-3">Login sebagai Orang Tua</button>
           <div class="mb-3">
             <label for="loginEmail" class="form-label">Email</label>
             <input type="email" class="form-control" id="loginEmail" required>
@@ -595,7 +607,7 @@
             <label for="loginPassword" class="form-label">Password</label>
             <input type="password" class="form-control" id="loginPassword" required>
           </div>
-          <button id="emailLogin" class="btn btn-primary w-100">Login with Email</button>
+          <button id="emailLogin" class="btn btn-primary w-100">Login</button>
         </div>
       </div>
     </div>
@@ -619,7 +631,7 @@
             <label for="registerPassword" class="form-label">Password</label>
             <input type="password" class="form-control" id="registerPassword" required>
           </div>
-          <button id="emailRegister" class="btn btn-primary w-100">Daftar with Email</button>
+          <button id="emailRegister" class="btn btn-primary w-100">Daftar</button>
         </div>
       </div>
     </div>
@@ -701,18 +713,29 @@
 
     // Handle Google Login/Register
     const googleProvider = new firebase.auth.GoogleAuthProvider();
-    document.getElementById('googleLogin')?.addEventListener('click', () => {
+    document.getElementById('googleLoginStudent')?.addEventListener('click', () => {
       if (auth) auth.signInWithPopup(googleProvider).then((result) => {
         const user = result.user;
+        saveUserToFirestore(user, 'student');
         loadUserData(user.uid);
         updateUI(user);
       }).catch(handleError);
     });
 
-    document.getElementById('googleRegister')?.addEventListener('click', () => {
+    document.getElementById('googleLoginTutor')?.addEventListener('click', () => {
       if (auth) auth.signInWithPopup(googleProvider).then((result) => {
         const user = result.user;
-        saveUserToFirestore(user, document.getElementById('role')?.value || 'student');
+        saveUserToFirestore(user, 'tutor');
+        loadUserData(user.uid);
+        updateUI(user);
+      }).catch(handleError);
+    });
+
+    document.getElementById('googleLoginParent')?.addEventListener('click', () => {
+      if (auth) auth.signInWithPopup(googleProvider).then((result) => {
+        const user = result.user;
+        saveUserToFirestore(user, 'parent');
+        loadUserData(user.uid);
         updateUI(user);
       }).catch(handleError);
     });
@@ -728,7 +751,7 @@
       }
       auth.createUserWithEmailAndPassword(email, password).then((userCredential) => {
         const user = userCredential.user;
-        saveUserToFirestore(user, document.getElementById('role')?.value || 'student');
+        saveUserToFirestore(user, 'student'); // Default to student for registration
         updateUI(user);
         document.getElementById('registerModal').querySelector('.btn-close')?.click();
       }).catch(handleError);
@@ -776,8 +799,6 @@
 
     // Update UI based on Auth State and Role
     function updateUI(user) {
-      const loginItem = document.getElementById('loginItem');
-      const registerItem = document.getElementById('registerItem');
       const profileItem = document.getElementById('profileItem');
       const logoutItem = document.getElementById('logoutItem');
       const profileSection = document.getElementById('profile');
@@ -785,13 +806,12 @@
       const parentSection = document.getElementById('parent');
 
       if (user) {
-        loginItem.style.display = 'none';
-        registerItem.style.display = 'none';
         profileItem.style.display = 'block';
         logoutItem.style.display = 'block';
         profileSection.style.display = 'block';
-        const sendAdviceBtn = document.getElementById('sendAdviceBtn');
-        if (user.role === 'tutor') sendAdviceBtn.style.display = 'block';
+        if (user.role === 'tutor') {
+          document.getElementById('sendAdviceBtn').style.display = 'block';
+        }
         if (user.role === 'parent') {
           parentItem.style.display = 'block';
           parentSection.style.display = 'block';
@@ -801,8 +821,6 @@
         }
         loadUserData(user.uid);
       } else {
-        loginItem.style.display = 'block';
-        registerItem.style.display = 'block';
         profileItem.style.display = 'none';
         logoutItem.style.display = 'none';
         profileSection.style.display = 'none';
@@ -845,7 +863,6 @@
           document.getElementById('editName').value = userData.name;
           document.getElementById('editEmail').value = userData.email;
           document.getElementById('editWhatsapp').value = userData.whatsapp || '';
-          document.getElementById('editRole').value = userData.role;
         }
       }).catch(handleError);
     }
@@ -939,7 +956,7 @@
       });
     }
 
-    // Handle Form Submission with WhatsApp and Parent-Child Link
+    // Handle Form Submission with WhatsApp
     document.getElementById('registrationForm')?.addEventListener('submit', async (e) => {
       e.preventDefault();
       const name = document.getElementById('name').value.trim();
@@ -960,20 +977,14 @@
       }
 
       try {
-        const docRef = await db.collection('registrations').add({
+        await db.collection('registrations').add({
           name: name,
           email: email,
           whatsapp: whatsapp,
           role: role,
           needs: needs,
-          timestamp: new Date().toISOString(),
-          parentId: role === 'student' ? null : '' // Link to parent if student
+          timestamp: new Date().toISOString()
         });
-        if (role === 'student' && auth.currentUser) {
-          await db.collection('users').doc(auth.currentUser.uid).update({
-            parentId: docRef.id // Link student to parent
-          });
-        }
         successMessage.style.display = 'block';
         errorMessage.style.display = 'none';
         document.getElementById('registrationForm').reset();
@@ -997,7 +1008,6 @@
       const name = document.getElementById('editName').value.trim();
       const email = document.getElementById('editEmail').value.trim();
       const whatsapp = document.getElementById('editWhatsapp').value.trim();
-      const role = document.getElementById('editRole').value;
 
       if (!name || !email || !whatsapp || !isValidEmail(email) || !isValidWhatsapp(whatsapp)) {
         handleError(new Error('Data tidak valid!'));
@@ -1007,8 +1017,7 @@
       db.collection('users').doc(auth.currentUser.uid).update({
         name: name,
         email: email,
-        whatsapp: whatsapp,
-        role: role
+        whatsapp: whatsapp
       }).then(() => {
         loadUserData(auth.currentUser.uid);
         document.getElementById('editForm').classList.remove('show');
