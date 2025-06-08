@@ -1,42 +1,4 @@
-<script type="text/javascript">
-        var gk_isXlsx = false;
-        var gk_xlsxFileLookup = {};
-        var gk_fileData = {};
-        function filledCell(cell) {
-          return cell !== '' && cell != null;
-        }
-        function loadFileData(filename) {
-        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
-            try {
-                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
-                var firstSheetName = workbook.SheetNames[0];
-                var worksheet = workbook.Sheets[firstSheetName];
-                // Convert sheet to JSON to filter blank rows
-                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
-                // Filter out blank rows (rows where all cells are empty, null, or undefined)
-                var filteredData = jsonData.filter(row => row.some(filledCell));
-
-                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
-                var headerRowIndex = filteredData.findIndex((row, index) =>
-                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
-                );
-                // Fallback
-                if (headerRowIndex === -1 || headerRowIndex > 25) {
-                  headerRowIndex = 0;
-                }
-
-                // Convert filtered JSON back to CSV
-                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
-                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
-                return csv;
-            } catch (e) {
-                console.error(e);
-                return "";
-            }
-        }
-        return gk_fileData[filename] || "";
-        }
-        </script><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8">
@@ -230,6 +192,12 @@
       max-width: 200px;
       margin: 20px 0;
     }
+    #userProfile {
+      display: none;
+      color: green;
+      text-align: center;
+      margin-top: 10px;
+    }
   </style>
 </head>
 <body>
@@ -261,7 +229,10 @@
             <a class="nav-link" href="#payment">Pembayaran</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#contact">Kontak</a>
+            <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">Login</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#registerModal">Daftar</a>
           </li>
         </ul>
       </div>
@@ -369,7 +340,7 @@
           </h2>
           <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
             <div class="accordion-body">
-              Kamu bisa mendaftar dengan mengisi formulir di bagian kontak. Kami akan menghubungi kamu untuk sesi gratis pertama!
+              Kamu bisa mendaftar dengan mengisi formulir di bagian kontak atau membuat akun melalui login/daftar di navbar.
             </div>
           </div>
         </div>
@@ -424,14 +395,14 @@
              <strong>Nomor Rekening:</strong> 123-456-7890<br>
              <strong>Atas Nama:</strong> BeEdu Indonesia</p>
           <p>Setelah transfer, konfirmasi pembayaran via WhatsApp dengan mengirimkan bukti transfer.</p>
-          <a href="https://wa.me/6281367315144?text=Saya%20telah%20melakukan%20pembayaran%20via%20transfer%20bank" class="btn btn-primary" target="_blank">Konfirmasi via WhatsApp</a>
+          <a href="https://wa.me/081367315144?text=Saya%20telah%20melakukan%20pembayaran%20via%20transfer%20bank" class="btn btn-primary" target="_blank">Konfirmasi via WhatsApp</a>
         </div>
         <div class="col-md-6" data-aos="fade-up" data-aos-delay="100">
           <h4>QRIS</h4>
           <p>Scan kode QRIS berikut untuk pembayaran cepat:</p>
           <img src="https://via.placeholder.com/200x200.png?text=QRIS+BeEdu" alt="QRIS BeEdu" class="img-fluid">
           <p>Setelah pembayaran, konfirmasi via WhatsApp.</p>
-          <a href="https://wa.me/6281367315144?text=Saya%20telah%20melakukan%20pembayaran%20via%20QRIS" class="btn btn-primary" target="_blank">Konfirmasi via WhatsApp</a>
+          <a href="https://wa.me/081367315144?text=Saya%20telah%20melakukan%20pembayaran%20via%20QRIS" class="btn btn-primary" target="_blank">Konfirmasi via WhatsApp</a>
         </div>
       </div>
     </div>
@@ -460,19 +431,20 @@
         Data berhasil disimpan! Kami akan segera menghubungi kamu di saptohendratmoko@gmail.com.
       </div>
       <div id="errorMessage" class="text-center mt-3" style="display: none; color: red;">
-        Terjadi kesalahan. Silakan coba lagi atau hubungi kami di 6281367315144.
+        Terjadi kesalahan. Silakan coba lagi atau hubungi kami di 081367315144.
       </div>
+      <div id="userProfile" class="mt-3"></div>
     </div>
   </section>
 
   <!-- Footer -->
   <footer>
     <div class="container">
-      <p>© 2025 BeEdu. Kontak kami: <a href="mailto:saptohendratmoko@gmail.com">saptohendratmoko@gmail.com</a> | <a href="https://wa.me/6281367315144">WhatsApp</a> | <a href="https://t.me/6281367315144">Telegram</a></p>
+      <p>© 2025 BeEdu. Kontak kami: <a href="mailto:saptohendratmoko@gmail.com">saptohendratmoko@gmail.com</a> | <a href="https://wa.me/081367315144">WhatsApp</a> | <a href="https://t.me/081367315144">Telegram</a></p>
     </footer>
 
   <!-- WhatsApp Floating Button -->
-  <a href="https://wa.me/6281367315144" class="whatsapp-btn" target="_blank">
+  <a href="https://wa.me/081367315144" class="whatsapp-btn" target="_blank">
     <i class="fab fa-whatsapp"></i>
   </a>
 
@@ -480,6 +452,54 @@
   <a href="#home" class="scroll-to-top">
     <i class="fas fa-chevron-up"></i>
   </a>
+
+  <!-- Login Modal -->
+  <div class="modal fade" id="loginModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Login</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <button id="googleLogin" class="btn btn-danger w-100 mb-3">Login with Google</button>
+          <div class="mb-3">
+            <label for="loginEmail" class="form-label">Email</label>
+            <input type="email" class="form-control" id="loginEmail" required>
+          </div>
+          <div class="mb-3">
+            <label for="loginPassword" class="form-label">Password</label>
+            <input type="password" class="form-control" id="loginPassword" required>
+          </div>
+          <button id="emailLogin" class="btn btn-primary w-100">Login with Email</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Register Modal -->
+  <div class="modal fade" id="registerModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Daftar Akun</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <button id="googleRegister" class="btn btn-danger w-100 mb-3">Daftar with Google</button>
+          <div class="mb-3">
+            <label for="registerEmail" class="form-label">Email</label>
+            <input type="email" class="form-control" id="registerEmail" required>
+          </div>
+          <div class="mb-3">
+            <label for="registerPassword" class="form-label">Password</label>
+            <input type="password" class="form-control" id="registerPassword" required>
+          </div>
+          <button id="emailRegister" class="btn btn-primary w-100">Daftar with Email</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- Modal Pop-Up -->
   <div class="modal fade" id="welcomeModal" tabindex="-1" aria-hidden="true">
@@ -499,6 +519,7 @@
 
   <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
@@ -519,9 +540,81 @@
       measurementId: "G-X0GTPEGZ40"
     };
 
-    // Initialize Firebase App
     const app = firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore(); // Using compat version for easier integration
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    // Handle Google Login/Register
+    const googleProvider = new firebase.auth.GoogleAuthProvider();
+    document.getElementById('googleLogin').addEventListener('click', () => {
+      auth.signInWithPopup(googleProvider).then((result) => {
+        const user = result.user;
+        saveUserToFirestore(user);
+        updateUserProfile(user);
+      }).catch((error) => {
+        document.getElementById('errorMessage').textContent = error.message;
+        document.getElementById('errorMessage').style.display = 'block';
+      });
+    });
+
+    document.getElementById('googleRegister').addEventListener('click', () => {
+      auth.signInWithPopup(googleProvider).then((result) => {
+        const user = result.user;
+        saveUserToFirestore(user);
+        updateUserProfile(user);
+      }).catch((error) => {
+        document.getElementById('errorMessage').textContent = error.message;
+        document.getElementById('errorMessage').style.display = 'block';
+      });
+    });
+
+    // Handle Email/Password Register
+    document.getElementById('emailRegister').addEventListener('click', () => {
+      const email = document.getElementById('registerEmail').value;
+      const password = document.getElementById('registerPassword').value;
+      auth.createUserWithEmailAndPassword(email, password).then((userCredential) => {
+        const user = userCredential.user;
+        saveUserToFirestore(user);
+        updateUserProfile(user);
+        document.getElementById('registerModal').querySelector('.btn-close').click();
+      }).catch((error) => {
+        document.getElementById('errorMessage').textContent = error.message;
+        document.getElementById('errorMessage').style.display = 'block';
+      });
+    });
+
+    // Handle Email/Password Login
+    document.getElementById('emailLogin').addEventListener('click', () => {
+      const email = document.getElementById('loginEmail').value;
+      const password = document.getElementById('loginPassword').value;
+      auth.signInWithEmailAndPassword(email, password).then((userCredential) => {
+        const user = userCredential.user;
+        updateUserProfile(user);
+        document.getElementById('loginModal').querySelector('.btn-close').click();
+      }).catch((error) => {
+        document.getElementById('errorMessage').textContent = error.message;
+        document.getElementById('errorMessage').style.display = 'block';
+      });
+    });
+
+    // Save User to Firestore
+    function saveUserToFirestore(user) {
+      db.collection('users').doc(user.uid).set({
+        name: user.displayName || 'User',
+        email: user.email,
+        uid: user.uid,
+        createdAt: new Date().toISOString()
+      }, { merge: true }).catch((error) => {
+        console.error('Error saving user: ', error);
+      });
+    }
+
+    // Update User Profile Display
+    function updateUserProfile(user) {
+      const userProfile = document.getElementById('userProfile');
+      userProfile.textContent = `Selamat datang, ${user.displayName || user.email}!`;
+      userProfile.style.display = 'block';
+    }
 
     // Handle Form Submission and Save to Firestore
     document.getElementById('registrationForm').addEventListener('submit', async (e) => {
@@ -532,7 +625,6 @@
       const successMessage = document.getElementById('successMessage');
       const errorMessage = document.getElementById('errorMessage');
 
-      // Validasi input
       if (!name || !email || !needs) {
         errorMessage.textContent = 'Semua field harus diisi!';
         errorMessage.style.display = 'block';
@@ -551,7 +643,7 @@
         document.getElementById('registrationForm').reset();
       } catch (error) {
         console.error('Error saving data: ', error);
-        errorMessage.textContent = 'Terjadi kesalahan. Silakan coba lagi atau hubungi kami di 6281367315144.';
+        errorMessage.textContent = 'Terjadi kesalahan. Silakan coba lagi atau hubungi kami di 081367315144.';
         errorMessage.style.display = 'block';
         successMessage.style.display = 'none';
       }
@@ -589,6 +681,15 @@
         scrollToTopBtn.classList.add('show');
       } else {
         scrollToTopBtn.classList.remove('show');
+      }
+    });
+
+    // Logout
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        updateUserProfile(user);
+      } else {
+        document.getElementById('userProfile').style.display = 'none';
       }
     });
   </script>
