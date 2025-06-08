@@ -53,7 +53,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==') no-repeat center center/cover; /* Placeholder lokal */
+      background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==') no-repeat center center/cover;
       opacity: 0.2;
     }
     .hero-section h1 {
@@ -107,7 +107,7 @@
       padding: 20px;
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
     }
-    .faq-section, .blog-section, .payment-section, .profile-section {
+    .faq-section, .blog-section, .payment-section, .profile-section, .parent-section {
       padding: 60px 0;
     }
     .accordion-button {
@@ -198,7 +198,7 @@
       text-align: center;
       margin-top: 10px;
     }
-    .profile-card {
+    .profile-card, .parent-card {
       background-color: #fff;
       border-radius: 15px;
       padding: 20px;
@@ -219,6 +219,12 @@
       padding-right: 10px;
       color: white;
       transition: width 0.3s ease;
+    }
+    .edit-form {
+      display: none;
+    }
+    .edit-form.show {
+      display: block;
     }
   </style>
 </head>
@@ -261,6 +267,9 @@
           </li>
           <li class="nav-item" id="logoutItem" style="display: none;">
             <a class="nav-link" href="#" id="logoutBtn">Logout</a>
+          </li>
+          <li class="nav-item" id="parentItem" style="display: none;">
+            <a class="nav-link" href="#" id="parentDashboardNav">Monitoring Anak</a>
           </li>
         </ul>
       </div>
@@ -454,6 +463,7 @@
           <select class="form-control" id="role" name="role" required>
             <option value="student">Siswa</option>
             <option value="tutor">Tentor</option>
+            <option value="parent">Orang Tua</option>
           </select>
         </div>
         <div class="mb-3">
@@ -496,10 +506,55 @@
             <div class="mb-3" id="teachingSchedule" style="display: none;">
               <h5>Jadwal Mengajar</h5>
               <ul id="scheduleList"></ul>
+              <button class="btn btn-success mt-3" id="sendAdviceBtn" style="display: none;">Kirim Saran ke Orang Tua</button>
             </div>
             <div class="mb-3">
-              <button class="btn btn-primary" id="editProfile">Edit Profil</button>
+              <button class="btn btn-primary" id="editProfileBtn">Edit Profil</button>
             </div>
+            <div class="edit-form" id="editForm">
+              <form id="editProfileForm">
+                <div class="mb-3">
+                  <label for="editName" class="form-label">Nama</label>
+                  <input type="text" class="form-control" id="editName" required>
+                </div>
+                <div class="mb-3">
+                  <label for="editEmail" class="form-label">Email</label>
+                  <input type="email" class="form-control" id="editEmail" required>
+                </div>
+                <div class="mb-3">
+                  <label for="editWhatsapp" class="form-label">Nomor WhatsApp</label>
+                  <input type="text" class="form-control" id="editWhatsapp" pattern="^08[1-9][0-9]{8,11}$" placeholder="Contoh: 081367315144" required>
+                </div>
+                <div class="mb-3">
+                  <label for="editRole" class="form-label">Peran</label>
+                  <select class="form-control" id="editRole" required>
+                    <option value="student">Siswa</option>
+                    <option value="tutor">Tentor</option>
+                    <option value="parent">Orang Tua</option>
+                  </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                <button type="button" class="btn btn-secondary ms-2" id="cancelEditBtn">Batal</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Parent Monitoring Section -->
+  <section id="parent" class="parent-section" style="display: none;">
+    <div class="container">
+      <h2 class="text-center mb-5" data-aos="fade-up">Monitoring Perkembangan Anak</h2>
+      <div class="row">
+        <div class="col-md-12" data-aos="fade-up">
+          <div class="parent-card" id="parentContent">
+            <h4 id="childName"></h4>
+            <p id="childProgress"></p>
+            <p id="childPoints"></p>
+            <h5>Riwayat Belajar Anak</h5>
+            <ul id="childHistoryList"></ul>
           </div>
         </div>
       </div>
@@ -629,9 +684,7 @@
       auth = firebase.auth();
       db = firebase.firestore();
     } catch (error) {
-      console.error('Firebase initialization failed:', error);
-      document.getElementById('errorMessage').textContent = 'Gagal memuat layanan. Periksa koneksi internet.';
-      document.getElementById('errorMessage').style.display = 'block';
+      handleError(new Error('Firebase initialization failed: ' + error.message));
     }
 
     // Validate Email Function
@@ -649,27 +702,19 @@
     // Handle Google Login/Register
     const googleProvider = new firebase.auth.GoogleAuthProvider();
     document.getElementById('googleLogin')?.addEventListener('click', () => {
-      if (auth) {
-        auth.signInWithPopup(googleProvider).then((result) => {
-          const user = result.user;
-          loadUserData(user.uid);
-          updateUI(user);
-        }).catch((error) => {
-          handleError(error);
-        });
-      }
+      if (auth) auth.signInWithPopup(googleProvider).then((result) => {
+        const user = result.user;
+        loadUserData(user.uid);
+        updateUI(user);
+      }).catch(handleError);
     });
 
     document.getElementById('googleRegister')?.addEventListener('click', () => {
-      if (auth) {
-        auth.signInWithPopup(googleProvider).then((result) => {
-          const user = result.user;
-          saveUserToFirestore(user, 'student');
-          updateUI(user);
-        }).catch((error) => {
-          handleError(error);
-        });
-      }
+      if (auth) auth.signInWithPopup(googleProvider).then((result) => {
+        const user = result.user;
+        saveUserToFirestore(user, document.getElementById('role')?.value || 'student');
+        updateUI(user);
+      }).catch(handleError);
     });
 
     // Handle Email/Password Register
@@ -677,22 +722,16 @@
       if (!auth) return;
       const email = document.getElementById('registerEmail').value.trim();
       const password = document.getElementById('registerPassword').value;
-      if (!isValidEmail(email)) {
-        handleError(new Error('Format email tidak valid!'));
-        return;
-      }
-      if (password.length < 6) {
-        handleError(new Error('Password minimal 6 karakter!'));
+      if (!isValidEmail(email) || password.length < 6) {
+        handleError(new Error('Format email tidak valid atau password kurang dari 6 karakter!'));
         return;
       }
       auth.createUserWithEmailAndPassword(email, password).then((userCredential) => {
         const user = userCredential.user;
-        saveUserToFirestore(user, 'student');
+        saveUserToFirestore(user, document.getElementById('role')?.value || 'student');
         updateUI(user);
         document.getElementById('registerModal').querySelector('.btn-close')?.click();
-      }).catch((error) => {
-        handleError(error);
-      });
+      }).catch(handleError);
     });
 
     // Handle Email/Password Login
@@ -708,9 +747,7 @@
         const user = userCredential.user;
         updateUI(user);
         document.getElementById('loginModal').querySelector('.btn-close')?.click();
-      }).catch((error) => {
-        handleError(error);
-      });
+      }).catch(handleError);
     });
 
     // Save User to Firestore with WhatsApp
@@ -732,10 +769,9 @@
         whatsapp: whatsapp || null,
         progress: 0,
         gamificationPoints: 0,
-        learningHistory: []
-      }, { merge: true }).catch((error) => {
-        handleError(error);
-      });
+        learningHistory: [],
+        childId: role === 'parent' ? null : '' // For parent to link child
+      }, { merge: true }).catch(handleError);
     }
 
     // Update UI based on Auth State and Role
@@ -745,6 +781,8 @@
       const profileItem = document.getElementById('profileItem');
       const logoutItem = document.getElementById('logoutItem');
       const profileSection = document.getElementById('profile');
+      const parentItem = document.getElementById('parentItem');
+      const parentSection = document.getElementById('parent');
 
       if (user) {
         loginItem.style.display = 'none';
@@ -752,6 +790,15 @@
         profileItem.style.display = 'block';
         logoutItem.style.display = 'block';
         profileSection.style.display = 'block';
+        const sendAdviceBtn = document.getElementById('sendAdviceBtn');
+        if (user.role === 'tutor') sendAdviceBtn.style.display = 'block';
+        if (user.role === 'parent') {
+          parentItem.style.display = 'block';
+          parentSection.style.display = 'block';
+        } else {
+          parentItem.style.display = 'none';
+          parentSection.style.display = 'none';
+        }
         loadUserData(user.uid);
       } else {
         loginItem.style.display = 'block';
@@ -759,18 +806,14 @@
         profileItem.style.display = 'none';
         logoutItem.style.display = 'none';
         profileSection.style.display = 'none';
+        parentItem.style.display = 'none';
+        parentSection.style.display = 'none';
       }
     }
 
     // Logout
     document.getElementById('logoutBtn')?.addEventListener('click', () => {
-      if (auth) {
-        auth.signOut().then(() => {
-          updateUI(null);
-        }).catch((error) => {
-          handleError(error);
-        });
-      }
+      if (auth) auth.signOut().then(() => updateUI(null)).catch(handleError);
     });
 
     // Load User Data (Profile, Packages, Schedules)
@@ -787,7 +830,7 @@
           document.getElementById('progressBar').textContent = `${userData.progress}%`;
           document.getElementById('gamificationPoints').textContent = userData.gamificationPoints;
           const historyList = document.getElementById('historyList');
-          historyList.innerHTML = userData.learningHistory.map(item => `<li>${item}</li>`).join('') || '<li>Tidak ada riwayat</li>';
+          historyList.innerHTML = (userData.learningHistory || []).map(item => `<li>${item}</li>`).join('') || '<li>Tidak ada riwayat</li>';
 
           const teachingSchedule = document.getElementById('teachingSchedule');
           if (userData.role === 'tutor') {
@@ -798,10 +841,28 @@
           }
 
           displayPackages(userData.activePackage);
+          loadParentData(uid, userData.role);
+          document.getElementById('editName').value = userData.name;
+          document.getElementById('editEmail').value = userData.email;
+          document.getElementById('editWhatsapp').value = userData.whatsapp || '';
+          document.getElementById('editRole').value = userData.role;
         }
-      }).catch((error) => {
-        handleError(error);
-      });
+      }).catch(handleError);
+    }
+
+    // Load Parent Data
+    function loadParentData(uid, role) {
+      if (role !== 'parent' || !db) return;
+      db.collection('users').where('parentId', '==', uid).get().then((querySnapshot) => {
+        if (!querySnapshot.empty) {
+          const childData = querySnapshot.docs[0].data();
+          document.getElementById('childName').textContent = childData.name;
+          document.getElementById('childProgress').textContent = `Progress: ${childData.progress}%`;
+          document.getElementById('childPoints').textContent = `Poin: ${childData.gamificationPoints}`;
+          const childHistoryList = document.getElementById('childHistoryList');
+          childHistoryList.innerHTML = (childData.learningHistory || []).map(item => `<li>${item}</li>`).join('') || '<li>Tidak ada riwayat</li>';
+        }
+      }).catch(handleError);
     }
 
     // Display Packages with Auto Payment
@@ -842,9 +903,7 @@
         generateSchedule(auth.currentUser.uid, packageId);
         new bootstrap.Modal(document.getElementById('packageModal')).hide();
         loadUserData(auth.currentUser.uid);
-      }).catch((error) => {
-        handleError(error);
-      });
+      }).catch(handleError);
     }
 
     // Generate Schedule
@@ -864,16 +923,14 @@
 
       db.collection('users').doc(uid).update({
         schedules: schedules
-      }).catch((error) => {
-        handleError(error);
-      });
+      }).catch(handleError);
     }
 
     // Display Schedules
     function displaySchedules(schedules) {
       const scheduleList = document.getElementById('scheduleList');
       scheduleList.innerHTML = '';
-      schedules.forEach(schedule => {
+      (schedules || []).forEach(schedule => {
         const li = document.createElement('li');
         li.innerHTML = `
           ${schedule.day} - Jam: ${new Date(schedule.time).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })} (Status: ${schedule.status})
@@ -882,7 +939,7 @@
       });
     }
 
-    // Handle Form Submission with WhatsApp
+    // Handle Form Submission with WhatsApp and Parent-Child Link
     document.getElementById('registrationForm')?.addEventListener('submit', async (e) => {
       e.preventDefault();
       const name = document.getElementById('name').value.trim();
@@ -897,30 +954,79 @@
         handleError(new Error('Semua field harus diisi!'));
         return;
       }
-      if (!isValidEmail(email)) {
-        handleError(new Error('Format email tidak valid!'));
-        return;
-      }
-      if (!isValidWhatsapp(whatsapp)) {
-        handleError(new Error('Nomor WhatsApp tidak valid! Gunakan format 08xxxxxxxxxx.'));
+      if (!isValidEmail(email) || !isValidWhatsapp(whatsapp)) {
+        handleError(new Error('Format email atau WhatsApp tidak valid!'));
         return;
       }
 
       try {
-        await db.collection('registrations').add({
+        const docRef = await db.collection('registrations').add({
           name: name,
           email: email,
           whatsapp: whatsapp,
           role: role,
           needs: needs,
-          timestamp: new Date().toISOString()
+          timestamp: new Date().toISOString(),
+          parentId: role === 'student' ? null : '' // Link to parent if student
         });
+        if (role === 'student' && auth.currentUser) {
+          await db.collection('users').doc(auth.currentUser.uid).update({
+            parentId: docRef.id // Link student to parent
+          });
+        }
         successMessage.style.display = 'block';
         errorMessage.style.display = 'none';
         document.getElementById('registrationForm').reset();
       } catch (error) {
         handleError(error);
       }
+    });
+
+    // Edit Profile
+    document.getElementById('editProfileBtn')?.addEventListener('click', () => {
+      document.getElementById('editForm').classList.add('show');
+    });
+
+    document.getElementById('cancelEditBtn')?.addEventListener('click', () => {
+      document.getElementById('editForm').classList.remove('show');
+    });
+
+    document.getElementById('editProfileForm')?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (!auth.currentUser || !db) return;
+      const name = document.getElementById('editName').value.trim();
+      const email = document.getElementById('editEmail').value.trim();
+      const whatsapp = document.getElementById('editWhatsapp').value.trim();
+      const role = document.getElementById('editRole').value;
+
+      if (!name || !email || !whatsapp || !isValidEmail(email) || !isValidWhatsapp(whatsapp)) {
+        handleError(new Error('Data tidak valid!'));
+        return;
+      }
+
+      db.collection('users').doc(auth.currentUser.uid).update({
+        name: name,
+        email: email,
+        whatsapp: whatsapp,
+        role: role
+      }).then(() => {
+        loadUserData(auth.currentUser.uid);
+        document.getElementById('editForm').classList.remove('show');
+      }).catch(handleError);
+    });
+
+    // Send Advice to Parent
+    document.getElementById('sendAdviceBtn')?.addEventListener('click', () => {
+      if (!auth.currentUser || !db) return;
+      db.collection('users').where('role', '==', 'parent').get().then((querySnapshot) => {
+        querySnapshot.forEach(doc => {
+          const parentData = doc.data();
+          if (parentData.whatsapp) {
+            const advice = `Halo, ini saran dari tentor untuk perkembangan ${parentData.name || 'anak Anda'}: Pertahankan semangat belajar! Progress: ${auth.currentUser.progress}%, Poin: ${auth.currentUser.gamificationPoints}.`;
+            window.open(`https://wa.me/${parentData.whatsapp}?text=${encodeURIComponent(advice)}`, '_blank');
+          }
+        });
+      }).catch(handleError);
     });
 
     // Error Handler
@@ -976,6 +1082,14 @@
       const profileSection = document.getElementById('profile');
       profileSection.style.display = profileSection.style.display === 'none' ? 'block' : 'none';
       if (auth.currentUser) loadUserData(auth.currentUser.uid);
+    });
+
+    // Open Parent Dashboard
+    document.getElementById('parentDashboardNav')?.addEventListener('click', (e) => {
+      e.preventDefault();
+      const parentSection = document.getElementById('parent');
+      parentSection.style.display = parentSection.style.display === 'none' ? 'block' : 'none';
+      if (auth.currentUser) loadParentData(auth.currentUser.uid, auth.currentUser.role);
     });
 
     // Auth State Change Listener
