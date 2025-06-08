@@ -131,6 +131,7 @@
       text-align: center;
       margin-bottom: 20px;
       transition: transform 0.3s ease;
+      color: #333; /* Teks hitam agar terlihat jelas */
     }
     .testimonial-mini:hover, .feature-mini:hover {
       transform: translateY(-5px);
@@ -191,6 +192,12 @@
     footer a:hover {
       color: #ffca28;
     }
+    .section-title {
+      margin-bottom: 30px;
+    }
+    .section-title h2 {
+      font-weight: 700;
+    }
   </style>
 </head>
 <body>
@@ -242,18 +249,18 @@
   <section id="home" class="hero-section">
     <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
       <div class="carousel-inner">
-        <div class="carousel-item active" style="background: linear-gradient(135deg, #007bff 0%, #00c4b4 100%);">
-          <div class="container">
-            <h1>BeEdu: Learn, Grow, Succeed</h1>
-            <p>Les privat online personal untuk siswa SD-SMA dan mahasiswa!</p>
-            <a href="#kontak" class="btn btn-hero">Daftar Sesi Gratis</a>
-          </div>
-        </div>
         <div class="carousel-item" style="background: linear-gradient(135deg, #ff6f61 0%, #6b48ff 100%);">
           <div class="container">
             <h1>Akses Belajar 24/7</h1>
             <p>Rekaman sesi dan materi fleksibel kapan saja!</p>
             <a href="#kontak" class="btn btn-hero">Mulai Sekarang</a>
+          </div>
+        </div>
+        <div class="carousel-item active" style="background: linear-gradient(135deg, #007bff 0%, #00c4b4 100%);">
+          <div class="container">
+            <h1>BeEdu: Learn, Grow, Succeed</h1>
+            <p>Les privat online personal untuk siswa SD-SMA dan mahasiswa!</p>
+            <a href="#kontak" class="btn btn-hero">Daftar Sesi Gratis</a>
           </div>
         </div>
       </div>
@@ -295,7 +302,7 @@
   <!-- Testimonial Mini -->
   <section class="content-section">
     <div class="container">
-      <h2 class="text-center" data-aos="fade-up">Apa Kata Mereka</h2>
+      <h2 class="text-center section-title" data-aos="fade-up">Apa Kata Mereka</h2>
       <div id="testimonialCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
         <div class="carousel-inner">
           <div class="carousel-item active">
@@ -326,27 +333,41 @@
   <!-- Feature Mini -->
   <section class="content-section bg-light">
     <div class="container">
-      <h2 class="text-center" data-aos="fade-up">Kelebihan BeEdu</h2>
+      <h2 class="text-center section-title" data-aos="fade-up">Kelebihan BeEdu</h2>
       <div class="row">
         <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="100">
           <div class="feature-mini">
-            <i class="fas fa-robot" style="font-size: 2rem; color: #007bff;"></i>
+            <span class="logo" style="margin: 0 auto; display: block;"></span>
             <h3>Personalisasi AI</h3>
             <p>Materi disesuaikan dengan kebutuhan dan gaya belajarmu.</p>
           </div>
         </div>
         <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="200">
           <div class="feature-mini">
-            <i class="fas fa-clock" style="font-size: 2rem; color: #007bff;"></i>
+            <span class="logo" style="margin: 0 auto; display: block;"></span>
             <h3>Akses Fleksibel</h3>
             <p>Belajar kapan saja dengan rekaman 24/7.</p>
           </div>
         </div>
         <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="300">
           <div class="feature-mini">
-            <i class="fas fa-trophy" style="font-size: 2rem; color: #007bff;"></i>
+            <span class="logo" style="margin: 0 auto; display: block;"></span>
             <h3>Gamifikasi</h3>
             <p>Motivasi belajar dengan poin dan badge.</p>
+          </div>
+        </div>
+        <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="400">
+          <div class="feature-mini">
+            <span class="logo" style="margin: 0 auto; display: block;"></span>
+            <h3>Monitoring Orang Tua</h3>
+            <p>Pantau progress anak secara real-time dengan laporan interaktif.</p>
+          </div>
+        </div>
+        <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="500">
+          <div class="feature-mini">
+            <span class="logo" style="margin: 0 auto; display: block;"></span>
+            <h3>Saran dari Tentor</h3>
+            <p>Dapatkan saran pribadi via WhatsApp untuk perkembangan terbaik.</p>
           </div>
         </div>
       </div>
@@ -366,6 +387,7 @@
   <footer>
     <div class="container">
       <p>© 2025 BeEdu. Kontak kami: <a href="mailto:saptohendratmoko@gmail.com">saptohendratmoko@gmail.com</a> | <a href="https://wa.me/6281367315144">WhatsApp</a></p>
+      <span class="logo" style="margin: 0 auto; display: block;"></span>
     </footer>
 
   <!-- WhatsApp Floating Button -->
@@ -579,42 +601,42 @@
               <div class="row">
                 <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="100">
                   <div class="feature-card">
-                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==" alt="AI Icon" class="card-img">
+                    <span class="logo" style="margin: 0 auto; display: block;"></span>
                     <h3>Personalisasi AI</h3>
                     <p>Materi disesuaikan dengan gaya belajarmu menggunakan kecerdasan buatan.</p>
                   </div>
                 </div>
                 <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="200">
                   <div class="feature-card">
-                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==" alt="Clock Icon" class="card-img">
+                    <span class="logo" style="margin: 0 auto; display: block;"></span>
                     <h3>Akses Fleksibel</h3>
                     <p>Belajar kapan saja dengan rekaman sesi 24/7 dan jadwal fleksibel.</p>
                   </div>
                 </div>
                 <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="300">
                   <div class="feature-card">
-                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==" alt="Trophy Icon" class="card-img">
+                    <span class="logo" style="margin: 0 auto; display: block;"></span>
                     <h3>Gamifikasi</h3>
                     <p>Kumpulkan poin dan badge untuk meningkatkan motivasi belajarmu.</p>
                   </div>
                 </div>
                 <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="400">
                   <div class="feature-card">
-                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==" alt="Eye Icon" class="card-img">
+                    <span class="logo" style="margin: 0 auto; display: block;"></span>
                     <h3>Monitoring Orang Tua</h3>
                     <p>Pantau progress anak secara real-time dengan laporan interaktif.</p>
                   </div>
                 </div>
                 <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="500">
                   <div class="feature-card">
-                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==" alt="Teacher Icon" class="card-img">
+                    <span class="logo" style="margin: 0 auto; display: block;"></span>
                     <h3>Saran dari Tentor</h3>
                     <p>Dapatkan saran pribadi via WhatsApp untuk perkembangan terbaik.</p>
                   </div>
                 </div>
                 <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="600">
                   <div class="feature-card">
-                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==" alt="Edit Icon" class="card-img">
+                    <span class="logo" style="margin: 0 auto; display: block;"></span>
                     <h3>Edit Profil</h3>
                     <p>Kustomisasi profil dengan foto dan tema yang kamu suka.</p>
                   </div>
@@ -631,14 +653,14 @@
               <div class="row">
                 <div class="col-md-6 mb-4" data-aos="fade-up" data-aos-delay="100">
                   <div class="testimonial-card">
-                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==" alt="Student Testimonial" class="card-img">
+                    <span class="logo" style="margin: 0 auto; display: block;"></span>
                     <p>"BeEdu membuat pelajaran matematika jadi menyenangkan dan mudah dipahami!"</p>
                     <h5>Alya, Siswa SMA</h5>
                   </div>
                 </div>
                 <div class="col-md-6 mb-4" data-aos="fade-up" data-aos-delay="200">
                   <div class="testimonial-card">
-                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==" alt="Parent Testimonial" class="card-img">
+                    <span class="logo" style="margin: 0 auto; display: block;"></span>
                     <p>"Anak saya semakin termotivasi berkat gamifikasi di BeEdu!"</p>
                     <h5>Ibu Sari, Orang Tua</h5>
                   </div>
@@ -655,14 +677,14 @@
               <div class="row">
                 <div class="col-md-12" data-aos="fade-up">
                   <div class="faq-item">
+                    <span class="logo" style="margin: 0 auto; display: block;"></span>
                     <h4>Apa itu BeEdu?</h4>
                     <p>BeEdu adalah platform les privat online dengan AI dan gamifikasi untuk belajar yang lebih menyenangkan.</p>
-                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==" alt="FAQ Icon" class="card-img">
                   </div>
                   <div class="faq-item" data-aos="fade-up" data-aos-delay="100">
+                    <span class="logo" style="margin: 0 auto; display: block;"></span>
                     <h4>Bagaimana cara mendaftar?</h4>
                     <p>Klik "Daftar Sesi Gratis" di Beranda dan isi formulir sederhana.</p>
-                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==" alt="Register Icon" class="card-img">
                   </div>
                 </div>
               </div>
@@ -677,14 +699,14 @@
               <div class="row">
                 <div class="col-md-6 mb-4" data-aos="fade-up" data-aos-delay="100">
                   <div class="blog-card">
-                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==" alt="Blog Image" class="card-img">
+                    <span class="logo" style="margin: 0 auto; display: block;"></span>
                     <h4>Siswa Terbaik: Alya</h4>
                     <p>Alya meraih badge "Super Learner" setelah menyelesaikan 20 sesi (6 Juni 2025).</p>
                   </div>
                 </div>
                 <div class="col-md-6 mb-4" data-aos="fade-up" data-aos-delay="200">
                   <div class="blog-card">
-                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==" alt="Blog Image" class="card-img">
+                    <span class="logo" style="margin: 0 auto; display: block;"></span>
                     <h4>Tips Belajar Efektif</h4>
                     <p>5 strategi dari tentor BeEdu untuk sukses di ujian (9 Juni 2025).</p>
                   </div>
@@ -701,14 +723,14 @@
               <div class="row">
                 <div class="col-md-6 mb-4" data-aos="fade-up" data-aos-delay="100">
                   <div class="payment-card">
-                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==" alt="Bank Transfer" class="card-img">
+                    <span class="logo" style="margin: 0 auto; display: block;"></span>
                     <h4>Transfer Bank</h4>
                     <p>BCA, No. Rek: 123-456-7890, A/n: BeEdu Indonesia. Proses cepat dalam 1x24 jam.</p>
                   </div>
                 </div>
                 <div class="col-md-6 mb-4" data-aos="fade-up" data-aos-delay="200">
                   <div class="payment-card">
-                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==" alt="E-Wallet" class="card-img">
+                    <span class="logo" style="margin: 0 auto; display: block;"></span>
                     <h4>E-Wallet</h4>
                     <p>Dukungan OVO dan GoPay dengan konfirmasi instan.</p>
                   </div>
