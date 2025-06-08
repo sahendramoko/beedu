@@ -107,7 +107,7 @@
       padding: 20px;
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
     }
-    .faq-section, .blog-section, .payment-section {
+    .faq-section, .blog-section, .payment-section, .schedule-section {
       padding: 60px 0;
     }
     .accordion-button {
@@ -198,6 +198,24 @@
       text-align: center;
       margin-top: 10px;
     }
+    .schedule-card {
+      background-color: #fff;
+      border-radius: 15px;
+      padding: 15px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      margin-bottom: 15px;
+    }
+    .package-card {
+      background-color: #fff;
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .package-card.active {
+      border: 2px solid #007bff;
+    }
   </style>
 </head>
 <body>
@@ -209,7 +227,7 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto">
+        <ul class="navbar-nav ms-auto" id="navItems">
           <li class="nav-item">
             <a class="nav-link" href="#home">Beranda</a>
           </li>
@@ -228,11 +246,17 @@
           <li class="nav-item">
             <a class="nav-link" href="#payment">Pembayaran</a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item" id="loginItem">
             <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">Login</a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item" id="registerItem">
             <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#registerModal">Daftar</a>
+          </li>
+          <li class="nav-item" id="profileItem" style="display: none;">
+            <a class="nav-link" href="#" id="userProfileNav"></a>
+          </li>
+          <li class="nav-item" id="logoutItem" style="display: none;">
+            <a class="nav-link" href="#" id="logoutBtn">Logout</a>
           </li>
         </ul>
       </div>
@@ -431,7 +455,14 @@
         Data berhasil disimpan! Kami akan segera menghubungi kamu di saptohendratmoko@gmail.com.
       </div>
       <div id="errorMessage" class="text-center mt-3" style="display: none; color: red;"></div>
-      <div id="userProfile" class="mt-3"></div>
+    </div>
+  </section>
+
+  <!-- Schedule Section -->
+  <section id="schedule" class="schedule-section">
+    <div class="container">
+      <h2 class="text-center mb-5" data-aos="fade-up">Jadwal Belajar</h2>
+      <div id="scheduleList" class="row"></div>
     </div>
   </section>
 
@@ -515,6 +546,21 @@
     </div>
   </div>
 
+  <!-- Package Selection Modal -->
+  <div class="modal fade" id="packageModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Pilih Paket Belajar</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row" id="packageList"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
@@ -554,7 +600,7 @@
       auth.signInWithPopup(googleProvider).then((result) => {
         const user = result.user;
         saveUserToFirestore(user);
-        updateUserProfile(user);
+        updateUI(user);
       }).catch((error) => {
         document.getElementById('errorMessage').textContent = error.message;
         document.getElementById('errorMessage').style.display = 'block';
@@ -565,7 +611,7 @@
       auth.signInWithPopup(googleProvider).then((result) => {
         const user = result.user;
         saveUserToFirestore(user);
-        updateUserProfile(user);
+        updateUI(user);
       }).catch((error) => {
         document.getElementById('errorMessage').textContent = error.message;
         document.getElementById('errorMessage').style.display = 'block';
@@ -589,7 +635,7 @@
       auth.createUserWithEmailAndPassword(email, password).then((userCredential) => {
         const user = userCredential.user;
         saveUserToFirestore(user);
-        updateUserProfile(user);
+        updateUI(user);
         document.getElementById('registerModal').querySelector('.btn-close').click();
       }).catch((error) => {
         document.getElementById('errorMessage').textContent = error.message;
@@ -608,7 +654,7 @@
       }
       auth.signInWithEmailAndPassword(email, password).then((userCredential) => {
         const user = userCredential.user;
-        updateUserProfile(user);
+        updateUI(user);
         document.getElementById('loginModal').querySelector('.btn-close').click();
       }).catch((error) => {
         document.getElementById('errorMessage').textContent = error.message;
@@ -622,17 +668,142 @@
         name: user.displayName || 'User',
         email: user.email,
         uid: user.uid,
-        createdAt: new Date().toISOString()
+        createdAt: new Date().toISOString(),
+        activePackage: null, // Akan diisi saat memilih paket
+        schedules: []
       }, { merge: true }).catch((error) => {
         console.error('Error saving user: ', error);
       });
     }
 
-    // Update User Profile Display
-    function updateUserProfile(user) {
-      const userProfile = document.getElementById('userProfile');
-      userProfile.textContent = `Selamat datang, ${user.displayName || user.email}!`;
-      userProfile.style.display = 'block';
+    // Update UI based on Auth State
+    function updateUI(user) {
+      const loginItem = document.getElementById('loginItem');
+      const registerItem = document.getElementById('registerItem');
+      const profileItem = document.getElementById('profileItem');
+      const logoutItem = document.getElementById('logoutItem');
+      const userProfileNav = document.getElementById('userProfileNav');
+
+      if (user) {
+        loginItem.style.display = 'none';
+        registerItem.style.display = 'none';
+        profileItem.style.display = 'block';
+        logoutItem.style.display = 'block';
+        userProfileNav.textContent = `Halo, ${user.displayName || user.email}`;
+        userProfileNav.href = '#schedule'; // Arahkan ke jadwal
+        loadUserData(user.uid);
+      } else {
+        loginItem.style.display = 'block';
+        registerItem.style.display = 'block';
+        profileItem.style.display = 'none';
+        logoutItem.style.display = 'none';
+      }
+    }
+
+    // Logout
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      auth.signOut().then(() => {
+        updateUI(null);
+      }).catch((error) => {
+        document.getElementById('errorMessage').textContent = error.message;
+        document.getElementById('errorMessage').style.display = 'block';
+      });
+    });
+
+    // Load User Data (Packages and Schedules)
+    function loadUserData(uid) {
+      db.collection('users').doc(uid).get().then((doc) => {
+        if (doc.exists) {
+          const userData = doc.data();
+          displayPackages(userData.activePackage);
+          displaySchedules(userData.schedules);
+        }
+      }).catch((error) => {
+        console.error('Error loading user data: ', error);
+      });
+    }
+
+    // Display Packages
+    function displayPackages(activePackage) {
+      const packageList = document.getElementById('packageList');
+      packageList.innerHTML = '';
+      const packages = [
+        { id: 'basic', name: 'Basic', price: 'Rp 200.000/bulan', features: ['5 sesi/minggu', 'Personalisasi AI', 'Gamifikasi dasar'] },
+        { id: 'pro', name: 'Pro', price: 'Rp 400.000/bulan', features: ['10 sesi/minggu', 'Personalisasi AI', 'Gamifikasi lengkap', 'Rekaman sesi'] },
+        { id: 'premium', name: 'Premium', price: 'Rp 600.000/bulan', features: ['15 sesi/minggu', 'Personalisasi AI', 'Gamifikasi lengkap', 'Rekaman sesi', 'Support 24/7'] }
+      ];
+
+      packages.forEach(pkg => {
+        const col = document.createElement('div');
+        col.className = 'col-md-4 mb-3';
+        col.innerHTML = `
+          <div class="package-card ${activePackage === pkg.id ? 'active' : ''}">
+            <h4>${pkg.name}</h4>
+            <p>${pkg.price}</p>
+            <ul>
+              ${pkg.features.map(feature => `<li>${feature}</li>`).join('')}
+            </ul>
+            <button class="btn btn-primary mt-2" onclick="selectPackage('${pkg.id}')">Pilih Paket</button>
+          </div>
+        `;
+        packageList.appendChild(col);
+      });
+    }
+
+    // Select Package
+    function selectPackage(packageId) {
+      const user = auth.currentUser;
+      if (user) {
+        db.collection('users').doc(user.uid).update({
+          activePackage: packageId
+        }).then(() => {
+          generateSchedule(user.uid, packageId);
+          new bootstrap.Modal(document.getElementById('packageModal')).hide();
+          loadUserData(user.uid);
+        }).catch((error) => {
+          document.getElementById('errorMessage').textContent = error.message;
+          document.getElementById('errorMessage').style.display = 'block';
+        });
+      }
+    }
+
+    // Generate Schedule
+    function generateSchedule(uid, packageId) {
+      const schedules = [];
+      const now = new Date();
+      const days = ['Senin', 'Rabu', 'Jumat'];
+      if (packageId === 'pro') days.push('Selasa', 'Kamis');
+      if (packageId === 'premium') days.push('Sabtu', 'Minggu');
+
+      days.forEach(day => {
+        const time = new Date(now);
+        time.setHours(19, 0, 0, 0); // 7:00 PM WIB
+        schedules.push({ day: day, time: time.toISOString(), status: 'Scheduled' });
+      });
+
+      db.collection('users').doc(uid).update({
+        schedules: schedules
+      }).catch((error) => {
+        console.error('Error generating schedule: ', error);
+      });
+    }
+
+    // Display Schedules
+    function displaySchedules(schedules) {
+      const scheduleList = document.getElementById('scheduleList');
+      scheduleList.innerHTML = '';
+      schedules.forEach(schedule => {
+        const col = document.createElement('div');
+        col.className = 'col-md-6';
+        col.innerHTML = `
+          <div class="schedule-card">
+            <h5>${schedule.day}</h5>
+            <p>Jam: ${new Date(schedule.time).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}</p>
+            <p>Status: ${schedule.status}</p>
+          </div>
+        `;
+        scheduleList.appendChild(col);
+      });
     }
 
     // Handle Form Submission and Save to Firestore
@@ -712,12 +883,18 @@
       }
     });
 
-    // Logout
+    // Open Package Modal
+    document.getElementById('userProfileNav').addEventListener('click', (e) => {
+      e.preventDefault();
+      const packageModal = new bootstrap.Modal(document.getElementById('packageModal'));
+      packageModal.show();
+    });
+
+    // Auth State Change Listener
     auth.onAuthStateChanged((user) => {
+      updateUI(user);
       if (user) {
-        updateUserProfile(user);
-      } else {
-        document.getElementById('userProfile').style.display = 'none';
+        loadUserData(user.uid);
       }
     });
   </script>
