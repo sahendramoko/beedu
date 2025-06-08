@@ -163,28 +163,17 @@
     }
     .hero-section {
       position: relative;
-      overflow: hidden;
       padding: 100px 0;
-    }
-    .carousel-inner {
-      height: 400px;
-    }
-    .carousel-item {
-      height: 400px;
-      background-size: cover;
-      background-position: center;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       text-align: center;
+      background: linear-gradient(135deg, #007bff 0%, #00c4b4 100%);
       color: white;
     }
-    .carousel-item h1 {
+    .hero-section h1 {
       font-size: 3rem;
       font-weight: 700;
       margin-bottom: 20px;
     }
-    .carousel-item p {
+    .hero-section p {
       font-size: 1.2rem;
       margin-bottom: 30px;
     }
@@ -303,6 +292,23 @@
       background-color: #f8f9fa;
       color: #007bff;
     }
+    .profile-section {
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+    .notification {
+      position: fixed;
+      top: 70px;
+      right: 20px;
+      background-color: #fff;
+      padding: 10px;
+      border-radius: 5px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      display: none;
+      z-index: 1000;
+    }
   </style>
 </head>
 <body>
@@ -319,41 +325,41 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
           <li class="nav-item">
-            <a class="nav-link" href="#home">Beranda</a>
+            <a class="nav-link" href="#home" target="_self">Beranda</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#fitur">Fitur</a>
+            <a class="nav-link" href="#fitur" target="_self">Fitur</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#testimoni">Testimoni</a>
+            <a class="nav-link" href="#testimoni" target="_self">Testimoni</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#faq">FAQ</a>
+            <a class="nav-link" href="#faq" target="_self">FAQ</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#blog">Blog</a>
+            <a class="nav-link" href="#blog" target="_self">Blog</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#pembayaran">Pembayaran</a>
+            <a class="nav-link" href="#pembayaran" target="_self">Pembayaran</a>
           </li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="paketDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               Paket Belajar
             </a>
             <ul class="dropdown-menu" aria-labelledby="paketDropdown">
-              <li><a class="dropdown-item" href="#paket-sd">Paket Belajar SD</a></li>
-              <li><a class="dropdown-item" href="#paket-sma">Paket Belajar SMA</a></li>
-              <li><a class="dropdown-item" href="#paket-perguruan-tinggi">Paket Belajar Perguruan Tinggi</a></li>
+              <li><a class="dropdown-item" href="#paket-sd" target="_self">Paket Belajar SD</a></li>
+              <li><a class="dropdown-item" href="#paket-sma" target="_self">Paket Belajar SMA</a></li>
+              <li><a class="dropdown-item" href="#paket-perguruan-tinggi" target="_self">Paket Belajar Perguruan Tinggi</a></li>
             </ul>
           </li>
           <li class="nav-item" id="profileItem" style="display: none;">
-            <a class="nav-link" href="#profil">Profil</a>
+            <a class="nav-link" href="#profil" target="_self">Profil</a>
           </li>
           <li class="nav-item" id="logoutItem" style="display: none;">
             <a class="nav-link" href="#" id="logoutBtn">Logout</a>
           </li>
           <li class="nav-item" id="parentItem" style="display: none;">
-            <a class="nav-link" href="#parent">Monitoring Anak</a>
+            <a class="nav-link" href="#parent" target="_self">Monitoring Anak</a>
           </li>
         </ul>
       </div>
@@ -362,31 +368,10 @@
 
   <!-- Hero Section (Beranda) -->
   <section id="home" class="hero-section">
-    <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
-      <div class="carousel-inner">
-        <div class="carousel-item" style="background: linear-gradient(135deg, #ff6f61 0%, #6b48ff 100%);">
-          <div class="container">
-            <h1>Akses Belajar 24/7</h1>
-            <p>Rekaman sesi dan materi fleksibel kapan saja!</p>
-            <a href="#kontak" class="btn btn-hero">Mulai Sekarang</a>
-          </div>
-        </div>
-        <div class="carousel-item active" style="background: linear-gradient(135deg, #007bff 0%, #00c4b4 100%);">
-          <div class="container">
-            <h1>BeEdu: Learn, Grow, Succeed</h1>
-            <p>Les privat online personal untuk siswa SD-SMA dan mahasiswa!</p>
-            <a href="#kontak" class="btn btn-hero">Daftar Sesi Gratis</a>
-          </div>
-        </div>
-      </div>
-      <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Previous</span>
-      </button>
-      <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Next</span>
-      </button>
+    <div class="container">
+      <h1>BeEdu: Learn, Grow, Succeed</h1>
+      <p>Les privat online personal untuk siswa SD-SMA dan mahasiswa!</p>
+      <a href="#kontak" class="btn btn-hero">Daftar Sesi Gratis</a>
     </div>
   </section>
 
@@ -498,6 +483,9 @@
     </div>
   </section>
 
+  <!-- Notification -->
+  <div id="notification" class="notification"></div>
+
   <!-- Footer -->
   <footer>
     <div class="container">
@@ -567,6 +555,41 @@
             <input type="password" class="form-control" id="registerPassword" required>
           </div>
           <button id="emailRegister" class="btn btn-success w-100">Daftar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Profile Modal -->
+  <div class="modal fade" id="profileModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="profileModalTitle">Edit Profil</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="profileName" class="form-label">Nama</label>
+            <input type="text" class="form-control" id="profileName" required>
+          </div>
+          <div class="mb-3">
+            <label for="profileEmail" class="form-label">Email</label>
+            <input type="email" class="form-control" id="profileEmail" required readonly>
+          </div>
+          <div class="mb-3" id="profileRoleField" style="display: none;">
+            <label for="profileRole" class="form-label">Peran</label>
+            <select class="form-control" id="profileRole" disabled>
+              <option value="student">Siswa</option>
+              <option value="tutor">Tentor</option>
+              <option value="parent">Orang Tua</option>
+            </select>
+          </div>
+          <div class="mb-3" id="profilePhotoField">
+            <label for="profilePhoto" class="form-label">Foto Profil</label>
+            <input type="file" class="form-control" id="profilePhoto" accept="image/*">
+          </div>
+          <button id="saveProfile" class="btn btn-primary w-100">Simpan</button>
         </div>
       </div>
     </div>
@@ -665,7 +688,11 @@
         email: user.email,
         uid: user.uid,
         role: role,
-        createdAt: new Date().toISOString()
+        createdAt: new Date().toISOString(),
+        photoURL: user.photoURL || '',
+        schedule: [],
+        activePackage: '',
+        notifications: []
       }, { merge: true }).catch(handleError);
     }
 
@@ -679,6 +706,8 @@
         logoutItem.style.display = 'block';
         if (user.role === 'parent') parentItem.style.display = 'block';
         else parentItem.style.display = 'none';
+        loadProfile(user);
+        loadNotifications(user);
       } else {
         profileItem.style.display = 'none';
         logoutItem.style.display = 'none';
@@ -687,10 +716,90 @@
       loadPage();
     }
 
-    // Logout
-    document.getElementById('logoutBtn')?.addEventListener('click', () => {
-      if (auth) auth.signOut().then(() => updateUI(null)).catch(handleError);
+    // Load Profile
+    function loadProfile(user) {
+      if (!user || !db) return;
+      db.collection('users').doc(user.uid).get().then((doc) => {
+        if (doc.exists) {
+          const data = doc.data();
+          document.getElementById('profileName').value = data.name || '';
+          document.getElementById('profileEmail').value = data.email || '';
+          const roleSelect = document.getElementById('profileRole');
+          roleSelect.value = data.role || 'student';
+          document.getElementById('profileRoleField').style.display = user.role === 'admin' ? 'block' : 'none';
+        }
+      }).catch(handleError);
+    }
+
+    // Save Profile
+    document.getElementById('saveProfile')?.addEventListener('click', () => {
+      if (!auth.currentUser || !db) return;
+      const user = auth.currentUser;
+      const name = document.getElementById('profileName').value.trim();
+      const photoInput = document.getElementById('profilePhoto');
+      const role = document.getElementById('profileRole').value;
+
+      if (!name) {
+        handleError(new Error('Nama tidak boleh kosong!'));
+        return;
+      }
+
+      const updateData = { name };
+      if (user.role === 'admin') updateData.role = role;
+
+      if (photoInput.files && photoInput.files[0]) {
+        const storageRef = firebase.storage().ref(`profile_photos/${user.uid}/${photoInput.files[0].name}`);
+        storageRef.put(photoInput.files[0]).then((snapshot) => {
+          snapshot.ref.getDownloadURL().then((photoURL) => {
+            updateData.photoURL = photoURL;
+            saveProfileToFirestore(user.uid, updateData);
+          });
+        }).catch(handleError);
+      } else {
+        saveProfileToFirestore(user.uid, updateData);
+      }
     });
+
+    function saveProfileToFirestore(uid, data) {
+      db.collection('users').doc(uid).update(data).then(() => {
+        showNotification('Profil berhasil diperbarui!');
+        const profileModal = bootstrap.Modal.getInstance(document.getElementById('profileModal'));
+        profileModal.hide();
+      }).catch(handleError);
+    }
+
+    // Load Notifications
+    function loadNotifications(user) {
+      if (!user || !db) return;
+      db.collection('users').doc(user.uid).onSnapshot((doc) => {
+        if (doc.exists) {
+          const data = doc.data();
+          const notifications = data.notifications || [];
+          const notificationDiv = document.getElementById('notification');
+          notificationDiv.innerHTML = notifications.map(n => `<p>${n.message} (${new Date(n.timestamp).toLocaleString()})</p>`).join('');
+          notificationDiv.style.display = notifications.length ? 'block' : 'none';
+        }
+      }, handleError);
+    }
+
+    // Add Notification
+    function addNotification(user, message) {
+      if (!user || !db) return;
+      db.collection('users').doc(user.uid).update({
+        notifications: firebase.firestore.FieldValue.arrayUnion({
+          message,
+          timestamp: new Date().toISOString()
+        })
+      }).catch(handleError);
+    }
+
+    // Show Notification
+    function showNotification(message) {
+      const notificationDiv = document.getElementById('notification');
+      notificationDiv.innerHTML = `<p>${message} (${new Date().toLocaleString()})</p>`;
+      notificationDiv.style.display = 'block';
+      setTimeout(() => notificationDiv.style.display = 'none', 5000);
+    }
 
     // Load Page Content
     function loadPage() {
@@ -706,6 +815,20 @@
       } else if (hash.startsWith('paket-')) {
         contentDiv.style.display = 'block';
         contentDiv.innerHTML = getPaketContent(hash.replace('paket-', ''));
+      } else if (hash === 'profil' && auth.currentUser) {
+        contentDiv.style.display = 'block';
+        contentDiv.innerHTML = `
+          <div class="profile-section" data-aos="fade-up">
+            <h2>Profil Saya</h2>
+            <p><strong>Nama:</strong> <span id="displayName"></span></p>
+            <p><strong>Email:</strong> <span id="displayEmail"></span></p>
+            <p><strong>Peran:</strong> <span id="displayRole"></span></p>
+            <p><strong>Jadwal:</strong> <span id="displaySchedule"></span></p>
+            <p><strong>Paket Aktif:</strong> <span id="displayPackage"></span></p>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#profileModal">Edit Profil</button>
+          </div>
+        `;
+        loadProfileData();
       } else {
         contentDiv.style.display = 'block';
         contentDiv.innerHTML = '';
@@ -856,16 +979,17 @@
               </div>
             `;
             break;
-          case 'profil':
-            if (auth.currentUser) {
-              contentDiv.innerHTML = '<h2>Profil Saya</h2><p>Silakan edit profil Anda di sini.</p>';
-            } else {
-              contentDiv.innerHTML = '<h2>Silakan Login untuk melihat profil.</h2>';
-            }
-            break;
           case 'parent':
             if (auth.currentUser && auth.currentUser.role === 'parent') {
-              contentDiv.innerHTML = '<h2>Monitoring Perkembangan Anak</h2><p>Lihat progress anak Anda di sini.</p>';
+              contentDiv.innerHTML = `
+                <div class="profile-section" data-aos="fade-up">
+                  <h2>Monitoring Perkembangan Anak</h2>
+                  <p><strong>Jadwal Anak:</strong> <span id="parentSchedule"></span></p>
+                  <p><strong>Paket Aktif Anak:</strong> <span id="parentPackage"></span></p>
+                  <p><strong>Notifikasi:</strong> <span id="parentNotifications"></span></p>
+                </div>
+              `;
+              loadParentData();
             } else {
               contentDiv.innerHTML = '<h2>Silakan Login sebagai Orang Tua.</h2>';
             }
@@ -946,6 +1070,34 @@
       return content;
     }
 
+    function loadProfileData() {
+      if (!auth.currentUser || !db) return;
+      db.collection('users').doc(auth.currentUser.uid).get().then((doc) => {
+        if (doc.exists) {
+          const data = doc.data();
+          document.getElementById('displayName').textContent = data.name || 'Tidak ada nama';
+          document.getElementById('displayEmail').textContent = data.email || 'Tidak ada email';
+          document.getElementById('displayRole').textContent = data.role || 'Tidak ada peran';
+          document.getElementById('displaySchedule').textContent = (data.schedule || []).join(', ') || 'Tidak ada jadwal';
+          document.getElementById('displayPackage').textContent = data.activePackage || 'Tidak ada paket aktif';
+        }
+      }).catch(handleError);
+    }
+
+    function loadParentData() {
+      if (!auth.currentUser || !db) return;
+      // Simulasi data anak (harus disesuaikan dengan UID anak)
+      const childUid = 'childUidExample'; // Ganti dengan logika untuk mendapatkan UID anak
+      db.collection('users').doc(childUid).get().then((doc) => {
+        if (doc.exists) {
+          const data = doc.data();
+          document.getElementById('parentSchedule').textContent = (data.schedule || []).join(', ') || 'Tidak ada jadwal';
+          document.getElementById('parentPackage').textContent = data.activePackage || 'Tidak ada paket aktif';
+          document.getElementById('parentNotifications').textContent = (data.notifications || []).map(n => n.message).join(', ') || 'Tidak ada notifikasi';
+        }
+      }).catch(handleError);
+    }
+
     // Handle Navigation
     document.querySelectorAll('.nav-link, .dropdown-item').forEach(link => {
       link.addEventListener('click', (e) => {
@@ -965,17 +1117,9 @@
       once: true
     });
 
-    // Fix Carousel Manual Control
-    document.querySelectorAll('.carousel-control-prev, .carousel-control-next').forEach(button => {
-      button.addEventListener('click', () => {
-        const carousel = new bootstrap.Carousel(document.getElementById(button.dataset.bsTarget.replace('#', '')));
-        carousel.cycle(); // Ensure carousel continues cycling after manual control
-      });
-    });
-
-    // Auth State Change
-    auth?.onAuthStateChanged((user) => {
-      updateUI(user);
+    // Logout
+    document.getElementById('logoutBtn')?.addEventListener('click', () => {
+      if (auth) auth.signOut().then(() => updateUI(null)).catch(handleError);
     });
 
     // Error Handler
