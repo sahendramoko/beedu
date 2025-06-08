@@ -1,0 +1,691 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Pilihan paket belajar di BeEdu untuk berbagai tingkat pendidikan.">
+  <meta name="keywords" content="paket belajar BeEdu, les privat online, paket edtech">
+  <meta name="author" content="BeEdu Team">
+  <title>BeEdu - Paket Belajar</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" onerror="this.href='https://stackpath.bootstrapcdn.com/bootstrap/5.3.2/css/bootstrap.min.css'; this.onerror=null;">
+  <!-- Google Fonts: Poppins -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet" onerror="this.href='https://fonts.cdnfonts.com/css/poppins'; this.onerror=null;">
+  <!-- FontAwesome for Icons -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" onerror="this.href='https://use.fontawesome.com/releases/v6.4.0/css/all.css'; this.onerror=null;">
+  <!-- AOS (Animate On Scroll) -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" onerror="this.href='https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.1/aos.css'; this.onerror=null;">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f5f7fa;
+      color: #333;
+      margin: 0;
+      padding: 0;
+      transition: background-color 0.3s;
+    }
+    .navbar {
+      background-color: #ffffff;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    .navbar-brand {
+      font-weight: 700;
+      color: #007bff !important;
+      display: flex;
+      align-items: center;
+    }
+    .logo-nav {
+      width: 35px;
+      height: 35px;
+      background: linear-gradient(45deg, #007bff, #00c4b4);
+      border-radius: 50%;
+      position: relative;
+      margin-right: 10px;
+    }
+    .logo-nav::before {
+      content: '';
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      background: #fff;
+      border-radius: 50%;
+      top: 6px;
+      left: 12px;
+      box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.1);
+    }
+    .hero-section {
+      position: relative;
+      padding: 100px 0;
+      text-align: center;
+      background: linear-gradient(135deg, #007bff 0%, #00c4b4 100%);
+      color: white;
+    }
+    .hero-section h1 {
+      font-size: 3rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+    .hero-section p {
+      font-size: 1.2rem;
+      margin-bottom: 30px;
+    }
+    .btn-hero {
+      background-color: #ffd700;
+      color: #333;
+      font-weight: 600;
+      padding: 12px 30px;
+      border-radius: 30px;
+      transition: transform 0.3s ease, background-color 0.3s ease;
+    }
+    .btn-hero:hover {
+      transform: scale(1.05);
+      background-color: #ffca28;
+    }
+    .package-section {
+      padding: 60px 0;
+      text-align: center;
+    }
+    .package-card {
+      padding: 20px;
+      text-align: center;
+      background-color: #fff;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease;
+      margin-bottom: 20px;
+    }
+    .package-card:hover {
+      transform: translateY(-10px);
+    }
+    .whatsapp-btn, .login-btn, .register-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #25d366;
+      color: white;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+      transition: transform 0.3s ease;
+      z-index: 1000;
+    }
+    .login-btn {
+      background-color: #007bff;
+      right: 100px;
+    }
+    .register-btn {
+      background-color: #28a745;
+      right: 180px;
+    }
+    .whatsapp-btn:hover, .login-btn:hover, .register-btn:hover {
+      transform: scale(1.1);
+    }
+    footer {
+      background-color: #343a40;
+      color: white;
+      padding: 20px 0;
+      text-align: center;
+    }
+    footer a {
+      color: #ffd700;
+      text-decoration: none;
+    }
+    footer a:hover {
+      color: #ffca28;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="index.html">
+        <span class="logo-nav"></span>
+        BeEdu
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="index.html">Beranda</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="fitur.html">Fitur</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="testimoni.html">Testimoni</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="faq.html">FAQ</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="blog.html">Blog</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="pembayaran.html">Pembayaran</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="paketDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Paket Belajar
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="paketDropdown">
+              <li><a class="dropdown-item" href="paket-sd.html">Paket Belajar SD</a></li>
+              <li><a class="dropdown-item" href="paket-sma.html">Paket Belajar SMA</a></li>
+              <li><a class="dropdown-item" href="paket-perguruan-tinggi.html">Paket Belajar Perguruan Tinggi</a></li>
+            </ul>
+          </li>
+          <li class="nav-item" id="profileItem" style="display: none;">
+            <a class="nav-link" href="profil.html">Profil</a>
+          </li>
+          <li class="nav-item" id="logoutItem" style="display: none;">
+            <a class="nav-link" href="#" id="logoutBtn">Logout</a>
+          </li>
+          <li class="nav-item" id="parentItem" style="display: none;">
+            <a class="nav-link" href="parent.html">Monitoring Anak</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="container">
+      <h1>Paket Belajar BeEdu</h1>
+      <p>Pilih paket yang sesuai dengan kebutuhan belajar Anda!</p>
+      <a href="#packages" class="btn btn-hero">Lihat Paket</a>
+    </div>
+  </section>
+
+  <!-- Package Section -->
+  <section id="packages" class="package-section">
+    <div class="container">
+      <h2 class="text-center section-title" data-aos="fade-up">Pilihan Paket</h2>
+      <div class="row">
+        <div class="col-md-12 mb-4" data-aos="fade-up" data-aos-delay="100">
+          <div class="package-card">
+            <h4>Paket SD</h4>
+            <p>Belajar interaktif untuk siswa SD. Lihat detail di <a href="paket-sd.html">sini</a>.</p>
+          </div>
+        </div>
+        <div class="col-md-12 mb-4" data-aos="fade-up" data-aos-delay="200">
+          <div class="package-card">
+            <h4>Paket SMA</h4>
+            <p>Persiapan ujian dan pelajaran mendalam untuk SMA. Lihat detail di <a href="paket-sma.html">sini</a>.</p>
+          </div>
+        </div>
+        <div class="col-md-12 mb-4" data-aos="fade-up" data-aos-delay="300">
+          <div class="package-card">
+            <h4>Paket Perguruan Tinggi</h4>
+            <p>Support akademik untuk mahasiswa. Lihat detail di <a href="paket-perguruan-tinggi.html">sini</a>.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p>© 2025 BeEdu. Kontak kami: <a href="mailto:saptohendratmoko@gmail.com">saptohendratmoko@gmail.com</a> | <a href="https://wa.me/6281367315144">WhatsApp</a></p>
+      <span class="logo-nav" style="margin: 0 auto; display: block;"></span>
+    </footer>
+
+  <!-- WhatsApp Floating Button -->
+  <a href="https://wa.me/6281367315144" class="whatsapp-btn" target="_blank">
+    <i class="fab fa-whatsapp"></i>
+  </a>
+
+  <!-- Login Floating Button -->
+  <a href="#" class="login-btn" data-bs-toggle="modal" data-bs-target="#loginModal">
+    <i class="fas fa-sign-in-alt"></i>
+  </a>
+
+  <!-- Register Floating Button -->
+  <a href="#" class="register-btn" data-bs-toggle="modal" data-bs-target="#registerModal">
+    <i class="fas fa-user-plus"></i>
+  </a>
+
+  <!-- Login Modal -->
+  <div class="modal fade" id="loginModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Login</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <button id="googleLoginStudent" class="btn btn-primary w-100 mb-3">Login sebagai Siswa</button>
+          <button id="googleLoginTutor" class="btn btn-primary w-100 mb-3">Login sebagai Tentor</button>
+          <button id="googleLoginParent" class="btn btn-primary w-100 mb-3">Login sebagai Orang Tua</button>
+          <div class="mb-3">
+            <label for="loginEmail" class="form-label">Email</label>
+            <input type="email" class="form-control" id="loginEmail" required>
+          </div>
+          <div class="mb-3">
+            <label for="loginPassword" class="form-label">Password</label>
+            <input type="password" class="form-control" id="loginPassword" required>
+          </div>
+          <button id="emailLogin" class="btn btn-primary w-100">Login</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Register Modal -->
+  <div class="modal fade" id="registerModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Daftar</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <button id="googleRegisterStudent" class="btn btn-success w-100 mb-3">Daftar sebagai Siswa</button>
+          <button id="googleRegisterTutor" class="btn btn-success w-100 mb-3">Daftar sebagai Tentor</button>
+          <button id="googleRegisterParent" class="btn btn-success w-100 mb-3">Daftar sebagai Orang Tua</button>
+          <div class="mb-3">
+            <label for="registerEmail" class="form-label">Email</label>
+            <input type="email" class="form-control" id="registerEmail" required>
+          </div>
+          <div class="mb-3">
+            <label for="registerPassword" class="form-label">Password</label>
+            <input type="password" class="form-control" id="registerPassword" required>
+          </div>
+          <button id="emailRegister" class="btn btn-success w-100">Daftar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Profile Modal -->
+  <div class="modal fade" id="profileModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="profileModalTitle">Edit Profil</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="profileName" class="form-label">Nama</label>
+            <input type="text" class="form-control" id="profileName" required>
+          </div>
+          <div class="mb-3">
+            <label for="profileEmail" class="form-label">Email</label>
+            <input type="email" class="form-control" id="profileEmail" required readonly>
+          </div>
+          <div class="mb-3" id="profileRoleField" style="display: none;">
+            <label for="profileRole" class="form-label">Peran</label>
+            <select class="form-control" id="profileRole" disabled>
+              <option value="student">Siswa</option>
+              <option value="tutor">Tentor</option>
+              <option value="parent">Orang Tua</option>
+            </select>
+          </div>
+          <div class="mb-3" id="profilePhotoField">
+            <label for="profilePhoto" class="form-label">Foto Profil</label>
+            <input type="file" class="form-control" id="profilePhoto" accept="image/*">
+          </div>
+          <button id="saveProfile" class="btn btn-primary w-100">Simpan</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js" onerror="this.src='https://cdn.jsdelivr.net/npm/firebase@9.22.0/dist/firebase-app-compat.js'; this.onerror=null;"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js" onerror="this.src='https://cdn.jsdelivr.net/npm/firebase@9.22.0/dist/firebase-auth-compat.js'; this.onerror=null;"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js" onerror="this.src='https://cdn.jsdelivr.net/npm/firebase@9.22.0/dist/firebase-firestore-compat.js'; this.onerror=null;"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js" onerror="this.src='https://cdn.jsdelivr.net/npm/firebase@9.22.0/dist/firebase-storage-compat.js'; this.onerror=null;"></script>
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" onerror="this.src='https://stackpath.bootstrapcdn.com/bootstrap/5.3.2/js/bootstrap.bundle.min.js'; this.onerror=null;"></script>
+  <!-- AOS JS -->
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js" onerror="this.src='https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.1/aos.js'; this.onerror=null;"></script>
+  <script>
+    // Initialize Firebase
+    let app, auth, db, storage;
+    try {
+      const firebaseConfig = {
+        apiKey: "AIzaSyC_fhbF2b-Tg2an3fN-sn2p6nYbMYC3bRQ",
+        authDomain: "beeduwithme.firebaseapp.com",
+        projectId: "beeduwithme",
+        storageBucket: "beeduwithme.firebasestorage.app",
+        messagingSenderId: "1097577891574",
+        appId: "1:1097577891574:web:81cef1772cc41427930ed7",
+        measurementId: "G-X0GTPEGZ40"
+      };
+      app = firebase.initializeApp(firebaseConfig);
+      auth = firebase.auth();
+      db = firebase.firestore();
+      storage = firebase.storage();
+    } catch (error) {
+      handleError(new Error('Firebase initialization failed: ' + error.message));
+    }
+
+    // Validate Email and WhatsApp
+    function isValidEmail(email) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email); }
+    function isValidWhatsapp(whatsapp) { return /^08[1-9][0-9]{8,11}$/.test(whatsapp); }
+
+    // Handle Google Login/Register
+    const googleProvider = new firebase.auth.GoogleAuthProvider();
+    ['Student', 'Tutor', 'Parent'].forEach(role => {
+      document.getElementById(`googleLogin${role}`)?.addEventListener('click', () => {
+        if (auth) auth.signInWithPopup(googleProvider).then((result) => {
+          const user = result.user;
+          sendEmailVerification(user);
+          saveUserToFirestore(user, role.toLowerCase());
+          updateUI(user);
+        }).catch(handleError);
+      });
+      document.getElementById(`googleRegister${role}`)?.addEventListener('click', () => {
+        if (auth) auth.signInWithPopup(googleProvider).then((result) => {
+          const user = result.user;
+          sendEmailVerification(user);
+          saveUserToFirestore(user, role.toLowerCase());
+          updateUI(user);
+        }).catch(handleError);
+      });
+    });
+
+    // Handle Email/Password Register
+    document.getElementById('emailRegister')?.addEventListener('click', () => {
+      if (!auth) return;
+      const email = document.getElementById('registerEmail').value.trim();
+      const password = document.getElementById('registerPassword').value;
+      if (!isValidEmail(email) || password.length < 6) {
+        handleError(new Error('Email atau password tidak valid!'));
+        return;
+      }
+      auth.createUserWithEmailAndPassword(email, password).then((userCredential) => {
+        const user = userCredential.user;
+        sendEmailVerification(user);
+        saveUserToFirestore(user, 'student');
+        updateUI(user);
+        document.getElementById('registerModal').querySelector('.btn-close')?.click();
+      }).catch(handleError);
+    });
+
+    // Handle Email/Password Login
+    document.getElementById('emailLogin')?.addEventListener('click', () => {
+      if (!auth) return;
+      const email = document.getElementById('loginEmail').value.trim();
+      const password = document.getElementById('loginPassword').value;
+      if (!isValidEmail(email)) {
+        handleError(new Error('Email tidak valid!'));
+        return;
+      }
+      auth.signInWithEmailAndPassword(email, password).then((userCredential) => {
+        const user = userCredential.user;
+        if (!user.emailVerified) {
+          sendEmailVerification(user);
+          handleError(new Error('Silakan verifikasi email Anda!'));
+        } else {
+          updateUI(user);
+          document.getElementById('loginModal').querySelector('.btn-close')?.click();
+        }
+      }).catch(handleError);
+    });
+
+    // Send Email Verification
+    function sendEmailVerification(user) {
+      if (user && !user.emailVerified) {
+        user.sendEmailVerification().then(() => {
+          alert('Link verifikasi email telah dikirim. Silakan cek inbox Anda!');
+        }).catch(handleError);
+      }
+    }
+
+    // Save User to Firestore
+    function saveUserToFirestore(user, role = 'student') {
+      if (!db) return;
+      db.collection('users').doc(user.uid).set({
+        name: user.displayName || 'User',
+        email: user.email,
+        uid: user.uid,
+        role: role,
+        createdAt: new Date().toISOString(),
+        photoURL: user.photoURL || '',
+        parentUid: role === 'student' ? '' : null,
+        schedule: [],
+        activePackage: ''
+      }, { merge: true }).catch(handleError);
+    }
+
+    // Update UI
+    function updateUI(user) {
+      const profileItem = document.getElementById('profileItem');
+      const logoutItem = document.getElementById('logoutItem');
+      const parentItem = document.getElementById('parentItem');
+      if (user) {
+        profileItem.style.display = 'block';
+        logoutItem.style.display = 'block';
+        if (user.role === 'parent') parentItem.style.display = 'block';
+        else parentItem.style.display = 'none';
+        if (user.role === 'student') loadStudentCalendar(user);
+        else if (user.role === 'parent') loadParentData(user);
+      } else {
+        profileItem.style.display = 'none';
+        logoutItem.style.display = 'none';
+        parentItem.style.display = 'none';
+      }
+    }
+
+    // Load Student Calendar
+    function loadStudentCalendar(user) {
+      if (!user || !db) return;
+      document.getElementById('main-content').innerHTML = `
+        <div class="container">
+          <div class="profile-section" data-aos="fade-up">
+            <h2>Jadwal Saya</h2>
+            <div id="calendar"></div>
+          </div>
+        </div>
+      `;
+      const calendarEl = document.getElementById('calendar');
+      const calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        events: function(fetchInfo, successCallback, failureCallback) {
+          db.collection('users').doc(user.uid).get().then((doc) => {
+            if (doc.exists) {
+              const data = doc.data();
+              const events = (data.schedule || []).map(s => ({
+                title: `Sesi ${s.subject || 'Belajar'}`,
+                start: s.date,
+                allDay: true
+              }));
+              successCallback(events);
+            }
+          }).catch(failureCallback);
+        },
+        dateClick: function(info) {
+          const subject = prompt('Masukkan mata pelajaran untuk sesi ini:');
+          if (subject) {
+            db.collection('users').doc(user.uid).update({
+              schedule: firebase.firestore.FieldValue.arrayUnion({
+                date: info.dateStr,
+                subject: subject
+              })
+            }).then(() => {
+              calendar.refetchEvents();
+              alert('Jadwal berhasil ditambahkan!');
+            }).catch(handleError);
+          }
+        }
+      });
+      calendar.render();
+    }
+
+    // Load Parent Data
+    function loadParentData(user) {
+      if (!user || !db) return;
+      document.getElementById('main-content').innerHTML = `
+        <div class="container">
+          <div class="profile-section" data-aos="fade-up">
+            <h2>Monitoring Perkembangan Anak</h2>
+            <p><strong>Jadwal Anak:</strong> <span id="parentSchedule"></span></p>
+            <p><strong>Paket Aktif Anak:</strong> <span id="parentPackage"></span></p>
+            <div id="childCalendar"></div>
+          </div>
+        </div>
+      `;
+      const calendarEl = document.getElementById('childCalendar');
+      const calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        events: function(fetchInfo, successCallback, failureCallback) {
+          db.collection('users').where('parentUid', '==', user.uid).get().then((querySnapshot) => {
+            const events = [];
+            querySnapshot.forEach(doc => {
+              const data = doc.data();
+              (data.schedule || []).forEach(s => {
+                events.push({
+                  title: `Sesi Anak ${s.subject || 'Belajar'}`,
+                  start: s.date,
+                  allDay: true
+                });
+              });
+            });
+            successCallback(events);
+          }).catch(failureCallback);
+        }
+      });
+      calendar.render();
+      db.collection('users').where('parentUid', '==', user.uid).get().then((querySnapshot) => {
+        querySnapshot.forEach(doc => {
+          const data = doc.data();
+          document.getElementById('parentSchedule').textContent = (data.schedule || []).map(s => s.date).join(', ') || 'Tidak ada jadwal';
+          document.getElementById('parentPackage').textContent = data.activePackage || 'Tidak ada paket aktif';
+        });
+      }).catch(handleError);
+    }
+
+    // Load Profile
+    function loadProfile(user) {
+      if (!user || !db) return;
+      db.collection('users').doc(user.uid).get().then((doc) => {
+        if (doc.exists) {
+          const data = doc.data();
+          document.getElementById('profileName').value = data.name || '';
+          document.getElementById('profileEmail').value = data.email || '';
+          const roleSelect = document.getElementById('profileRole');
+          roleSelect.value = data.role || 'student';
+          document.getElementById('profileRoleField').style.display = user.role === 'admin' ? 'block' : 'none';
+        }
+      }).catch(handleError);
+    }
+
+    // Save Profile
+    document.getElementById('saveProfile')?.addEventListener('click', () => {
+      if (!auth.currentUser || !db) return;
+      const user = auth.currentUser;
+      const name = document.getElementById('profileName').value.trim();
+      const photoInput = document.getElementById('profilePhoto');
+      const role = document.getElementById('profileRole').value;
+
+      if (!name) {
+        handleError(new Error('Nama tidak boleh kosong!'));
+        return;
+      }
+
+      const updateData = { name };
+      if (user.role === 'admin') updateData.role = role;
+      if (role === 'student') updateData.parentUid = '';
+
+      if (photoInput.files && photoInput.files[0]) {
+        const storageRef = storage.ref(`profile_photos/${user.uid}/${photoInput.files[0].name}`);
+        storageRef.put(photoInput.files[0]).then((snapshot) => {
+          snapshot.ref.getDownloadURL().then((photoURL) => {
+            updateData.photoURL = photoURL;
+            saveProfileToFirestore(user.uid, updateData);
+          });
+        }).catch(handleError);
+      } else {
+        saveProfileToFirestore(user.uid, updateData);
+      }
+    });
+
+    function saveProfileToFirestore(uid, data) {
+      db.collection('users').doc(uid).update(data).then(() => {
+        alert('Profil berhasil diperbarui!');
+        const profileModal = bootstrap.Modal.getInstance(document.getElementById('profileModal'));
+        profileModal.hide();
+      }).catch(handleError);
+    }
+
+    // Handle Navigation
+    document.querySelectorAll('.nav-link, .dropdown-item').forEach(link => {
+      link.addEventListener('click', (e) => {
+        const href = link.getAttribute('href');
+        if (href && href !== '#' && !link.classList.contains('dropdown-toggle')) {
+          // Biarkan navigasi default untuk tautan internal
+        } else {
+          e.preventDefault();
+        }
+      });
+    });
+
+    // Initialize AOS
+    AOS.init({
+      duration: 1000,
+      once: true
+    });
+
+    // Logout
+    document.getElementById('logoutBtn')?.addEventListener('click', () => {
+      if (auth) auth.signOut().then(() => updateUI(null)).catch(handleError);
+    });
+
+    // Error Handler
+    function handleError(error) {
+      console.error('Error:', error);
+      alert(error.message || 'Terjadi kesalahan. Coba lagi!');
+    }
+  </script>
+</body>
+</html>
