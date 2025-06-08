@@ -1,43 +1,4 @@
-<script type="text/javascript">
-        var gk_isXlsx = false;
-        var gk_xlsxFileLookup = {};
-        var gk_fileData = {};
-        function filledCell(cell) {
-          return cell !== '' && cell != null;
-        }
-        function loadFileData(filename) {
-        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
-            try {
-                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
-                var firstSheetName = workbook.SheetNames[0];
-                var worksheet = workbook.Sheets[firstSheetName];
-
-                // Convert sheet to JSON to filter blank rows
-                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
-                // Filter out blank rows (rows where all cells are empty, null, or undefined)
-                var filteredData = jsonData.filter(row => row.some(filledCell));
-
-                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
-                var headerRowIndex = filteredData.findIndex((row, index) =>
-                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
-                );
-                // Fallback
-                if (headerRowIndex === -1 || headerRowIndex > 25) {
-                  headerRowIndex = 0;
-                }
-
-                // Convert filtered JSON back to CSV
-                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
-                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
-                return csv;
-            } catch (e) {
-                console.error(e);
-                return "";
-            }
-        }
-        return gk_fileData[filename] || "";
-        }
-        </script><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8">
@@ -70,7 +31,7 @@
 <body>
   <nav class="navbar navbar-expand-lg navbar-light fixed-top">
     <div class="container">
-      <a class="navbar-brand" href="index.html">
+      <a class="navbar-brand" href="index.html" <a href="fitur.html">Fitur</a>>
         <span class="logo-nav"></span>
         BeEdu
       </a>
@@ -79,22 +40,22 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
-          <li class="nav-item"><a class="nav-link" href="index.html">Beranda</a></li>
-          <li class="nav-item"><a class="nav-link" href="testimoni.html">Testimoni</a></li>
-          <li class="nav-item"><a class="nav-link" href="faq.html">FAQ</a></li>
-          <li class="nav-item"><a class="nav-link" href="blog.html">Blog</a></li>
-          <li class="nav-item"><a class="nav-link" href="pembayaran.html">Pembayaran</a></li>
+          <li class="nav-item"><a class="nav-link" href="index.html" <a href="fitur.html">Fitur</a>>Beranda</a></li>
+          <li class="nav-item"><a class="nav-link" href="testimoni.html" <a href="fitur.html">Fitur</a>>Testimoni</a></li>
+          <li class="nav-item"><a class="nav-link" href="faq.html" <a href="fitur.html">Fitur</a>>FAQ</a></li>
+          <li class="nav-item"><a class="nav-link" href="blog.html" <a href="fitur.html">Fitur</a>>Blog</a></li>
+          <li class="nav-item"><a class="nav-link" href="pembayaran.html" <a href="fitur.html">Fitur</a>>Pembayaran</a></li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="paketDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Paket Belajar</a>
             <ul class="dropdown-menu" aria-labelledby="paketDropdown">
-              <li><a class="dropdown-item" href="paket-sd.html">Paket Belajar SD</a></li>
-              <li><a class="dropdown-item" href="paket-sma.html">Paket Belajar SMA</a></li>
-              <li><a class="dropdown-item" href="paket-perguruan-tinggi.html">Paket Belajar Perguruan Tinggi</a></li>
+              <li><a class="dropdown-item" href="paket-sd.html" <a href="fitur.html">Fitur</a>>Paket Belajar SD</a></li>
+              <li><a class="dropdown-item" href="paket-sma.html" <a href="fitur.html">Fitur</a>>Paket Belajar SMA</a></li>
+              <li><a class="dropdown-item" href="paket-perguruan-tinggi.html" <a href="fitur.html">Fitur</a>>Paket Belajar Perguruan Tinggi</a></li>
             </ul>
           </li>
-          <li class="nav-item" id="profileItem" style="display: none;"><a class="nav-link" href="profil.html">Profil</a></li>
+          <li class="nav-item" id="profileItem" style="display: none;"><a class="nav-link" href="profil.html" <a href="fitur.html">Fitur</a>>Profil</a></li>
           <li class="nav-item" id="logoutItem" style="display: none;"><a class="nav-link" href="#" id="logoutBtn">Logout</a></li>
-          <li class="nav-item" id="parentItem" style="display: none;"><a class="nav-link" href="parent.html">Monitoring Anak</a></li>
+          <li class="nav-item" id="parentItem" style="display: none;"><a class="nav-link" href="parent.html" <a href="fitur.html">Fitur</a>>Monitoring Anak</a></li>
         </ul>
       </div>
     </div>
@@ -152,7 +113,7 @@
       <span class="logo-nav" style="margin: 0 auto; display: block;"></span>
     </footer>
 
-  <a href="https://wa.me/6281367315144" class="whatsapp-btn"><i class="fab fa-whatsapp"></i></a>
+  <a href="https://wa.me/6281367315144" class="whatsapp-btn" <a href="fitur.html">Fitur</a>><i class="fab fa-whatsapp"></i></a>
   <a href="#" class="login-btn" data-bs-toggle="modal" data-bs-target="#loginModal"><i class="fas fa-sign-in-alt"></i></a>
   <a href="#" class="register-btn" data-bs-toggle="modal" data-bs-target="#registerModal"><i class="fas fa-user-plus"></i></a>
 
