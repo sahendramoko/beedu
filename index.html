@@ -15,6 +15,8 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" onerror="this.href='https://use.fontawesome.com/releases/v6.4.0/css/all.css'; this.onerror=null;">
   <!-- AOS (Animate On Scroll) -->
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" onerror="this.href='https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.1/aos.css'; this.onerror=null;">
+  <!-- FullCalendar CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.css" rel="stylesheet" onerror="this.href='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.11.0/main.min.css'; this.onerror=null;">
   <style>
     body {
       font-family: 'Poppins', sans-serif;
@@ -53,107 +55,24 @@
       left: 12px;
       box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.1);
     }
-    .logo-personal {
+    .logo-personal, .logo-access, .logo-gami, .logo-monitor, .logo-saran {
       width: 35px;
       height: 35px;
-      background: radial-gradient(circle, #ff6f61, #6b48ff);
-      border-radius: 50%;
       position: relative;
       display: block;
       margin: 0 auto;
     }
-    .logo-personal::before {
-      content: '';
-      position: absolute;
-      width: 15px;
-      height: 15px;
-      background: #fff;
-      clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
-      top: 10px;
-      left: 10px;
-    }
-    .logo-access {
-      width: 35px;
-      height: 35px;
-      background: linear-gradient(135deg, #00c4b4, #007bff);
-      border-radius: 20% 80% 20% 80% / 20% 80% 20% 80%;
-      position: relative;
-      display: block;
-      margin: 0 auto;
-    }
-    .logo-access::before {
-      content: '';
-      position: absolute;
-      width: 10px;
-      height: 10px;
-      background: #fff;
-      border-radius: 50%;
-      top: 12px;
-      left: 12px;
-      animation: pulse 2s infinite;
-    }
-    @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.2); }
-      100% { transform: scale(1); }
-    }
-    .logo-gami {
-      width: 35px;
-      height: 35px;
-      background: radial-gradient(circle, #ffd700, #ffca28);
-      border-radius: 50%;
-      position: relative;
-      display: block;
-      margin: 0 auto;
-    }
-    .logo-gami::before {
-      content: '';
-      position: absolute;
-      width: 8px;
-      height: 8px;
-      background: #fff;
-      clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
-      top: 14px;
-      left: 14px;
-    }
-    .logo-monitor {
-      width: 35px;
-      height: 35px;
-      background: linear-gradient(45deg, #28a745, #ffd700);
-      border-radius: 10px;
-      position: relative;
-      display: block;
-      margin: 0 auto;
-    }
-    .logo-monitor::before {
-      content: '';
-      position: absolute;
-      width: 20px;
-      height: 10px;
-      background: #fff;
-      border-radius: 5px;
-      top: 12px;
-      left: 7px;
-    }
-    .logo-saran {
-      width: 35px;
-      height: 35px;
-      background: radial-gradient(circle, #25d366, #28a745);
-      border-radius: 50% / 60%;
-      position: relative;
-      display: block;
-      margin: 0 auto;
-    }
-    .logo-saran::before {
-      content: '';
-      position: absolute;
-      width: 12px;
-      height: 12px;
-      background: #fff;
-      clip-path: polygon(50% 0%, 80% 10%, 100% 35%, 80% 60%, 50% 70%, 20% 60%, 0% 35%, 20% 10%);
-      top: 11px;
-      left: 11px;
-    }
+    .logo-personal { background: radial-gradient(circle, #ff6f61, #6b48ff); border-radius: 50%; }
+    .logo-personal::before { content: ''; position: absolute; width: 15px; height: 15px; background: #fff; clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%); top: 10px; left: 10px; }
+    .logo-access { background: linear-gradient(135deg, #00c4b4, #007bff); border-radius: 20% 80% 20% 80% / 20% 80% 20% 80%; }
+    .logo-access::before { content: ''; position: absolute; width: 10px; height: 10px; background: #fff; border-radius: 50%; top: 12px; left: 12px; animation: pulse 2s infinite; }
+    .logo-gami { background: radial-gradient(circle, #ffd700, #ffca28); border-radius: 50%; }
+    .logo-gami::before { content: ''; position: absolute; width: 8px; height: 8px; background: #fff; clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%); top: 14px; left: 14px; }
+    .logo-monitor { background: linear-gradient(45deg, #28a745, #ffd700); border-radius: 10px; }
+    .logo-monitor::before { content: ''; position: absolute; width: 20px; height: 10px; background: #fff; border-radius: 5px; top: 12px; left: 7px; }
+    .logo-saran { background: radial-gradient(circle, #25d366, #28a745); border-radius: 50% / 60%; }
+    .logo-saran::before { content: ''; position: absolute; width: 12px; height: 12px; background: #fff; clip-path: polygon(50% 0%, 80% 10%, 100% 35%, 80% 60%, 50% 70%, 20% 60%, 0% 35%, 20% 10%); top: 11px; left: 11px; }
+    @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.2); } 100% { transform: scale(1); } }
     .nav-link {
       color: #333 !important;
       font-weight: 500;
@@ -298,16 +217,10 @@
       border-radius: 15px;
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
     }
-    .notification {
-      position: fixed;
-      top: 70px;
-      right: 20px;
-      background-color: #fff;
-      padding: 10px;
-      border-radius: 5px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-      display: none;
-      z-index: 1000;
+    #calendar {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px;
     }
   </style>
 </head>
@@ -315,7 +228,7 @@
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg navbar-light fixed-top">
     <div class="container">
-      <a class="navbar-brand" href="#home">
+      <a class="navbar-brand" href="index.html" target="_blank">
         <span class="logo-nav"></span>
         BeEdu
       </a>
@@ -325,41 +238,38 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
           <li class="nav-item">
-            <a class="nav-link" href="#home" target="_self">Beranda</a>
+            <a class="nav-link" href="fitur.html" target="_blank">Fitur</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#fitur" target="_self">Fitur</a>
+            <a class="nav-link" href="testimoni.html" target="_blank">Testimoni</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#testimoni" target="_self">Testimoni</a>
+            <a class="nav-link" href="faq.html" target="_blank">FAQ</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#faq" target="_self">FAQ</a>
+            <a class="nav-link" href="blog.html" target="_blank">Blog</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#blog" target="_self">Blog</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#pembayaran" target="_self">Pembayaran</a>
+            <a class="nav-link" href="pembayaran.html" target="_blank">Pembayaran</a>
           </li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="paketDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               Paket Belajar
             </a>
             <ul class="dropdown-menu" aria-labelledby="paketDropdown">
-              <li><a class="dropdown-item" href="#paket-sd" target="_self">Paket Belajar SD</a></li>
-              <li><a class="dropdown-item" href="#paket-sma" target="_self">Paket Belajar SMA</a></li>
-              <li><a class="dropdown-item" href="#paket-perguruan-tinggi" target="_self">Paket Belajar Perguruan Tinggi</a></li>
+              <li><a class="dropdown-item" href="paket-sd.html" target="_blank">Paket Belajar SD</a></li>
+              <li><a class="dropdown-item" href="paket-sma.html" target="_blank">Paket Belajar SMA</a></li>
+              <li><a class="dropdown-item" href="paket-perguruan-tinggi.html" target="_blank">Paket Belajar Perguruan Tinggi</a></li>
             </ul>
           </li>
           <li class="nav-item" id="profileItem" style="display: none;">
-            <a class="nav-link" href="#profil" target="_self">Profil</a>
+            <a class="nav-link" href="profil.html" target="_blank">Profil</a>
           </li>
           <li class="nav-item" id="logoutItem" style="display: none;">
             <a class="nav-link" href="#" id="logoutBtn">Logout</a>
           </li>
           <li class="nav-item" id="parentItem" style="display: none;">
-            <a class="nav-link" href="#parent" target="_self">Monitoring Anak</a>
+            <a class="nav-link" href="parent.html" target="_blank">Monitoring Anak</a>
           </li>
         </ul>
       </div>
@@ -371,7 +281,7 @@
     <div class="container">
       <h1>BeEdu: Learn, Grow, Succeed</h1>
       <p>Les privat online personal untuk siswa SD-SMA dan mahasiswa!</p>
-      <a href="#kontak" class="btn btn-hero">Daftar Sesi Gratis</a>
+      <a href="kontak.html" class="btn btn-hero">Daftar Sesi Gratis</a>
     </div>
   </section>
 
@@ -403,29 +313,19 @@
   <section class="content-section">
     <div class="container">
       <h2 class="text-center section-title" data-aos="fade-up">Apa Kata Mereka</h2>
-      <div id="testimonialCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
-        <div class="carousel-inner">
-          <div class="carousel-item active">
-            <div class="testimonial-mini">
-              <p>"BeEdu mengubah cara saya belajar matematika!"</p>
-              <h5>Alya, Siswa SMA</h5>
-            </div>
-          </div>
-          <div class="carousel-item">
-            <div class="testimonial-mini">
-              <p>"Anak saya lebih termotivasi berkat gamifikasi!"</p>
-              <h5>Ibu Sari, Orang Tua</h5>
-            </div>
+      <div class="row">
+        <div class="col-md-6 mb-4" data-aos="fade-up" data-aos-delay="100">
+          <div class="testimonial-mini">
+            <p>"BeEdu mengubah cara saya belajar matematika!"</p>
+            <h5>Alya, Siswa SMA</h5>
           </div>
         </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="prev">
-          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="next">
-          <span class="carousel-control-next-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Next</span>
-        </button>
+        <div class="col-md-6 mb-4" data-aos="fade-up" data-aos-delay="200">
+          <div class="testimonial-mini">
+            <p>"Anak saya lebih termotivasi berkat gamifikasi!"</p>
+            <h5>Ibu Sari, Orang Tua</h5>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -473,18 +373,6 @@
       </div>
     </div>
   </section>
-
-  <!-- Main Content -->
-  <div id="main-content" class="content-section">
-    <div class="container">
-      <div id="page-content" style="display: none;">
-        <!-- Content will be loaded dynamically here -->
-      </div>
-    </div>
-  </section>
-
-  <!-- Notification -->
-  <div id="notification" class="notification"></div>
 
   <!-- Footer -->
   <footer>
@@ -599,14 +487,17 @@
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js" onerror="this.src='https://cdn.jsdelivr.net/npm/firebase@9.22.0/dist/firebase-app-compat.js'; this.onerror=null;"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js" onerror="this.src='https://cdn.jsdelivr.net/npm/firebase@9.22.0/dist/firebase-auth-compat.js'; this.onerror=null;"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js" onerror="this.src='https://cdn.jsdelivr.net/npm/firebase@9.22.0/dist/firebase-firestore-compat.js'; this.onerror=null;"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js" onerror="this.src='https://cdn.jsdelivr.net/npm/firebase@9.22.0/dist/firebase-storage-compat.js'; this.onerror=null;"></script>
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" onerror="this.src='https://stackpath.bootstrapcdn.com/bootstrap/5.3.2/js/bootstrap.bundle.min.js'; this.onerror=null;"></script>
   <!-- AOS JS -->
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js" onerror="this.src='https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.1/aos.js'; this.onerror=null;"></script>
+  <!-- FullCalendar JS -->
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js" onerror="this.src='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.11.0/main.min.js'; this.onerror=null;"></script>
   <!-- Custom JS -->
   <script>
     // Initialize Firebase
-    let app, auth, db;
+    let app, auth, db, storage;
     try {
       const firebaseConfig = {
         apiKey: "AIzaSyC_fhbF2b-Tg2an3fN-sn2p6nYbMYC3bRQ",
@@ -620,6 +511,7 @@
       app = firebase.initializeApp(firebaseConfig);
       auth = firebase.auth();
       db = firebase.firestore();
+      storage = firebase.storage();
     } catch (error) {
       handleError(new Error('Firebase initialization failed: ' + error.message));
     }
@@ -634,6 +526,7 @@
       document.getElementById(`googleLogin${role}`)?.addEventListener('click', () => {
         if (auth) auth.signInWithPopup(googleProvider).then((result) => {
           const user = result.user;
+          sendEmailVerification(user);
           saveUserToFirestore(user, role.toLowerCase());
           updateUI(user);
         }).catch(handleError);
@@ -641,6 +534,7 @@
       document.getElementById(`googleRegister${role}`)?.addEventListener('click', () => {
         if (auth) auth.signInWithPopup(googleProvider).then((result) => {
           const user = result.user;
+          sendEmailVerification(user);
           saveUserToFirestore(user, role.toLowerCase());
           updateUI(user);
         }).catch(handleError);
@@ -658,6 +552,7 @@
       }
       auth.createUserWithEmailAndPassword(email, password).then((userCredential) => {
         const user = userCredential.user;
+        sendEmailVerification(user);
         saveUserToFirestore(user, 'student');
         updateUI(user);
         document.getElementById('registerModal').querySelector('.btn-close')?.click();
@@ -675,10 +570,24 @@
       }
       auth.signInWithEmailAndPassword(email, password).then((userCredential) => {
         const user = userCredential.user;
-        updateUI(user);
-        document.getElementById('loginModal').querySelector('.btn-close')?.click();
+        if (!user.emailVerified) {
+          sendEmailVerification(user);
+          handleError(new Error('Silakan verifikasi email Anda!'));
+        } else {
+          updateUI(user);
+          document.getElementById('loginModal').querySelector('.btn-close')?.click();
+        }
       }).catch(handleError);
     });
+
+    // Send Email Verification
+    function sendEmailVerification(user) {
+      if (user && !user.emailVerified) {
+        user.sendEmailVerification().then(() => {
+          alert('Link verifikasi email telah dikirim. Silakan cek inbox Anda!');
+        }).catch(handleError);
+      }
+    }
 
     // Save User to Firestore
     function saveUserToFirestore(user, role = 'student') {
@@ -690,9 +599,9 @@
         role: role,
         createdAt: new Date().toISOString(),
         photoURL: user.photoURL || '',
+        parentUid: role === 'student' ? '' : null,
         schedule: [],
-        activePackage: '',
-        notifications: []
+        activePackage: ''
       }, { merge: true }).catch(handleError);
     }
 
@@ -706,14 +615,101 @@
         logoutItem.style.display = 'block';
         if (user.role === 'parent') parentItem.style.display = 'block';
         else parentItem.style.display = 'none';
-        loadProfile(user);
-        loadNotifications(user);
+        if (user.role === 'student') loadStudentCalendar(user);
+        else if (user.role === 'parent') loadParentData(user);
       } else {
         profileItem.style.display = 'none';
         logoutItem.style.display = 'none';
         parentItem.style.display = 'none';
       }
-      loadPage();
+    }
+
+    // Load Student Calendar
+    function loadStudentCalendar(user) {
+      if (!user || !db) return;
+      document.getElementById('main-content').innerHTML = `
+        <div class="container">
+          <div class="profile-section" data-aos="fade-up">
+            <h2>Jadwal Saya</h2>
+            <div id="calendar"></div>
+          </div>
+        </div>
+      `;
+      const calendarEl = document.getElementById('calendar');
+      const calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        events: function(fetchInfo, successCallback, failureCallback) {
+          db.collection('users').doc(user.uid).get().then((doc) => {
+            if (doc.exists) {
+              const data = doc.data();
+              const events = (data.schedule || []).map(s => ({
+                title: `Sesi ${s.subject || 'Belajar'}`,
+                start: s.date,
+                allDay: true
+              }));
+              successCallback(events);
+            }
+          }).catch(failureCallback);
+        },
+        dateClick: function(info) {
+          const subject = prompt('Masukkan mata pelajaran untuk sesi ini:');
+          if (subject) {
+            db.collection('users').doc(user.uid).update({
+              schedule: firebase.firestore.FieldValue.arrayUnion({
+                date: info.dateStr,
+                subject: subject
+              })
+            }).then(() => {
+              calendar.refetchEvents();
+              alert('Jadwal berhasil ditambahkan!');
+            }).catch(handleError);
+          }
+        }
+      });
+      calendar.render();
+    }
+
+    // Load Parent Data
+    function loadParentData(user) {
+      if (!user || !db) return;
+      document.getElementById('main-content').innerHTML = `
+        <div class="container">
+          <div class="profile-section" data-aos="fade-up">
+            <h2>Monitoring Perkembangan Anak</h2>
+            <p><strong>Jadwal Anak:</strong> <span id="parentSchedule"></span></p>
+            <p><strong>Paket Aktif Anak:</strong> <span id="parentPackage"></span></p>
+            <div id="childCalendar"></div>
+          </div>
+        </div>
+      `;
+      const calendarEl = document.getElementById('childCalendar');
+      const calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        events: function(fetchInfo, successCallback, failureCallback) {
+          db.collection('users').where('parentUid', '==', user.uid).get().then((querySnapshot) => {
+            const events = [];
+            querySnapshot.forEach(doc => {
+              const data = doc.data();
+              (data.schedule || []).forEach(s => {
+                events.push({
+                  title: `Sesi Anak ${s.subject || 'Belajar'}`,
+                  start: s.date,
+                  allDay: true
+                });
+              });
+            });
+            successCallback(events);
+          }).catch(failureCallback);
+        }
+      });
+      calendar.render();
+      db.collection('users').where('parentUid', '==', user.uid).get().then((querySnapshot) => {
+        querySnapshot.forEach(doc => {
+          const data = doc.data();
+          document.getElementById('parentSchedule').textContent = (data.schedule || []).map(s => s.date).join(', ') || 'Tidak ada jadwal';
+          document.getElementById('parentPackage').textContent = data.activePackage || 'Tidak ada paket aktif';
+        });
+      }).catch(handleError);
     }
 
     // Load Profile
@@ -746,9 +742,10 @@
 
       const updateData = { name };
       if (user.role === 'admin') updateData.role = role;
+      if (role === 'student') updateData.parentUid = '';
 
       if (photoInput.files && photoInput.files[0]) {
-        const storageRef = firebase.storage().ref(`profile_photos/${user.uid}/${photoInput.files[0].name}`);
+        const storageRef = storage.ref(`profile_photos/${user.uid}/${photoInput.files[0].name}`);
         storageRef.put(photoInput.files[0]).then((snapshot) => {
           snapshot.ref.getDownloadURL().then((photoURL) => {
             updateData.photoURL = photoURL;
@@ -762,339 +759,9 @@
 
     function saveProfileToFirestore(uid, data) {
       db.collection('users').doc(uid).update(data).then(() => {
-        showNotification('Profil berhasil diperbarui!');
+        alert('Profil berhasil diperbarui!');
         const profileModal = bootstrap.Modal.getInstance(document.getElementById('profileModal'));
         profileModal.hide();
-      }).catch(handleError);
-    }
-
-    // Load Notifications
-    function loadNotifications(user) {
-      if (!user || !db) return;
-      db.collection('users').doc(user.uid).onSnapshot((doc) => {
-        if (doc.exists) {
-          const data = doc.data();
-          const notifications = data.notifications || [];
-          const notificationDiv = document.getElementById('notification');
-          notificationDiv.innerHTML = notifications.map(n => `<p>${n.message} (${new Date(n.timestamp).toLocaleString()})</p>`).join('');
-          notificationDiv.style.display = notifications.length ? 'block' : 'none';
-        }
-      }, handleError);
-    }
-
-    // Add Notification
-    function addNotification(user, message) {
-      if (!user || !db) return;
-      db.collection('users').doc(user.uid).update({
-        notifications: firebase.firestore.FieldValue.arrayUnion({
-          message,
-          timestamp: new Date().toISOString()
-        })
-      }).catch(handleError);
-    }
-
-    // Show Notification
-    function showNotification(message) {
-      const notificationDiv = document.getElementById('notification');
-      notificationDiv.innerHTML = `<p>${message} (${new Date().toLocaleString()})</p>`;
-      notificationDiv.style.display = 'block';
-      setTimeout(() => notificationDiv.style.display = 'none', 5000);
-    }
-
-    // Load Page Content
-    function loadPage() {
-      const hash = window.location.hash.substring(1) || 'home';
-      const contentDiv = document.getElementById('page-content');
-      const homeSection = document.getElementById('home');
-
-      contentDiv.style.display = 'none';
-      homeSection.style.display = 'none';
-
-      if (hash === 'home') {
-        homeSection.style.display = 'block';
-      } else if (hash.startsWith('paket-')) {
-        contentDiv.style.display = 'block';
-        contentDiv.innerHTML = getPaketContent(hash.replace('paket-', ''));
-      } else if (hash === 'profil' && auth.currentUser) {
-        contentDiv.style.display = 'block';
-        contentDiv.innerHTML = `
-          <div class="profile-section" data-aos="fade-up">
-            <h2>Profil Saya</h2>
-            <p><strong>Nama:</strong> <span id="displayName"></span></p>
-            <p><strong>Email:</strong> <span id="displayEmail"></span></p>
-            <p><strong>Peran:</strong> <span id="displayRole"></span></p>
-            <p><strong>Jadwal:</strong> <span id="displaySchedule"></span></p>
-            <p><strong>Paket Aktif:</strong> <span id="displayPackage"></span></p>
-            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#profileModal">Edit Profil</button>
-          </div>
-        `;
-        loadProfileData();
-      } else {
-        contentDiv.style.display = 'block';
-        contentDiv.innerHTML = '';
-        switch (hash.toLowerCase()) {
-          case 'fitur':
-            contentDiv.innerHTML = `
-              <div class="section-title" data-aos="fade-up">
-                <h2>Fitur Unggulan BeEdu</h2>
-                <p>Jelajahi fitur-fitur menarik yang membuat belajar jadi lebih seru dan efektif!</p>
-              </div>
-              <div class="row">
-                <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="100">
-                  <div class="feature-card">
-                    <span class="logo-personal"></span>
-                    <h3>Personalisasi AI</h3>
-                    <p>Materi disesuaikan dengan gaya belajarmu menggunakan kecerdasan buatan.</p>
-                  </div>
-                </div>
-                <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="200">
-                  <div class="feature-card">
-                    <span class="logo-access"></span>
-                    <h3>Akses Fleksibel</h3>
-                    <p>Belajar kapan saja dengan rekaman sesi 24/7 dan jadwal fleksibel.</p>
-                  </div>
-                </div>
-                <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="300">
-                  <div class="feature-card">
-                    <span class="logo-gami"></span>
-                    <h3>Gamifikasi</h3>
-                    <p>Kumpulkan poin dan badge untuk meningkatkan motivasi belajarmu.</p>
-                  </div>
-                </div>
-                <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="400">
-                  <div class="feature-card">
-                    <span class="logo-monitor"></span>
-                    <h3>Monitoring Orang Tua</h3>
-                    <p>Pantau progress anak secara real-time dengan laporan interaktif.</p>
-                  </div>
-                </div>
-                <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="500">
-                  <div class="feature-card">
-                    <span class="logo-saran"></span>
-                    <h3>Saran dari Tentor</h3>
-                    <p>Dapatkan saran pribadi via WhatsApp untuk perkembangan terbaik.</p>
-                  </div>
-                </div>
-                <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="600">
-                  <div class="feature-card">
-                    <span class="logo-personal"></span>
-                    <h3>Edit Profil</h3>
-                    <p>Kustomisasi profil dengan foto dan tema yang kamu suka.</p>
-                  </div>
-                </div>
-              </div>
-            `;
-            break;
-          case 'testimoni':
-            contentDiv.innerHTML = `
-              <div class="section-title" data-aos="fade-up">
-                <h2>Testimoni Pengguna</h2>
-                <p>Dengar cerita sukses dari pengguna BeEdu!</p>
-              </div>
-              <div class="row">
-                <div class="col-md-6 mb-4" data-aos="fade-up" data-aos-delay="100">
-                  <div class="testimonial-card">
-                    <span class="logo-personal"></span>
-                    <p>"BeEdu membuat pelajaran matematika jadi menyenangkan dan mudah dipahami!"</p>
-                    <h5>Alya, Siswa SMA</h5>
-                  </div>
-                </div>
-                <div class="col-md-6 mb-4" data-aos="fade-up" data-aos-delay="200">
-                  <div class="testimonial-card">
-                    <span class="logo-monitor"></span>
-                    <p>"Anak saya semakin termotivasi berkat gamifikasi di BeEdu!"</p>
-                    <h5>Ibu Sari, Orang Tua</h5>
-                  </div>
-                </div>
-              </div>
-            `;
-            break;
-          case 'faq':
-            contentDiv.innerHTML = `
-              <div class="section-title" data-aos="fade-up">
-                <h2>Pertanyaan Umum</h2>
-                <p>Jelajahi jawaban atas pertanyaanmu tentang BeEdu!</p>
-              </div>
-              <div class="row">
-                <div class="col-md-12" data-aos="fade-up">
-                  <div class="faq-item">
-                    <span class="logo-nav"></span>
-                    <h4>Apa itu BeEdu?</h4>
-                    <p>BeEdu adalah platform les privat online dengan AI dan gamifikasi untuk belajar yang lebih menyenangkan.</p>
-                  </div>
-                  <div class="faq-item" data-aos="fade-up" data-aos-delay="100">
-                    <span class="logo-nav"></span>
-                    <h4>Bagaimana cara mendaftar?</h4>
-                    <p>Klik "Daftar Sesi Gratis" di Beranda dan isi formulir sederhana.</p>
-                  </div>
-                </div>
-              </div>
-            `;
-            break;
-          case 'blog':
-            contentDiv.innerHTML = `
-              <div class="section-title" data-aos="fade-up">
-                <h2>Berita & Prestasi</h2>
-                <p>Ikuti update terbaru dari komunitas BeEdu!</p>
-              </div>
-              <div class="row">
-                <div class="col-md-6 mb-4" data-aos="fade-up" data-aos-delay="100">
-                  <div class="blog-card">
-                    <span class="logo-gami"></span>
-                    <h4>Siswa Terbaik: Alya</h4>
-                    <p>Alya meraih badge "Super Learner" setelah menyelesaikan 20 sesi (6 Juni 2025).</p>
-                  </div>
-                </div>
-                <div class="col-md-6 mb-4" data-aos="fade-up" data-aos-delay="200">
-                  <div class="blog-card">
-                    <span class="logo-saran"></span>
-                    <h4>Tips Belajar Efektif</h4>
-                    <p>5 strategi dari tentor BeEdu untuk sukses di ujian (9 Juni 2025).</p>
-                  </div>
-                </div>
-              </div>
-            `;
-            break;
-          case 'pembayaran':
-            contentDiv.innerHTML = `
-              <div class="section-title" data-aos="fade-up">
-                <h2>Metode Pembayaran</h2>
-                <p>Pilih opsi pembayaran yang mudah dan aman!</p>
-              </div>
-              <div class="row">
-                <div class="col-md-6 mb-4" data-aos="fade-up" data-aos-delay="100">
-                  <div class="payment-card">
-                    <span class="logo-nav"></span>
-                    <h4>Transfer Bank</h4>
-                    <p>BCA, No. Rek: 123-456-7890, A/n: BeEdu Indonesia. Proses cepat dalam 1x24 jam.</p>
-                  </div>
-                </div>
-                <div class="col-md-6 mb-4" data-aos="fade-up" data-aos-delay="200">
-                  <div class="payment-card">
-                    <span class="logo-nav"></span>
-                    <h4>E-Wallet</h4>
-                    <p>Dukungan OVO dan GoPay dengan konfirmasi instan.</p>
-                  </div>
-                </div>
-              </div>
-            `;
-            break;
-          case 'parent':
-            if (auth.currentUser && auth.currentUser.role === 'parent') {
-              contentDiv.innerHTML = `
-                <div class="profile-section" data-aos="fade-up">
-                  <h2>Monitoring Perkembangan Anak</h2>
-                  <p><strong>Jadwal Anak:</strong> <span id="parentSchedule"></span></p>
-                  <p><strong>Paket Aktif Anak:</strong> <span id="parentPackage"></span></p>
-                  <p><strong>Notifikasi:</strong> <span id="parentNotifications"></span></p>
-                </div>
-              `;
-              loadParentData();
-            } else {
-              contentDiv.innerHTML = '<h2>Silakan Login sebagai Orang Tua.</h2>';
-            }
-            break;
-          case 'kontak':
-            contentDiv.innerHTML = `
-              <h2>Daftar Sekarang</h2>
-              <form id="registrationForm">
-                <div class="mb-3"><input type="text" class="form-control" id="name" placeholder="Nama" required></div>
-                <div class="mb-3"><input type="email" class="form-control" id="email" placeholder="Email" required></div>
-                <div class="mb-3"><input type="text" class="form-control" id="whatsapp" placeholder="Nomor WhatsApp" required></div>
-                <div class="mb-3"><textarea class="form-control" id="needs" placeholder="Kebutuhan Belajar" required></textarea></div>
-                <button type="submit" class="btn btn-primary w-100">Kirim</button>
-              </form>
-              <div id="successMessage" class="text-center mt-3" style="display: none; color: green;"></div>
-              <div id="errorMessage" class="text-center mt-3" style="display: none; color: red;"></div>
-            `;
-            document.getElementById('registrationForm')?.addEventListener('submit', async (e) => {
-              e.preventDefault();
-              const name = document.getElementById('name').value.trim();
-              const email = document.getElementById('email').value.trim();
-              const whatsapp = document.getElementById('whatsapp').value.trim();
-              const needs = document.getElementById('needs').value.trim();
-              if (!name || !email || !whatsapp || !needs || !isValidEmail(email) || !isValidWhatsapp(whatsapp)) {
-                handleError(new Error('Data tidak valid!'));
-                return;
-              }
-              try {
-                await db.collection('registrations').add({
-                  name, email, whatsapp, role: 'student', needs, timestamp: new Date().toISOString()
-                });
-                document.getElementById('successMessage').style.display = 'block';
-                document.getElementById('errorMessage').style.display = 'none';
-                document.getElementById('registrationForm').reset();
-              } catch (error) {
-                handleError(error);
-              }
-            });
-            break;
-          default:
-            contentDiv.innerHTML = '<h2>Halaman Tidak Ditemukan</h2><p>Kembali ke <a href="#home">Beranda</a>.</p>';
-        }
-      }
-    }
-
-    function getPaketContent(paket) {
-      let content = `
-        <div class="section-title" data-aos="fade-up">
-          <h2>Paket Belajar ${paket.charAt(0).toUpperCase() + paket.slice(1)}</h2>
-          <p>Pilih paket yang sesuai dengan kebutuhan belajar Anda!</p>
-        </div>
-        <div class="row">
-      `;
-      const packages = {
-        'sd': { standar: '10 sesi/bulan, materi dasar, akses 24/7', pro: '20 sesi/bulan, materi lanjutan, akses 24/7, saran pribadi' },
-        'sma': { standar: '12 sesi/bulan, fokus ujian, akses 24/7', pro: '25 sesi/bulan, simulasi ujian, akses 24/7, saran pribadi' },
-        'perguruan-tinggi': { standar: '15 sesi/bulan, materi akademik, akses 24/7', pro: '30 sesi/bulan, bimbingan tugas, akses 24/7, saran pribadi' }
-      };
-      content += `
-        <div class="col-md-6 mb-4" data-aos="fade-up" data-aos-delay="100">
-          <div class="feature-card">
-            <span class="logo-nav"></span>
-            <h3>Standar</h3>
-            <p>${packages[paket].standar}</p>
-            <button class="btn btn-primary">Beli Sekarang</button>
-          </div>
-        </div>
-        <div class="col-md-6 mb-4" data-aos="fade-up" data-aos-delay="200">
-          <div class="feature-card">
-            <span class="logo-nav"></span>
-            <h3>Pro</h3>
-            <p>${packages[paket].pro}</p>
-            <button class="btn btn-success">Beli Sekarang</button>
-          </div>
-        </div>
-      `;
-      content += '</div>';
-      return content;
-    }
-
-    function loadProfileData() {
-      if (!auth.currentUser || !db) return;
-      db.collection('users').doc(auth.currentUser.uid).get().then((doc) => {
-        if (doc.exists) {
-          const data = doc.data();
-          document.getElementById('displayName').textContent = data.name || 'Tidak ada nama';
-          document.getElementById('displayEmail').textContent = data.email || 'Tidak ada email';
-          document.getElementById('displayRole').textContent = data.role || 'Tidak ada peran';
-          document.getElementById('displaySchedule').textContent = (data.schedule || []).join(', ') || 'Tidak ada jadwal';
-          document.getElementById('displayPackage').textContent = data.activePackage || 'Tidak ada paket aktif';
-        }
-      }).catch(handleError);
-    }
-
-    function loadParentData() {
-      if (!auth.currentUser || !db) return;
-      // Simulasi data anak (harus disesuaikan dengan UID anak)
-      const childUid = 'childUidExample'; // Ganti dengan logika untuk mendapatkan UID anak
-      db.collection('users').doc(childUid).get().then((doc) => {
-        if (doc.exists) {
-          const data = doc.data();
-          document.getElementById('parentSchedule').textContent = (data.schedule || []).join(', ') || 'Tidak ada jadwal';
-          document.getElementById('parentPackage').textContent = data.activePackage || 'Tidak ada paket aktif';
-          document.getElementById('parentNotifications').textContent = (data.notifications || []).map(n => n.message).join(', ') || 'Tidak ada notifikasi';
-        }
       }).catch(handleError);
     }
 
@@ -1102,14 +769,8 @@
     document.querySelectorAll('.nav-link, .dropdown-item').forEach(link => {
       link.addEventListener('click', (e) => {
         e.preventDefault();
-        const href = link.getAttribute('href').substring(1); // Remove '#'
-        window.location.hash = href;
-        loadPage();
       });
     });
-
-    // Handle Hash Change
-    window.addEventListener('hashchange', loadPage);
 
     // Initialize AOS
     AOS.init({
