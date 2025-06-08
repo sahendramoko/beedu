@@ -107,7 +107,7 @@
       padding: 20px;
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
     }
-    .faq-section, .blog-section, .payment-section, .schedule-section {
+    .faq-section, .blog-section, .payment-section, .profile-section {
       padding: 60px 0;
     }
     .accordion-button {
@@ -198,14 +198,7 @@
       text-align: center;
       margin-top: 10px;
     }
-    .schedule-card {
-      background-color: #fff;
-      border-radius: 15px;
-      padding: 15px;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-      margin-bottom: 15px;
-    }
-    .package-card {
+    .profile-card {
       background-color: #fff;
       border-radius: 15px;
       padding: 20px;
@@ -213,15 +206,19 @@
       margin-bottom: 20px;
       text-align: center;
     }
-    .package-card.active {
-      border: 2px solid #007bff;
+    .progress-bar {
+      height: 20px;
+      background-color: #e9ecef;
+      border-radius: 10px;
+      overflow: hidden;
     }
-    .rating-section {
-      display: none;
-      margin-top: 20px;
-    }
-    .rating-section.active {
-      display: block;
+    .progress {
+      height: 100%;
+      background-color: #007bff;
+      text-align: right;
+      padding-right: 10px;
+      color: white;
+      transition: width 0.3s ease;
     }
   </style>
 </head>
@@ -260,7 +257,7 @@
             <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#registerModal">Daftar</a>
           </li>
           <li class="nav-item" id="profileItem" style="display: none;">
-            <a class="nav-link" href="#" id="userProfileNav"></a>
+            <a class="nav-link" href="#" id="userProfileNav">Profil</a>
           </li>
           <li class="nav-item" id="logoutItem" style="display: none;">
             <a class="nav-link" href="#" id="logoutBtn">Logout</a>
@@ -425,15 +422,11 @@
           <p><strong>Bank:</strong> BCA<br>
              <strong>Nomor Rekening:</strong> 123-456-7890<br>
              <strong>Atas Nama:</strong> BeEdu Indonesia</p>
-          <p>Setelah transfer, konfirmasi pembayaran via WhatsApp dengan mengirimkan bukti transfer.</p>
-          <a href="https://wa.me/081367315144?text=Saya%20telah%20melakukan%20pembayaran%20via%20transfer%20bank%20untuk%20paket%20[PaketNama]" class="btn btn-primary" target="_blank">Konfirmasi via WhatsApp</a>
         </div>
         <div class="col-md-6" data-aos="fade-up" data-aos-delay="100">
           <h4>QRIS</h4>
           <p>Scan kode QRIS berikut untuk pembayaran cepat:</p>
           <img src="https://via.placeholder.com/200x200.png?text=QRIS+BeEdu" alt="QRIS BeEdu" class="img-fluid" onerror="this.src='https://via.placeholder.com/200x200?text=QRIS+Error'">
-          <p>Setelah pembayaran, konfirmasi via WhatsApp.</p>
-          <a href="https://wa.me/081367315144?text=Saya%20telah%20melakukan%20pembayaran%20via%20QRIS%20untuk%20paket%20[PaketNama]" class="btn btn-primary" target="_blank">Konfirmasi via WhatsApp</a>
         </div>
       </div>
     </div>
@@ -451,6 +444,10 @@
         <div class="mb-3">
           <label for="email" class="form-label">Email</label>
           <input type="email" class="form-control" id="email" name="email" required>
+        </div>
+        <div class="mb-3">
+          <label for="whatsapp" class="form-label">Nomor WhatsApp</label>
+          <input type="text" class="form-control" id="whatsapp" name="whatsapp" pattern="^08[1-9][0-9]{8,11}$" placeholder="Contoh: 081367315144" required>
         </div>
         <div class="mb-3">
           <label for="role" class="form-label">Peran</label>
@@ -472,48 +469,51 @@
     </div>
   </section>
 
-  <!-- Schedule Section -->
-  <section id="schedule" class="schedule-section">
+  <!-- Profile Section -->
+  <section id="profile" class="profile-section" style="display: none;">
     <div class="container">
-      <h2 class="text-center mb-5" data-aos="fade-up">Jadwal Belajar</h2>
-      <div id="scheduleList" class="row"></div>
-    </div>
-  </section>
-
-  <!-- Rating Section -->
-  <section id="rating" class="rating-section" style="display: none;">
-    <div class="container">
-      <h2 class="text-center mb-5" data-aos="fade-up">Berikan Rating untuk Mentor</h2>
-      <form id="ratingForm" class="w-50 mx-auto" data-aos="fade-up">
-        <div class="mb-3">
-          <label for="mentorName" class="form-label">Nama Mentor</label>
-          <input type="text" class="form-control" id="mentorName" name="mentorName" required>
+      <h2 class="text-center mb-5" data-aos="fade-up">Profil Saya</h2>
+      <div class="row">
+        <div class="col-md-12" data-aos="fade-up">
+          <div class="profile-card" id="profileContent">
+            <h4 id="profileName"></h4>
+            <p id="profileEmail"></p>
+            <p id="profileRole"></p>
+            <p id="profileWhatsapp"></p>
+            <div class="mb-3">
+              <h5>Progress Belajar</h5>
+              <div class="progress-bar">
+                <div class="progress" id="progressBar" style="width: 0%;">0%</div>
+              </div>
+            </div>
+            <div class="mb-3" id="gamificationStats">
+              <h5>Poin Gamifikasi: <span id="gamificationPoints">0</span></h5>
+            </div>
+            <div class="mb-3" id="learningHistory">
+              <h5>Riwayat Belajar</h5>
+              <ul id="historyList"></ul>
+            </div>
+            <div class="mb-3" id="teachingSchedule" style="display: none;">
+              <h5>Jadwal Mengajar</h5>
+              <ul id="scheduleList"></ul>
+            </div>
+            <div class="mb-3">
+              <button class="btn btn-primary" id="editProfile">Edit Profil</button>
+            </div>
+          </div>
         </div>
-        <div class="mb-3">
-          <label for="rating" class="form-label">Rating (1-5)</label>
-          <input type="number" class="form-control" id="rating" name="rating" min="1" max="5" required>
-        </div>
-        <div class="mb-3">
-          <label for="review" class="form-label">Review</label>
-          <textarea class="form-control" id="review" name="review" rows="4" required></textarea>
-        </div>
-        <button type="submit" class="btn btn-primary w-100">Kirim Rating</button>
-      </form>
-      <div id="ratingSuccess" class="text-center mt-3" style="display: none; color: green;">
-        Rating berhasil dikirim!
       </div>
-      <div id="ratingError" class="text-center mt-3" style="display: none; color: red;"></div>
     </div>
   </section>
 
   <!-- Footer -->
   <footer>
     <div class="container">
-      <p>© 2025 BeEdu. Kontak kami: <a href="mailto:saptohendratmoko@gmail.com">saptohendratmoko@gmail.com</a> | <a href="https://wa.me/081367315144">WhatsApp</a> | <a href="https://t.me/081367315144">Telegram</a></p>
+      <p>© 2025 BeEdu. Kontak kami: <a href="mailto:saptohendratmoko@gmail.com">saptohendratmoko@gmail.com</a> | <a href="https://wa.me/6281367315144">WhatsApp</a> | <a href="https://t.me/6281367315144">Telegram</a></p>
     </footer>
 
   <!-- WhatsApp Floating Button -->
-  <a href="https://wa.me/081367315144" class="whatsapp-btn" target="_blank">
+  <a href="https://wa.me/6281367315144" class="whatsapp-btn" target="_blank">
     <i class="fab fa-whatsapp"></i>
   </a>
 
@@ -596,10 +596,6 @@
         </div>
         <div class="modal-body">
           <div class="row" id="packageList"></div>
-          <div id="paymentConfirmation" class="mt-3" style="display: none;">
-            <p>Konfirmasi pembayaran untuk paket yang dipilih:</p>
-            <a href="#" id="confirmPayment" class="btn btn-success">Konfirmasi via WhatsApp</a>
-          </div>
         </div>
       </div>
     </div>
@@ -638,12 +634,18 @@
       return emailRegex.test(email);
     }
 
+    // Validate WhatsApp Number
+    function isValidWhatsapp(whatsapp) {
+      const whatsappRegex = /^08[1-9][0-9]{8,11}$/;
+      return whatsappRegex.test(whatsapp);
+    }
+
     // Handle Google Login/Register
     const googleProvider = new firebase.auth.GoogleAuthProvider();
     document.getElementById('googleLogin').addEventListener('click', () => {
       auth.signInWithPopup(googleProvider).then((result) => {
         const user = result.user;
-        saveUserToFirestore(user);
+        loadUserData(user.uid);
         updateUI(user);
       }).catch((error) => {
         document.getElementById('errorMessage').textContent = error.message;
@@ -654,7 +656,7 @@
     document.getElementById('googleRegister').addEventListener('click', () => {
       auth.signInWithPopup(googleProvider).then((result) => {
         const user = result.user;
-        saveUserToFirestore(user);
+        saveUserToFirestore(user, 'student'); // Default role
         updateUI(user);
       }).catch((error) => {
         document.getElementById('errorMessage').textContent = error.message;
@@ -678,8 +680,7 @@
       }
       auth.createUserWithEmailAndPassword(email, password).then((userCredential) => {
         const user = userCredential.user;
-        const role = 'student'; // Default role saat register
-        saveUserToFirestore(user, role);
+        saveUserToFirestore(user, 'student'); // Default role
         updateUI(user);
         document.getElementById('registerModal').querySelector('.btn-close').click();
       }).catch((error) => {
@@ -707,8 +708,14 @@
       });
     });
 
-    // Save User to Firestore with Role
+    // Save User to Firestore with WhatsApp
     function saveUserToFirestore(user, role = 'student') {
+      const whatsapp = document.getElementById('whatsapp') ? document.getElementById('whatsapp').value.trim() : null;
+      if (whatsapp && !isValidWhatsapp(whatsapp)) {
+        document.getElementById('errorMessage').textContent = 'Nomor WhatsApp tidak valid! Gunakan format 08xxxxxxxxxx.';
+        document.getElementById('errorMessage').style.display = 'block';
+        return;
+      }
       db.collection('users').doc(user.uid).set({
         name: user.displayName || 'User',
         email: user.email,
@@ -716,7 +723,11 @@
         createdAt: new Date().toISOString(),
         activePackage: null,
         schedules: [],
-        role: role
+        role: role,
+        whatsapp: whatsapp || null,
+        progress: 0, // Dummy progress
+        gamificationPoints: 0, // Dummy points
+        learningHistory: [] // Dummy history
       }, { merge: true }).catch((error) => {
         console.error('Error saving user: ', error);
       });
@@ -728,41 +739,21 @@
       const registerItem = document.getElementById('registerItem');
       const profileItem = document.getElementById('profileItem');
       const logoutItem = document.getElementById('logoutItem');
-      const userProfileNav = document.getElementById('userProfileNav');
-      const scheduleSection = document.getElementById('schedule');
-      const ratingSection = document.getElementById('rating');
+      const profileSection = document.getElementById('profile');
 
       if (user) {
         loginItem.style.display = 'none';
         registerItem.style.display = 'none';
         profileItem.style.display = 'block';
         logoutItem.style.display = 'block';
-        userProfileNav.textContent = `Halo, ${user.displayName || user.email}`;
-        userProfileNav.href = '#schedule';
+        profileSection.style.display = 'block';
         loadUserData(user.uid);
-
-        db.collection('users').doc(user.uid).get().then((doc) => {
-          if (doc.exists) {
-            const userData = doc.data();
-            if (userData.role === 'student') {
-              scheduleSection.style.display = 'block';
-              ratingSection.classList.add('active');
-            } else if (userData.role === 'tutor') {
-              scheduleSection.style.display = 'none';
-              ratingSection.style.display = 'none';
-              // Fitur tutor (pembayaran per jam) akan ditambahkan nanti
-            }
-          }
-        }).catch((error) => {
-          console.error('Error loading user role: ', error);
-        });
       } else {
         loginItem.style.display = 'block';
         registerItem.style.display = 'block';
         profileItem.style.display = 'none';
         logoutItem.style.display = 'none';
-        scheduleSection.style.display = 'none';
-        ratingSection.style.display = 'none';
+        profileSection.style.display = 'none';
       }
     }
 
@@ -776,23 +767,37 @@
       });
     });
 
-    // Load User Data (Packages, Schedules, and Role)
+    // Load User Data (Profile, Packages, Schedules)
     function loadUserData(uid) {
       db.collection('users').doc(uid).get().then((doc) => {
         if (doc.exists) {
           const userData = doc.data();
-          displayPackages(userData.activePackage);
-          displaySchedules(userData.schedules);
-          if (userData.role === 'student' && userData.activePackage) {
-            document.getElementById('paymentConfirmation').style.display = 'none'; // Sembunyikan konfirmasi jika sudah aktif
+          document.getElementById('profileName').textContent = userData.name;
+          document.getElementById('profileEmail').textContent = `Email: ${userData.email}`;
+          document.getElementById('profileRole').textContent = `Peran: ${userData.role}`;
+          document.getElementById('profileWhatsapp').textContent = `WhatsApp: ${userData.whatsapp || 'Tidak diisi'}`;
+          document.getElementById('progressBar').style.width = `${userData.progress}%`;
+          document.getElementById('progressBar').textContent = `${userData.progress}%`;
+          document.getElementById('gamificationPoints').textContent = userData.gamificationPoints;
+          const historyList = document.getElementById('historyList');
+          historyList.innerHTML = userData.learningHistory.map(item => `<li>${item}</li>`).join('') || '<li>Tidak ada riwayat</li>';
+
+          const teachingSchedule = document.getElementById('teachingSchedule');
+          if (userData.role === 'tutor') {
+            teachingSchedule.style.display = 'block';
+            displaySchedules(userData.schedules);
+          } else {
+            teachingSchedule.style.display = 'none';
           }
+
+          displayPackages(userData.activePackage);
         }
       }).catch((error) => {
         console.error('Error loading user data: ', error);
       });
     }
 
-    // Display Packages
+    // Display Packages with Auto Payment
     function displayPackages(activePackage) {
       const packageList = document.getElementById('packageList');
       packageList.innerHTML = '';
@@ -812,33 +817,28 @@
             <ul>
               ${pkg.features.map(feature => `<li>${feature}</li>`).join('')}
             </ul>
-            <button class="btn btn-primary mt-2" onclick="selectPackage('${pkg.id}', '${pkg.name}')">Pilih Paket</button>
+            <button class="btn btn-primary mt-2" onclick="selectPackage('${pkg.id}')">Pilih Paket</button>
           </div>
         `;
         packageList.appendChild(col);
       });
     }
 
-    // Select Package with Payment Confirmation
-    function selectPackage(packageId, packageName) {
+    // Select Package with Auto Payment
+    function selectPackage(packageId) {
       const user = auth.currentUser;
       if (user) {
-        const paymentLink = `https://wa.me/081367315144?text=Saya%20telah%20memilih%20paket%20${packageName}%20(${packageId})%20dan%20akan%20mengirim%20bukti%20pembayaran`;
-        document.getElementById('confirmPayment').href = paymentLink;
-        document.getElementById('paymentConfirmation').style.display = 'block';
-        document.getElementById('confirmPayment').onclick = () => {
-          db.collection('users').doc(user.uid).update({
-            activePackage: packageId,
-            paymentStatus: 'pending'
-          }).then(() => {
-            generateSchedule(user.uid, packageId);
-            new bootstrap.Modal(document.getElementById('packageModal')).hide();
-            loadUserData(user.uid);
-          }).catch((error) => {
-            document.getElementById('errorMessage').textContent = error.message;
-            document.getElementById('errorMessage').style.display = 'block';
-          });
-        };
+        db.collection('users').doc(user.uid).update({
+          activePackage: packageId,
+          paymentStatus: 'paid' // Simulasi pembayaran otomatis
+        }).then(() => {
+          generateSchedule(user.uid, packageId);
+          new bootstrap.Modal(document.getElementById('packageModal')).hide();
+          loadUserData(user.uid);
+        }).catch((error) => {
+          document.getElementById('errorMessage').textContent = error.message;
+          document.getElementById('errorMessage').style.display = 'block';
+        });
       }
     }
 
@@ -868,30 +868,26 @@
       const scheduleList = document.getElementById('scheduleList');
       scheduleList.innerHTML = '';
       schedules.forEach(schedule => {
-        const col = document.createElement('div');
-        col.className = 'col-md-6';
-        col.innerHTML = `
-          <div class="schedule-card">
-            <h5>${schedule.day}</h5>
-            <p>Jam: ${new Date(schedule.time).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}</p>
-            <p>Status: ${schedule.status}</p>
-          </div>
+        const li = document.createElement('li');
+        li.innerHTML = `
+          ${schedule.day} - Jam: ${new Date(schedule.time).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })} (Status: ${schedule.status})
         `;
-        scheduleList.appendChild(col);
+        scheduleList.appendChild(li);
       });
     }
 
-    // Handle Form Submission with Role
+    // Handle Form Submission with WhatsApp
     document.getElementById('registrationForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const name = document.getElementById('name').value.trim();
       const email = document.getElementById('email').value.trim();
+      const whatsapp = document.getElementById('whatsapp').value.trim();
       const role = document.getElementById('role').value;
       const needs = document.getElementById('needs').value.trim();
       const successMessage = document.getElementById('successMessage');
       const errorMessage = document.getElementById('errorMessage');
 
-      if (!name || !email || !needs) {
+      if (!name || !email || !whatsapp || !needs) {
         errorMessage.textContent = 'Semua field harus diisi!';
         errorMessage.style.display = 'block';
         return;
@@ -901,11 +897,17 @@
         errorMessage.style.display = 'block';
         return;
       }
+      if (!isValidWhatsapp(whatsapp)) {
+        errorMessage.textContent = 'Nomor WhatsApp tidak valid! Gunakan format 08xxxxxxxxxx.';
+        errorMessage.style.display = 'block';
+        return;
+      }
 
       try {
         await db.collection('registrations').add({
           name: name,
           email: email,
+          whatsapp: whatsapp,
           role: role,
           needs: needs,
           timestamp: new Date().toISOString()
@@ -915,48 +917,9 @@
         document.getElementById('registrationForm').reset();
       } catch (error) {
         console.error('Error saving data: ', error);
-        errorMessage.textContent = 'Terjadi kesalahan. Silakan coba lagi atau hubungi kami di 081367315144.';
+        errorMessage.textContent = 'Terjadi kesalahan. Silakan coba lagi atau hubungi kami di 6281367315144.';
         errorMessage.style.display = 'block';
         successMessage.style.display = 'none';
-      }
-    });
-
-    // Handle Rating Submission
-    document.getElementById('ratingForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const mentorName = document.getElementById('mentorName').value.trim();
-      const rating = document.getElementById('rating').value;
-      const review = document.getElementById('review').value.trim();
-      const ratingSuccess = document.getElementById('ratingSuccess');
-      const ratingError = document.getElementById('ratingError');
-
-      if (!mentorName || !rating || !review) {
-        ratingError.textContent = 'Semua field harus diisi!';
-        ratingError.style.display = 'block';
-        return;
-      }
-      if (rating < 1 || rating > 5) {
-        ratingError.textContent = 'Rating harus antara 1-5!';
-        ratingError.style.display = 'block';
-        return;
-      }
-
-      try {
-        await db.collection('ratings').add({
-          mentorName: mentorName,
-          rating: parseInt(rating),
-          review: review,
-          studentId: auth.currentUser.uid,
-          timestamp: new Date().toISOString()
-        });
-        ratingSuccess.style.display = 'block';
-        ratingError.style.display = 'none';
-        document.getElementById('ratingForm').reset();
-      } catch (error) {
-        console.error('Error saving rating: ', error);
-        ratingError.textContent = 'Terjadi kesalahan. Silakan coba lagi.';
-        ratingError.style.display = 'block';
-        ratingSuccess.style.display = 'none';
       }
     });
 
@@ -999,11 +962,12 @@
       }
     });
 
-    // Open Package Modal
+    // Open Profile Modal
     document.getElementById('userProfileNav').addEventListener('click', (e) => {
       e.preventDefault();
-      const packageModal = new bootstrap.Modal(document.getElementById('packageModal'));
-      packageModal.show();
+      const profileSection = document.getElementById('profile');
+      profileSection.style.display = profileSection.style.display === 'none' ? 'block' : 'none';
+      loadUserData(auth.currentUser.uid);
     });
 
     // Auth State Change Listener
