@@ -13,8 +13,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet" onerror="this.href='https://fonts.cdnfonts.com/css/poppins'; this.onerror=null;">
   <!-- AOS (Animate On Scroll) -->
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" onerror="this.href='https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.1/aos.css'; this.onerror=null;">
-  <!-- Swiper CSS -->
-  <link href="https://unpkg.com/swiper/swiper-bundle.min.css" rel="stylesheet" onerror="this.href='https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css'; this.onerror=null;">
   <!-- FontAwesome for Icons -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" onerror="this.href='https://use.fontawesome.com/releases/v6.4.0/css/all.css'; this.onerror=null;">
   <!-- Custom CSS -->
@@ -23,6 +21,7 @@
       font-family: 'Poppins', sans-serif;
       background-color: #f5f7fa;
       color: #333;
+      transition: background-color 0.3s;
     }
     .navbar {
       background-color: #ffffff;
@@ -93,22 +92,13 @@
       color: #007bff;
       margin-bottom: 15px;
     }
-    .testimonial-section {
-      background-color: #e9ecef;
+    .testimonial-section, .blog-section, .faq-section, .payment-section, .profile-section, .parent-section {
       padding: 60px 0;
+      min-height: 70vh;
     }
-    .swiper-slide {
+    .section-title {
       text-align: center;
-      padding: 20px;
-    }
-    .testimonial-card {
-      background-color: #fff;
-      border-radius: 15px;
-      padding: 20px;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    }
-    .faq-section, .blog-section, .payment-section, .profile-section, .parent-section {
-      padding: 60px 0;
+      margin-bottom: 40px;
     }
     .accordion-button {
       font-weight: 600;
@@ -131,7 +121,7 @@
     footer a:hover {
       color: #ffca28;
     }
-    .whatsapp-btn, .login-btn {
+    .whatsapp-btn, .login-btn, .register-btn {
       position: fixed;
       bottom: 20px;
       right: 20px;
@@ -152,7 +142,11 @@
       background-color: #007bff;
       right: 100px;
     }
-    .whatsapp-btn:hover, .login-btn:hover {
+    .register-btn {
+      background-color: #28a745;
+      right: 180px;
+    }
+    .whatsapp-btn:hover, .login-btn:hover, .register-btn:hover {
       transform: scale(1.1);
     }
     .scroll-to-top {
@@ -186,23 +180,6 @@
       color: white;
       border-radius: 15px 15px 0 0;
     }
-    .blog-card {
-      background-color: #fff;
-      border-radius: 15px;
-      padding: 20px;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-      margin-bottom: 20px;
-    }
-    .payment-section img {
-      max-width: 200px;
-      margin: 20px 0;
-    }
-    #userProfile {
-      display: none;
-      color: green;
-      text-align: center;
-      margin-top: 10px;
-    }
     .profile-card, .parent-card {
       background-color: #fff;
       border-radius: 15px;
@@ -231,6 +208,13 @@
     .edit-form.show {
       display: block;
     }
+    .custom-theme {
+      margin: 10px 0;
+    }
+    .preview-image {
+      max-width: 100px;
+      margin-top: 10px;
+    }
   </style>
 </head>
 <body>
@@ -242,7 +226,7 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto" id="navItems">
+        <ul class="navbar-nav ms-auto">
           <li class="nav-item">
             <a class="nav-link" href="#home">Beranda</a>
           </li>
@@ -262,13 +246,13 @@
             <a class="nav-link" href="#payment">Pembayaran</a>
           </li>
           <li class="nav-item" id="profileItem" style="display: none;">
-            <a class="nav-link" href="#" id="userProfileNav">Profil</a>
+            <a class="nav-link" href="#profile">Profil</a>
           </li>
           <li class="nav-item" id="logoutItem" style="display: none;">
             <a class="nav-link" href="#" id="logoutBtn">Logout</a>
           </li>
           <li class="nav-item" id="parentItem" style="display: none;">
-            <a class="nav-link" href="#" id="parentDashboardNav">Monitoring Anak</a>
+            <a class="nav-link" href="#parent">Monitoring Anak</a>
           </li>
         </ul>
       </div>
@@ -292,50 +276,53 @@
   </section>
 
   <!-- Features Section -->
-  <section id="features" class="py-5">
+  <section id="features" class="feature-section">
     <div class="container">
-      <h2 class="text-center mb-5" data-aos="fade-up">Fitur Unggulan</h2>
+      <div class="section-title" data-aos="fade-up">
+        <h2>Fitur Unggulan</h2>
+        <p>Jelajahi fitur-fitur menarik yang membuat belajar di BeEdu lebih seru dan efektif!</p>
+      </div>
       <div class="row">
         <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="100">
           <div class="feature-card">
             <i class="fas fa-robot"></i>
             <h3>Personalisasi AI</h3>
-            <p>Materi dan metode belajar disesuaikan dengan kebutuhan dan gaya belajar kamu.</p>
+            <p>Materi disesuaikan dengan kebutuhan dan gaya belajar kamu.</p>
           </div>
         </div>
         <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="200">
           <div class="feature-card">
             <i class="fas fa-clock"></i>
             <h3>Akses Fleksibel</h3>
-            <p>Les privat 1-on-1 atau kelompok kecil, tersedia 24/7 dengan rekaman sesi.</p>
+            <p>Belajar kapan saja dengan rekaman sesi 24/7.</p>
           </div>
         </div>
         <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="300">
           <div class="feature-card">
             <i class="fas fa-trophy"></i>
             <h3>Gamifikasi</h3>
-            <p>Dapatkan poin, badge, dan hadiah untuk meningkatkan motivasi belajar.</p>
+            <p>Dapatkan poin dan badge untuk motivasi belajar.</p>
           </div>
         </div>
         <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="400">
           <div class="feature-card">
             <i class="fas fa-eye"></i>
             <h3>Monitoring Orang Tua</h3>
-            <p>Orang tua dapat memantau progress, poin, dan riwayat belajar anak secara real-time.</p>
+            <p>Lihat progress dan riwayat belajar anak secara real-time.</p>
           </div>
         </div>
         <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="500">
           <div class="feature-card">
             <i class="fas fa-chalkboard-teacher"></i>
             <h3>Saran dari Tentor</h3>
-            <p>Tentor dapat memberikan saran perkembangan anak langsung ke orang tua via WhatsApp.</p>
+            <p>Dapatkan saran via WhatsApp untuk perkembangan anak.</p>
           </div>
         </div>
         <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="600">
           <div class="feature-card">
             <i class="fas fa-edit"></i>
             <h3>Edit Profil</h3>
-            <p>Kelola dan perbarui data profil kamu dengan mudah kapan saja.</p>
+            <p>Customisasi profil dengan foto dan tema favoritmu.</p>
           </div>
         </div>
       </div>
@@ -345,24 +332,21 @@
   <!-- Testimonial Section -->
   <section id="testimonials" class="testimonial-section">
     <div class="container">
-      <h2 class="text-center mb-5" data-aos="fade-up">Apa Kata Mereka</h2>
+      <div class="section-title" data-aos="fade-up">
+        <h2>Testimoni</h2>
+        <p>Dengar pengalaman nyata dari pengguna BeEdu!</p>
+      </div>
       <div class="swiper-container">
         <div class="swiper-wrapper">
           <div class="swiper-slide">
             <div class="testimonial-card" data-aos="zoom-in">
-              <p>"BeEdu membantu saya paham matematika dengan cara yang menyenangkan. Tutornya sabar dan materinya pas untuk saya!"</p>
+              <p>"BeEdu membuat matematika jadi menyenangkan!"</p>
               <h5>Alya, Siswa SMA</h5>
             </div>
           </div>
           <div class="swiper-slide">
             <div class="testimonial-card" data-aos="zoom-in">
-              <p>"Saya suka fitur gamifikasinya! Belajar jadi tidak membosankan, dan saya lebih termotivasi."</p>
-              <h5>Rio, Siswa SMP</h5>
-            </div>
-          </div>
-          <div class="swiper-slide">
-            <div class="testimonial-card" data-aos="zoom-in">
-              <p>"Sebagai orang tua, saya senang melihat laporan kemajuan anak saya. BeEdu sangat membantu!"</p>
+              <p>"Gamifikasi meningkatkan motivasi anak saya."</p>
               <h5>Ibu Sari, Orang Tua</h5>
             </div>
           </div>
@@ -375,7 +359,10 @@
   <!-- FAQ Section -->
   <section id="faq" class="faq-section">
     <div class="container">
-      <h2 class="text-center mb-5" data-aos="fade-up">Pertanyaan Umum</h2>
+      <div class="section-title" data-aos="fade-up">
+        <h2>FAQ</h2>
+        <p>Jawaban atas pertanyaan umum tentang BeEdu.</p>
+      </div>
       <div class="accordion" id="faqAccordion" data-aos="fade-up">
         <div class="accordion-item">
           <h2 class="accordion-header">
@@ -385,7 +372,7 @@
           </h2>
           <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
             <div class="accordion-body">
-              BeEdu adalah platform les privat online yang menawarkan pembelajaran personal dan interaktif dengan teknologi AI dan gamifikasi.
+              BeEdu adalah platform les privat online dengan AI dan gamifikasi.
             </div>
           </div>
         </div>
@@ -397,19 +384,7 @@
           </h2>
           <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
             <div class="accordion-body">
-              Kamu bisa mendaftar sebagai siswa dengan mengisi formulir di bagian kontak.
-            </div>
-          </div>
-        </div>
-        <div class="accordion-item">
-          <h2 class="accordion-header">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
-              Apakah ada biaya?
-            </button>
-          </h2>
-          <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-            <div class="accordion-body">
-              Kami menawarkan sesi gratis untuk pengenalan. Setelah itu, kamu bisa memilih paket bulanan atau per sesi dengan harga terjangkau.
+              Isi formulir di bagian "Daftar Sekarang".
             </div>
           </div>
         </div>
@@ -420,19 +395,15 @@
   <!-- Blog Section -->
   <section id="blog" class="blog-section">
     <div class="container">
-      <h2 class="text-center mb-5" data-aos="fade-up">Berita & Prestasi</h2>
+      <div class="section-title" data-aos="fade-up">
+        <h2>Blog</h2>
+        <p>Artikel dan pembaruan terbaru dari BeEdu.</p>
+      </div>
       <div class="row">
         <div class="col-md-6" data-aos="fade-up">
           <div class="blog-card">
-            <h4>Siswa Terbaik Bulan Ini: Alya!</h4>
-            <p>Alya berhasil meraih poin tertinggi dalam gamifikasi bulan ini dengan menyelesaikan 20 sesi belajar dan mendapatkan badge "Super Learner". Selamat, Alya!</p>
-            <small>6 Juni 2025</small>
-          </div>
-        </div>
-        <div class="col-md-6" data-aos="fade-up" data-aos-delay="100">
-          <div class="blog-card">
-            <h4>Peringkat Gamifikasi Minggu Ini</h4>
-            <p>5 siswa teratas: 1. Alya (1200 poin), 2. Rio (1100 poin), 3. Siti (1000 poin), 4. Budi (900 poin), 5. Dika (850 poin). Teruskan semangat belajarnya!</p>
+            <h4>Siswa Terbaik: Alya</h4>
+            <p>Alya raih badge "Super Learner" dengan 20 sesi.</p>
             <small>6 Juni 2025</small>
           </div>
         </div>
@@ -443,19 +414,14 @@
   <!-- Payment Section -->
   <section id="payment" class="payment-section">
     <div class="container">
-      <h2 class="text-center mb-5" data-aos="fade-up">Metode Pembayaran</h2>
+      <div class="section-title" data-aos="fade-up">
+        <h2>Pembayaran</h2>
+        <p>Pilih metode pembayaran yang mudah untukmu.</p>
+      </div>
       <div class="row">
         <div class="col-md-6" data-aos="fade-up">
           <h4>Transfer Bank</h4>
-          <p>Silakan transfer ke rekening berikut:</p>
-          <p><strong>Bank:</strong> BCA<br>
-             <strong>Nomor Rekening:</strong> 123-456-7890<br>
-             <strong>Atas Nama:</strong> BeEdu Indonesia</p>
-        </div>
-        <div class="col-md-6" data-aos="fade-up" data-aos-delay="100">
-          <h4>QRIS</h4>
-          <p>Scan kode QRIS berikut untuk pembayaran cepat:</p>
-          <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==" alt="QRIS BeEdu" class="img-fluid" onerror="this.style.display='none';">
+          <p>Bank BCA, No. Rek: 123-456-7890, A/n: BeEdu Indonesia</p>
         </div>
       </div>
     </div>
@@ -486,7 +452,7 @@
         <button type="submit" class="btn btn-primary w-100">Kirim</button>
       </form>
       <div id="successMessage" class="text-center mt-3" style="display: none; color: green;">
-        Data berhasil disimpan! Kami akan segera menghubungi kamu di saptohendratmoko@gmail.com.
+        Data berhasil disimpan!
       </div>
       <div id="errorMessage" class="text-center mt-3" style="display: none; color: red;"></div>
     </div>
@@ -495,7 +461,10 @@
   <!-- Profile Section -->
   <section id="profile" class="profile-section" style="display: none;">
     <div class="container">
-      <h2 class="text-center mb-5" data-aos="fade-up">Profil Saya</h2>
+      <div class="section-title" data-aos="fade-up">
+        <h2>Profil Saya</h2>
+        <p>Kustomisasi profilmu dengan gaya yang unik!</p>
+      </div>
       <div class="row">
         <div class="col-md-12" data-aos="fade-up">
           <div class="profile-card" id="profileContent">
@@ -519,7 +488,7 @@
             <div class="mb-3" id="teachingSchedule" style="display: none;">
               <h5>Jadwal Mengajar</h5>
               <ul id="scheduleList"></ul>
-              <button class="btn btn-success mt-3" id="sendAdviceBtn" style="display: none;">Kirim Saran ke Orang Tua</button>
+              <button class="btn btn-success mt-3" id="sendAdviceBtn" style="display: none;">Kirim Saran</button>
             </div>
             <div class="mb-3">
               <button class="btn btn-primary" id="editProfileBtn">Edit Profil</button>
@@ -538,7 +507,25 @@
                   <label for="editWhatsapp" class="form-label">Nomor WhatsApp</label>
                   <input type="text" class="form-control" id="editWhatsapp" pattern="^08[1-9][0-9]{8,11}$" placeholder="Contoh: 081367315144" required>
                 </div>
-                <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                <div class="mb-3">
+                  <label for="profileImage" class="form-label">Foto Profil</label>
+                  <input type="file" class="form-control" id="profileImage" accept="image/*">
+                  <img id="previewImage" class="preview-image" src="#" alt="Preview" style="display: none;">
+                </div>
+                <div class="mb-3 custom-theme">
+                  <label for="themeColor" class="form-label">Pilih Warna Tema</label>
+                  <select class="form-control" id="themeColor">
+                    <option value="#007bff">Biru</option>
+                    <option value="#28a745">Hijau</option>
+                    <option value="#dc3545">Merah</option>
+                  </select>
+                </div>
+                <div class="mb-3">
+                  <label class="form-check-label">
+                    <input type="checkbox" id="notifications" class="form-check-input"> Aktifkan Notifikasi
+                  </label>
+                </div>
+                <button type="submit" class="btn btn-primary">Simpan</button>
                 <button type="button" class="btn btn-secondary ms-2" id="cancelEditBtn">Batal</button>
               </form>
             </div>
@@ -551,7 +538,10 @@
   <!-- Parent Monitoring Section -->
   <section id="parent" class="parent-section" style="display: none;">
     <div class="container">
-      <h2 class="text-center mb-5" data-aos="fade-up">Monitoring Perkembangan Anak</h2>
+      <div class="section-title" data-aos="fade-up">
+        <h2>Monitoring Perkembangan Anak</h2>
+        <p>Lihat perkembangan anakmu dengan mudah!</p>
+      </div>
       <div class="row">
         <div class="col-md-12" data-aos="fade-up">
           <div class="parent-card" id="parentContent">
@@ -569,7 +559,7 @@
   <!-- Footer -->
   <footer>
     <div class="container">
-      <p>© 2025 BeEdu. Kontak kami: <a href="mailto:saptohendratmoko@gmail.com">saptohendratmoko@gmail.com</a> | <a href="https://wa.me/6281367315144">WhatsApp</a> | <a href="https://t.me/6281367315144">Telegram</a></p>
+      <p>© 2025 BeEdu. Kontak kami: <a href="mailto:saptohendratmoko@gmail.com">saptohendratmoko@gmail.com</a> | <a href="https://wa.me/6281367315144">WhatsApp</a></p>
     </footer>
 
   <!-- WhatsApp Floating Button -->
@@ -580,6 +570,11 @@
   <!-- Login Floating Button -->
   <a href="#" class="login-btn" data-bs-toggle="modal" data-bs-target="#loginModal">
     <i class="fas fa-sign-in-alt"></i>
+  </a>
+
+  <!-- Register Floating Button -->
+  <a href="#" class="register-btn" data-bs-toggle="modal" data-bs-target="#registerModal">
+    <i class="fas fa-user-plus"></i>
   </a>
 
   <!-- Scroll to Top Button -->
@@ -618,11 +613,13 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">Daftar Akun</h5>
+          <h5 class="modal-title">Daftar</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <button id="googleRegister" class="btn btn-danger w-100 mb-3">Daftar with Google</button>
+          <button id="googleRegisterStudent" class="btn btn-success w-100 mb-3">Daftar sebagai Siswa</button>
+          <button id="googleRegisterTutor" class="btn btn-success w-100 mb-3">Daftar sebagai Tentor</button>
+          <button id="googleRegisterParent" class="btn btn-success w-100 mb-3">Daftar sebagai Orang Tua</button>
           <div class="mb-3">
             <label for="registerEmail" class="form-label">Email</label>
             <input type="email" class="form-control" id="registerEmail" required>
@@ -631,38 +628,7 @@
             <label for="registerPassword" class="form-label">Password</label>
             <input type="password" class="form-control" id="registerPassword" required>
           </div>
-          <button id="emailRegister" class="btn btn-primary w-100">Daftar</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Modal Pop-Up -->
-  <div class="modal fade" id="welcomeModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Selamat Datang di BeEdu!</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <p>Dapatkan sesi les gratis pertama kamu! Daftar sekarang dan mulai belajar dengan cara yang menyenangkan.</p>
-          <a href="#contact" class="btn btn-primary" data-bs-dismiss="modal">Daftar Sekarang</a>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Package Selection Modal -->
-  <div class="modal fade" id="packageModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Pilih Paket Belajar</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <div class="row" id="packageList"></div>
+          <button id="emailRegister" class="btn btn-success w-100">Daftar</button>
         </div>
       </div>
     </div>
@@ -740,6 +706,30 @@
       }).catch(handleError);
     });
 
+    document.getElementById('googleRegisterStudent')?.addEventListener('click', () => {
+      if (auth) auth.signInWithPopup(googleProvider).then((result) => {
+        const user = result.user;
+        saveUserToFirestore(user, 'student');
+        updateUI(user);
+      }).catch(handleError);
+    });
+
+    document.getElementById('googleRegisterTutor')?.addEventListener('click', () => {
+      if (auth) auth.signInWithPopup(googleProvider).then((result) => {
+        const user = result.user;
+        saveUserToFirestore(user, 'tutor');
+        updateUI(user);
+      }).catch(handleError);
+    });
+
+    document.getElementById('googleRegisterParent')?.addEventListener('click', () => {
+      if (auth) auth.signInWithPopup(googleProvider).then((result) => {
+        const user = result.user;
+        saveUserToFirestore(user, 'parent');
+        updateUI(user);
+      }).catch(handleError);
+    });
+
     // Handle Email/Password Register
     document.getElementById('emailRegister')?.addEventListener('click', () => {
       if (!auth) return;
@@ -751,7 +741,7 @@
       }
       auth.createUserWithEmailAndPassword(email, password).then((userCredential) => {
         const user = userCredential.user;
-        saveUserToFirestore(user, 'student'); // Default to student for registration
+        saveUserToFirestore(user, 'student'); // Default to student
         updateUI(user);
         document.getElementById('registerModal').querySelector('.btn-close')?.click();
       }).catch(handleError);
@@ -778,7 +768,7 @@
       if (!db) return;
       const whatsapp = document.getElementById('whatsapp')?.value.trim();
       if (whatsapp && !isValidWhatsapp(whatsapp)) {
-        handleError(new Error('Nomor WhatsApp tidak valid! Gunakan format 08xxxxxxxxxx.'));
+        handleError(new Error('Nomor WhatsApp tidak valid!'));
         return;
       }
       db.collection('users').doc(user.uid).set({
@@ -793,7 +783,9 @@
         progress: 0,
         gamificationPoints: 0,
         learningHistory: [],
-        childId: role === 'parent' ? null : '' // For parent to link child
+        childId: role === 'parent' ? null : '',
+        themeColor: '#007bff',
+        notifications: true
       }, { merge: true }).catch(handleError);
     }
 
@@ -820,6 +812,7 @@
           parentSection.style.display = 'none';
         }
         loadUserData(user.uid);
+        document.body.style.backgroundColor = user.themeColor || '#f5f7fa';
       } else {
         profileItem.style.display = 'none';
         logoutItem.style.display = 'none';
@@ -834,7 +827,7 @@
       if (auth) auth.signOut().then(() => updateUI(null)).catch(handleError);
     });
 
-    // Load User Data (Profile, Packages, Schedules)
+    // Load User Data
     function loadUserData(uid) {
       if (!db) return;
       db.collection('users').doc(uid).get().then((doc) => {
@@ -858,11 +851,12 @@
             teachingSchedule.style.display = 'none';
           }
 
-          displayPackages(userData.activePackage);
-          loadParentData(uid, userData.role);
           document.getElementById('editName').value = userData.name;
           document.getElementById('editEmail').value = userData.email;
           document.getElementById('editWhatsapp').value = userData.whatsapp || '';
+          document.getElementById('themeColor').value = userData.themeColor || '#007bff';
+          document.getElementById('notifications').checked = userData.notifications || false;
+          document.body.style.backgroundColor = userData.themeColor || '#f5f7fa';
         }
       }).catch(handleError);
     }
@@ -882,81 +876,18 @@
       }).catch(handleError);
     }
 
-    // Display Packages with Auto Payment
-    function displayPackages(activePackage) {
-      if (!db) return;
-      const packageList = document.getElementById('packageList');
-      packageList.innerHTML = '';
-      const packages = [
-        { id: 'basic', name: 'Basic', price: 'Rp 200.000/bulan', features: ['5 sesi/minggu', 'Personalisasi AI', 'Gamifikasi dasar'] },
-        { id: 'pro', name: 'Pro', price: 'Rp 400.000/bulan', features: ['10 sesi/minggu', 'Personalisasi AI', 'Gamifikasi lengkap', 'Rekaman sesi'] },
-        { id: 'premium', name: 'Premium', price: 'Rp 600.000/bulan', features: ['15 sesi/minggu', 'Personalisasi AI', 'Gamifikasi lengkap', 'Rekaman sesi', 'Support 24/7'] }
-      ];
-
-      packages.forEach(pkg => {
-        const col = document.createElement('div');
-        col.className = 'col-md-4 mb-3';
-        col.innerHTML = `
-          <div class="package-card ${activePackage === pkg.id ? 'active' : ''}">
-            <h4>${pkg.name}</h4>
-            <p>${pkg.price}</p>
-            <ul>
-              ${pkg.features.map(feature => `<li>${feature}</li>`).join('')}
-            </ul>
-            <button class="btn btn-primary mt-2" onclick="selectPackage('${pkg.id}')">Pilih Paket</button>
-          </div>
-        `;
-        packageList.appendChild(col);
-      });
-    }
-
-    // Select Package with Auto Payment
-    function selectPackage(packageId) {
-      if (!db || !auth.currentUser) return;
-      db.collection('users').doc(auth.currentUser.uid).update({
-        activePackage: packageId,
-        paymentStatus: 'paid'
-      }).then(() => {
-        generateSchedule(auth.currentUser.uid, packageId);
-        new bootstrap.Modal(document.getElementById('packageModal')).hide();
-        loadUserData(auth.currentUser.uid);
-      }).catch(handleError);
-    }
-
-    // Generate Schedule
-    function generateSchedule(uid, packageId) {
-      if (!db) return;
-      const schedules = [];
-      const now = new Date();
-      const days = ['Senin', 'Rabu', 'Jumat'];
-      if (packageId === 'pro') days.push('Selasa', 'Kamis');
-      if (packageId === 'premium') days.push('Sabtu', 'Minggu');
-
-      days.forEach(day => {
-        const time = new Date(now);
-        time.setHours(19, 0, 0, 0);
-        schedules.push({ day: day, time: time.toISOString(), status: 'Scheduled' });
-      });
-
-      db.collection('users').doc(uid).update({
-        schedules: schedules
-      }).catch(handleError);
-    }
-
     // Display Schedules
     function displaySchedules(schedules) {
       const scheduleList = document.getElementById('scheduleList');
       scheduleList.innerHTML = '';
       (schedules || []).forEach(schedule => {
         const li = document.createElement('li');
-        li.innerHTML = `
-          ${schedule.day} - Jam: ${new Date(schedule.time).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })} (Status: ${schedule.status})
-        `;
+        li.innerHTML = `${schedule.day} - ${new Date(schedule.time).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })} (Status: ${schedule.status})`;
         scheduleList.appendChild(li);
       });
     }
 
-    // Handle Form Submission with WhatsApp
+    // Handle Form Submission
     document.getElementById('registrationForm')?.addEventListener('submit', async (e) => {
       e.preventDefault();
       const name = document.getElementById('name').value.trim();
@@ -1008,6 +939,8 @@
       const name = document.getElementById('editName').value.trim();
       const email = document.getElementById('editEmail').value.trim();
       const whatsapp = document.getElementById('editWhatsapp').value.trim();
+      const themeColor = document.getElementById('themeColor').value;
+      const notifications = document.getElementById('notifications').checked;
 
       if (!name || !email || !whatsapp || !isValidEmail(email) || !isValidWhatsapp(whatsapp)) {
         handleError(new Error('Data tidak valid!'));
@@ -1017,11 +950,26 @@
       db.collection('users').doc(auth.currentUser.uid).update({
         name: name,
         email: email,
-        whatsapp: whatsapp
+        whatsapp: whatsapp,
+        themeColor: themeColor,
+        notifications: notifications
       }).then(() => {
         loadUserData(auth.currentUser.uid);
         document.getElementById('editForm').classList.remove('show');
       }).catch(handleError);
+    });
+
+    // Preview Image
+    document.getElementById('profileImage')?.addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          document.getElementById('previewImage').src = e.target.result;
+          document.getElementById('previewImage').style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+      }
     });
 
     // Send Advice to Parent
@@ -1031,7 +979,7 @@
         querySnapshot.forEach(doc => {
           const parentData = doc.data();
           if (parentData.whatsapp) {
-            const advice = `Halo, ini saran dari tentor untuk perkembangan ${parentData.name || 'anak Anda'}: Pertahankan semangat belajar! Progress: ${auth.currentUser.progress}%, Poin: ${auth.currentUser.gamificationPoints}.`;
+            const advice = `Halo, saran dari tentor: Pertahankan semangat belajar! Progress: ${auth.currentUser.progress}%, Poin: ${auth.currentUser.gamificationPoints}.`;
             window.open(`https://wa.me/${parentData.whatsapp}?text=${encodeURIComponent(advice)}`, '_blank');
           }
         });
@@ -1042,7 +990,7 @@
     function handleError(error) {
       console.error('Error:', error);
       const errorMessage = document.getElementById('errorMessage');
-      errorMessage.textContent = error.message || 'Terjadi kesalahan. Silakan coba lagi atau hubungi kami di 6281367315144.';
+      errorMessage.textContent = error.message || 'Terjadi kesalahan. Coba lagi!';
       errorMessage.style.display = 'block';
     }
 
@@ -1065,17 +1013,7 @@
       },
     });
 
-    // Show Modal on Page Load
-    window.onload = function() {
-      try {
-        const welcomeModal = new bootstrap.Modal(document.getElementById('welcomeModal'));
-        welcomeModal.show();
-      } catch (error) {
-        handleError(error);
-      }
-    };
-
-    // Scroll to Top Button
+    // Scroll to Top
     const scrollToTopBtn = document.querySelector('.scroll-to-top');
     window.addEventListener('scroll', () => {
       if (window.scrollY > 300) {
@@ -1085,23 +1023,7 @@
       }
     });
 
-    // Open Profile Modal
-    document.getElementById('userProfileNav')?.addEventListener('click', (e) => {
-      e.preventDefault();
-      const profileSection = document.getElementById('profile');
-      profileSection.style.display = profileSection.style.display === 'none' ? 'block' : 'none';
-      if (auth.currentUser) loadUserData(auth.currentUser.uid);
-    });
-
-    // Open Parent Dashboard
-    document.getElementById('parentDashboardNav')?.addEventListener('click', (e) => {
-      e.preventDefault();
-      const parentSection = document.getElementById('parent');
-      parentSection.style.display = parentSection.style.display === 'none' ? 'block' : 'none';
-      if (auth.currentUser) loadParentData(auth.currentUser.uid, auth.currentUser.role);
-    });
-
-    // Auth State Change Listener
+    // Auth State Change
     auth?.onAuthStateChanged((user) => {
       updateUI(user);
       if (user) {
