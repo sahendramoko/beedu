@@ -228,7 +228,7 @@
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg navbar-light fixed-top">
     <div class="container">
-      <a class="navbar-brand" href="index.html" href="fitur.html">Fitur</a>>
+      <a class="navbar-brand" href="index.html">
         <span class="logo-nav"></span>
         BeEdu
       </a>
@@ -238,38 +238,38 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
           <li class="nav-item">
-            <a class="nav-link" href="fitur.html" href="fitur.html">Fitur</a>>Fitur</a>
+            <a class="nav-link" href="fitur.html">Fitur</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="testimoni.html" href="fitur.html">Fitur</a>>Testimoni</a>
+            <a class="nav-link" href="testimoni.html">Testimoni</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="faq.html" href="fitur.html">Fitur</a>>FAQ</a>
+            <a class="nav-link" href="faq.html">FAQ</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="blog.html" href="fitur.html">Fitur</a>>Blog</a>
+            <a class="nav-link" href="blog.html">Blog</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="pembayaran.html" href="fitur.html">Fitur</a>>Pembayaran</a>
+            <a class="nav-link" href="pembayaran.html">Pembayaran</a>
           </li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="paketDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               Paket Belajar
             </a>
             <ul class="dropdown-menu" aria-labelledby="paketDropdown">
-              <li><a class="dropdown-item" href="paket-sd.html" href="fitur.html">Fitur</a>>Paket Belajar SD</a></li>
-              <li><a class="dropdown-item" href="paket-sma.html" href="fitur.html">Fitur</a>>Paket Belajar SMA</a></li>
-              <li><a class="dropdown-item" href="paket-perguruan-tinggi.html" href="fitur.html">Fitur</a>>Paket Belajar Perguruan Tinggi</a></li>
+              <li><a class="dropdown-item" href="paket-sd.html">Paket Belajar SD</a></li>
+              <li><a class="dropdown-item" href="paket-sma.html">Paket Belajar SMA</a></li>
+              <li><a class="dropdown-item" href="paket-perguruan-tinggi.html">Paket Belajar Perguruan Tinggi</a></li>
             </ul>
           </li>
           <li class="nav-item" id="profileItem" style="display: none;">
-            <a class="nav-link" href="profil.html" href="fitur.html">Fitur</a>>Profil</a>
+            <a class="nav-link" href="profil.html">Profil</a>
           </li>
           <li class="nav-item" id="logoutItem" style="display: none;">
             <a class="nav-link" href="#" id="logoutBtn">Logout</a>
           </li>
           <li class="nav-item" id="parentItem" style="display: none;">
-            <a class="nav-link" href="parent.html" href="fitur.html">Fitur</a>>Monitoring Anak</a>
+            <a class="nav-link" href="parent.html">Monitoring Anak</a>
           </li>
         </ul>
       </div>
@@ -382,7 +382,7 @@
     </footer>
 
   <!-- WhatsApp Floating Button -->
-  <a href="https://wa.me/6281367315144" class="whatsapp-btn" href="fitur.html">Fitur</a>>
+  <a href="https://wa.me/6281367315144" class="whatsapp-btn" target="_blank">
     <i class="fab fa-whatsapp"></i>
   </a>
 
@@ -765,10 +765,16 @@
       }).catch(handleError);
     }
 
-    // Handle Navigation
+    // Handle Navigation (Diperbaiki)
     document.querySelectorAll('.nav-link, .dropdown-item').forEach(link => {
       link.addEventListener('click', (e) => {
-        e.preventDefault();
+        // Hanya cegah default jika ada logika khusus, jika tidak biarkan navigasi default
+        const href = link.getAttribute('href');
+        if (href && href !== '#' && !link.classList.contains('dropdown-toggle')) {
+          // Biarkan navigasi default untuk tautan internal
+        } else {
+          e.preventDefault();
+        }
       });
     });
 
