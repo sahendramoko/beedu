@@ -31,6 +31,36 @@
     .navbar-brand {
       font-weight: 700;
       color: #007bff !important;
+      display: flex;
+      align-items: center;
+    }
+    .logo {
+      width: 30px;
+      height: 30px;
+      background-color: #007bff;
+      border-radius: 50%;
+      position: relative;
+      margin-right: 10px;
+    }
+    .logo::before {
+      content: '';
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background-color: white;
+      border-radius: 50%;
+      top: 5px;
+      left: 10px;
+    }
+    .logo::after {
+      content: '';
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      background-color: white;
+      border-radius: 50%;
+      top: 15px;
+      left: 12px;
     }
     .nav-link {
       color: #333 !important;
@@ -43,6 +73,9 @@
       position: relative;
       overflow: hidden;
       padding: 100px 0;
+    }
+    .carousel-inner {
+      height: 400px;
     }
     .carousel-item {
       height: 400px;
@@ -90,13 +123,17 @@
     .stat-card:hover {
       transform: translateY(-5px);
     }
-    .testimonial-mini {
+    .testimonial-mini, .feature-mini {
       background-color: #fff;
       padding: 20px;
       border-radius: 15px;
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
       text-align: center;
       margin-bottom: 20px;
+      transition: transform 0.3s ease;
+    }
+    .testimonial-mini:hover, .feature-mini:hover {
+      transform: translateY(-5px);
     }
     .feature-card, .testimonial-card, .blog-card, .faq-item, .payment-card {
       padding: 20px;
@@ -160,7 +197,10 @@
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg navbar-light fixed-top">
     <div class="container">
-      <a class="navbar-brand" href="#home">BeEdu</a>
+      <a class="navbar-brand" href="#home">
+        <span class="logo"></span>
+        BeEdu
+      </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -200,7 +240,7 @@
 
   <!-- Hero Section (Beranda) -->
   <section id="home" class="hero-section">
-    <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
+    <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
       <div class="carousel-inner">
         <div class="carousel-item active" style="background: linear-gradient(135deg, #007bff 0%, #00c4b4 100%);">
           <div class="container">
@@ -255,7 +295,8 @@
   <!-- Testimonial Mini -->
   <section class="content-section">
     <div class="container">
-      <div id="testimonialCarousel" class="carousel slide" data-bs-ride="carousel">
+      <h2 class="text-center" data-aos="fade-up">Apa Kata Mereka</h2>
+      <div id="testimonialCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
         <div class="carousel-inner">
           <div class="carousel-item active">
             <div class="testimonial-mini">
@@ -282,6 +323,36 @@
     </div>
   </section>
 
+  <!-- Feature Mini -->
+  <section class="content-section bg-light">
+    <div class="container">
+      <h2 class="text-center" data-aos="fade-up">Kelebihan BeEdu</h2>
+      <div class="row">
+        <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="100">
+          <div class="feature-mini">
+            <i class="fas fa-robot" style="font-size: 2rem; color: #007bff;"></i>
+            <h3>Personalisasi AI</h3>
+            <p>Materi disesuaikan dengan kebutuhan dan gaya belajarmu.</p>
+          </div>
+        </div>
+        <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="200">
+          <div class="feature-mini">
+            <i class="fas fa-clock" style="font-size: 2rem; color: #007bff;"></i>
+            <h3>Akses Fleksibel</h3>
+            <p>Belajar kapan saja dengan rekaman 24/7.</p>
+          </div>
+        </div>
+        <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="300">
+          <div class="feature-mini">
+            <i class="fas fa-trophy" style="font-size: 2rem; color: #007bff;"></i>
+            <h3>Gamifikasi</h3>
+            <p>Motivasi belajar dengan poin dan badge.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- Main Content -->
   <div id="main-content" class="content-section">
     <div class="container">
@@ -289,7 +360,7 @@
         <!-- Content will be loaded dynamically here -->
       </div>
     </div>
-  </div>
+  </section>
 
   <!-- Footer -->
   <footer>
