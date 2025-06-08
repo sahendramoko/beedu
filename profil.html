@@ -1,0 +1,227 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Kelola profil Anda di BeEdu.">
+  <meta name="keywords" content="profil BeEdu, edit profil, akun BeEdu">
+  <meta name="author" content="BeEdu Team">
+  <title>BeEdu - Profil</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" onerror="this.href='https://stackpath.bootstrapcdn.com/bootstrap/5.3.2/css/bootstrap.min.css'; this.onerror=null;">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet" onerror="this.href='https://fonts.cdnfonts.com/css/poppins'; this.onerror=null;">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" onerror="this.href='https://use.fontawesome.com/releases/v6.4.0/css/all.css'; this.onerror=null;">
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" onerror="this.href='https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.1/aos.css'; this.onerror=null;">
+  <style>
+    body { font-family: 'Poppins', sans-serif; background-color: #f5f7fa; color: #333; margin: 0; padding: 0; }
+    .navbar { background-color: #ffffff; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); }
+    .navbar-brand { font-weight: 700; color: #007bff !important; display: flex; align-items: center; }
+    .logo-nav { width: 35px; height: 35px; background: linear-gradient(45deg, #007bff, #00c4b4); border-radius: 50%; position: relative; margin-right: 10px; }
+    .logo-nav::before { content: ''; position: absolute; width: 12px; height: 12px; background: #fff; border-radius: 50%; top: 6px; left: 12px; box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.1); }
+    .nav-link { color: #333 !important; font-weight: 500; }
+    .nav-link:hover { color: #007bff !important; }
+    .profile-card { padding: 20px; text-align: center; background-color: #fff; border-radius: 15px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); }
+    footer { background-color: #343a40; color: white; padding: 20px 0; text-align: center; }
+    footer a { color: #ffd700; text-decoration: none; }
+    footer a:hover { color: #ffca28; }
+    .section-title { margin-bottom: 30px; }
+    .section-title h2 { font-weight: 700; }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="index.html" target="_blank">
+        <span class="logo-nav"></span>
+        BeEdu
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="index.html" target="_blank">Beranda</a></li>
+          <li class="nav-item"><a class="nav-link" href="fitur.html" target="_blank">Fitur</a></li>
+          <li class="nav-item"><a class="nav-link" href="testimoni.html" target="_blank">Testimoni</a></li>
+          <li class="nav-item"><a class="nav-link" href="faq.html" target="_blank">FAQ</a></li>
+          <li class="nav-item"><a class="nav-link" href="blog.html" target="_blank">Blog</a></li>
+          <li class="nav-item"><a class="nav-link" href="pembayaran.html" target="_blank">Pembayaran</a></li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="paketDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Paket Belajar</a>
+            <ul class="dropdown-menu" aria-labelledby="paketDropdown">
+              <li><a class="dropdown-item" href="paket-sd.html" target="_blank">Paket Belajar SD</a></li>
+              <li><a class="dropdown-item" href="paket-sma.html" target="_blank">Paket Belajar SMA</a></li>
+              <li><a class="dropdown-item" href="paket-perguruan-tinggi.html" target="_blank">Paket Belajar Perguruan Tinggi</a></li>
+            </ul>
+          </li>
+          <li class="nav-item" id="profileItem" style="display: none;"><a class="nav-link" href="profil.html" target="_blank">Profil</a></li>
+          <li class="nav-item" id="logoutItem" style="display: none;"><a class="nav-link" href="#" id="logoutBtn">Logout</a></li>
+          <li class="nav-item" id="parentItem" style="display: none;"><a class="nav-link" href="parent.html" target="_blank">Monitoring Anak</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <section class="content-section">
+    <div class="container">
+      <div class="section-title text-center" data-aos="fade-up">
+        <h2>Profil Saya</h2>
+        <p>Kelola informasi profil Anda di sini.</p>
+      </div>
+      <div class="row">
+        <div class="col-md-6 mx-auto" data-aos="fade-up" data-aos-delay="100">
+          <div class="profile-card">
+            <span class="logo-nav"></span>
+            <h4 id="profileNameDisplay">Nama: [Nama Pengguna]</h4>
+            <p id="profileEmailDisplay">Email: [Email Pengguna]</p>
+            <p id="profileRoleDisplay">Peran: [Peran Pengguna]</p>
+            <button class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#profileModal">Edit Profil</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <p>© 2025 BeEdu. Kontak kami: <a href="mailto:saptohendratmoko@gmail.com">saptohendratmoko@gmail.com</a> | <a href="https://wa.me/6281367315144">WhatsApp</a></p>
+      <span class="logo-nav" style="margin: 0 auto; display: block;"></span>
+    </footer>
+
+  <a href="https://wa.me/6281367315144" class="whatsapp-btn" target="_blank"><i class="fab fa-whatsapp"></i></a>
+  <a href="#" class="login-btn" data-bs-toggle="modal" data-bs-target="#loginModal"><i class="fas fa-sign-in-alt"></i></a>
+  <a href="#" class="register-btn" data-bs-toggle="modal" data-bs-target="#registerModal"><i class="fas fa-user-plus"></i></a>
+
+  <div class="modal fade" id="loginModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header"><h5 class="modal-title">Login</h5><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div>
+        <div class="modal-body">
+          <button id="googleLoginStudent" class="btn btn-primary w-100 mb-3">Login sebagai Siswa</button>
+          <button id="googleLoginTutor" class="btn btn-primary w-100 mb-3">Login sebagai Tentor</button>
+          <button id="googleLoginParent" class="btn btn-primary w-100 mb-3">Login sebagai Orang Tua</button>
+          <div class="mb-3"><label for="loginEmail" class="form-label">Email</label><input type="email" class="form-control" id="loginEmail" required></div>
+          <div class="mb-3"><label for="loginPassword" class="form-label">Password</label><input type="password" class="form-control" id="loginPassword" required></div>
+          <button id="emailLogin" class="btn btn-primary w-100">Login</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="registerModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header"><h5 class="modal-title">Daftar</h5><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div>
+        <div class="modal-body">
+          <button id="googleRegisterStudent" class="btn btn-success w-100 mb-3">Daftar sebagai Siswa</button>
+          <button id="googleRegisterTutor" class="btn btn-success w-100 mb-3">Daftar sebagai Tentor</button>
+          <button id="googleRegisterParent" class="btn btn-success w-100 mb-3">Daftar sebagai Orang Tua</button>
+          <div class="mb-3"><label for="registerEmail" class="form-label">Email</label><input type="email" class="form-control" id="registerEmail" required></div>
+          <div class="mb-3"><label for="registerPassword" class="form-label">Password</label><input type="password" class="form-control" id="registerPassword" required></div>
+          <button id="emailRegister" class="btn btn-success w-100">Daftar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="profileModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header"><h5 class="modal-title" id="profileModalTitle">Edit Profil</h5><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div>
+        <div class="modal-body">
+          <div class="mb-3"><label for="profileName" class="form-label">Nama</label><input type="text" class="form-control" id="profileName" required></div>
+          <div class="mb-3"><label for="profileEmail" class="form-label">Email</label><input type="email" class="form-control" id="profileEmail" required readonly></div>
+          <div class="mb-3" id="profileRoleField" style="display: none;"><label for="profileRole" class="form-label">Peran</label><select class="form-control" id="profileRole" disabled><option value="student">Siswa</option><option value="tutor">Tentor</option><option value="parent">Orang Tua</option></select></div>
+          <div class="mb-3" id="profilePhotoField"><label for="profilePhoto" class="form-label">Foto Profil</label><input type="file" class="form-control" id="profilePhoto" accept="image/*"></div>
+          <button id="saveProfile" class="btn btn-primary w-100">Simpan</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js" onerror="this.src='https://cdn.jsdelivr.net/npm/firebase@9.22.0/dist/firebase-app-compat.js'; this.onerror=null;"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js" onerror="this.src='https://cdn.jsdelivr.net/npm/firebase@9.22.0/dist/firebase-auth-compat.js'; this.onerror=null;"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js" onerror="this.src='https://cdn.jsdelivr.net/npm/firebase@9.22.0/dist/firebase-firestore-compat.js'; this.onerror=null;"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js" onerror="this.src='https://cdn.jsdelivr.net/npm/firebase@9.22.0/dist/firebase-storage-compat.js'; this.onerror=null;"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" onerror="this.src='https://stackpath.bootstrapcdn.com/bootstrap/5.3.2/js/bootstrap.bundle.min.js'; this.onerror=null;"></script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js" onerror="this.src='https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.1/aos.js'; this.onerror=null;"></script>
+  <script>
+    let app, auth, db, storage;
+    try {
+      const firebaseConfig = { apiKey: "AIzaSyC_fhbF2b-Tg2an3fN-sn2p6nYbMYC3bRQ", authDomain: "beeduwithme.firebaseapp.com", projectId: "beeduwithme", storageBucket: "beeduwithme.firebasestorage.app", messagingSenderId: "1097577891574", appId: "1:1097577891574:web:81cef1772cc41427930ed7", measurementId: "G-X0GTPEGZ40" };
+      app = firebase.initializeApp(firebaseConfig);
+      auth = firebase.auth();
+      db = firebase.firestore();
+      storage = firebase.storage();
+    } catch (error) { handleError(new Error('Firebase initialization failed: ' + error.message)); }
+
+    function isValidEmail(email) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email); }
+    function isValidWhatsapp(whatsapp) { return /^08[1-9][0-9]{8,11}$/.test(whatsapp); }
+
+    const googleProvider = new firebase.auth.GoogleAuthProvider();
+    ['Student', 'Tutor', 'Parent'].forEach(role => {
+      document.getElementById(`googleLogin${role}`)?.addEventListener('click', () => { if (auth) auth.signInWithPopup(googleProvider).then((result) => { const user = result.user; sendEmailVerification(user); saveUserToFirestore(user, role.toLowerCase()); updateUI(user); }).catch(handleError); });
+      document.getElementById(`googleRegister${role}`)?.addEventListener('click', () => { if (auth) auth.signInWithPopup(googleProvider).then((result) => { const user = result.user; sendEmailVerification(user); saveUserToFirestore(user, role.toLowerCase()); updateUI(user); }).catch(handleError); });
+    });
+
+    document.getElementById('emailRegister')?.addEventListener('click', () => { if (!auth) return; const email = document.getElementById('registerEmail').value.trim(); const password = document.getElementById('registerPassword').value; if (!isValidEmail(email) || password.length < 6) { handleError(new Error('Email atau password tidak valid!')); return; } auth.createUserWithEmailAndPassword(email, password).then((userCredential) => { const user = userCredential.user; sendEmailVerification(user); saveUserToFirestore(user, 'student'); updateUI(user); document.getElementById('registerModal').querySelector('.btn-close')?.click(); }).catch(handleError); });
+
+    document.getElementById('emailLogin')?.addEventListener('click', () => { if (!auth) return; const email = document.getElementById('loginEmail').value.trim(); const password = document.getElementById('loginPassword').value; if (!isValidEmail(email)) { handleError(new Error('Email tidak valid!')); return; } auth.signInWithEmailAndPassword(email, password).then((userCredential) => { const user = userCredential.user; if (!user.emailVerified) { sendEmailVerification(user); handleError(new Error('Silakan verifikasi email Anda!')); } else { updateUI(user); document.getElementById('loginModal').querySelector('.btn-close')?.click(); } }).catch(handleError); });
+
+    function sendEmailVerification(user) { if (user && !user.emailVerified) { user.sendEmailVerification().then(() => { alert('Link verifikasi email telah dikirim. Silakan cek inbox Anda!'); }).catch(handleError); } }
+
+    function saveUserToFirestore(user, role = 'student') { if (!db) return; db.collection('users').doc(user.uid).set({ name: user.displayName || 'User', email: user.email, uid: user.uid, role: role, createdAt: new Date().toISOString(), photoURL: user.photoURL || '', parentUid: role === 'student' ? '' : null, schedule: [], activePackage: '' }, { merge: true }).catch(handleError); }
+
+    function updateUI(user) { const profileItem = document.getElementById('profileItem'); const logoutItem = document.getElementById('logoutItem'); const parentItem = document.getElementById('parentItem'); if (user) { profileItem.style.display = 'block'; logoutItem.style.display = 'block'; if (user.role === 'parent') parentItem.style.display = 'block'; else parentItem.style.display = 'none'; document.getElementById('profileNameDisplay').textContent = `Nama: ${user.name || user.displayName || 'User'}`; document.getElementById('profileEmailDisplay').textContent = `Email: ${user.email}`; document.getElementById('profileRoleDisplay').textContent = `Peran: ${user.role || 'student'}`; } else { profileItem.style.display = 'none'; logoutItem.style.display = 'none'; parentItem.style.display = 'none'; document.getElementById('profileNameDisplay').textContent = 'Nama: [Nama Pengguna]'; document.getElementById('profileEmailDisplay').textContent = 'Email: [Email Pengguna]'; document.getElementById('profileRoleDisplay').textContent = 'Peran: [Peran Pengguna]'; } }
+
+    document.getElementById('saveProfile')?.addEventListener('click', () => { if (!auth.currentUser || !db) return; const user = auth.currentUser; const name = document.getElementById('profileName').value.trim(); const photoInput = document.getElementById('profilePhoto'); const role = document.getElementById('profileRole').value; if (!name) { handleError(new Error('Nama tidak boleh kosong!')); return; } const updateData = { name }; if (user.role === 'admin') updateData.role = role; if (role === 'student') updateData.parentUid = ''; if (photoInput.files && photoInput.files[0]) { const storageRef = storage.ref(`profile_photos/${user.uid}/${photoInput.files[0].name}`); storageRef.put(photoInput.files[0]).then((snapshot) => { snapshot.ref.getDownloadURL().then((photoURL) => { updateData.photoURL = photoURL; saveProfileToFirestore(user.uid, updateData); }); }).catch(handleError); } else { saveProfileToFirestore(user.uid, updateData); } });
+
+    function saveProfileToFirestore(uid, data) { db.collection('users').doc(uid).update(data).then(() => { alert('Profil berhasil diperbarui!'); const profileModal = bootstrap.Modal.getInstance(document.getElementById('profileModal')); profileModal.hide(); updateUI(auth.currentUser); }).catch(handleError); }
+
+    document.getElementById('logoutBtn')?.addEventListener('click', () => { if (auth) auth.signOut().then(() => updateUI(null)).catch(handleError); });
+
+    function handleError(error) { console.error('Error:', error); alert(error.message || 'Terjadi kesalahan. Coba lagi!'); }
+
+    AOS.init({ duration: 1000, once: true });
+    auth.onAuthStateChanged((user) => { updateUI(user); if (user) { db.collection('users').doc(user.uid).get().then((doc) => { if (doc.exists) { const userData = doc.data(); document.getElementById('profileNameDisplay').textContent = `Nama: ${userData.name}`; document.getElementById('profileEmailDisplay').textContent = `Email: ${userData.email}`; document.getElementById('profileRoleDisplay').textContent = `Peran: ${userData.role}`; } }).catch(handleError); } });
+  </script>
+</body>
+</html>
