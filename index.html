@@ -222,6 +222,13 @@
       margin: 0 auto;
       padding: 20px;
     }
+    #recommendation {
+      margin-top: 15px;
+      padding: 10px;
+      background-color: #f8f9fa;
+      border-radius: 10px;
+      display: none;
+    }
   </style>
 </head>
 <body>
@@ -454,6 +461,7 @@
                 <option value="Mahasiswa">Mahasiswa</option>
               </select>
             </div>
+            <div id="recommendation"></div> <!-- Tempat untuk rekomendasi -->
             <button type="submit" class="btn btn-success w-100">Daftar Sekarang</button>
           </form>
         </div>
@@ -528,6 +536,9 @@
     } catch (error) {
       handleError(new Error('Firebase initialization failed: ' + error.message));
     }
+
+    // API Key (Sementara di sini untuk pengujian, pindahkan ke backend nanti)
+    const API_KEY = 'xai-JRuKKPn6ohJsKuwDWjWHsiUGATno3SjOpLVVmxfTG15YgRnZ6ORrNFgXqfsy2Ol6m8oxuPxNterSW6D5';
 
     // Validate Email and WhatsApp
     function isValidEmail(email) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email); }
@@ -781,10 +792,8 @@
     // Handle Navigation (Diperbaiki)
     document.querySelectorAll('.nav-link, .dropdown-item').forEach(link => {
       link.addEventListener('click', (e) => {
-        // Hanya cegah default jika ada logika khusus, jika tidak biarkan navigasi default
         const href = link.getAttribute('href');
         if (href && href !== '#' && !link.classList.contains('dropdown-toggle')) {
-          // Biarkan navigasi default untuk tautan internal
         } else {
           e.preventDefault();
         }
@@ -802,7 +811,7 @@
       if (auth) auth.signOut().then(() => updateUI(null)).catch(handleError);
     });
 
-    // Handle Registration Form
+    // Handle Registration Form with Grok API
     document.getElementById('registrationForm')?.addEventListener('submit', function(e) {
       e.preventDefault();
       const name = document.getElementById('name').value;
@@ -811,7 +820,43 @@
       const level = document.getElementById('level').value;
 
       if (name && email && phone && level) {
-        alert(`Terima kasih, ${name}! Pendaftaran sesi gratis untuk ${level} telah diterima. Kami akan menghubungi Anda di ${email} atau ${phone}.`);
+        // Panggil API Grok untuk rekomendasi
+        fetch('https://api.x.ai/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${API_KEY}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            model: 'grok-3',
+            messages: [{ role: 'user', content: `Rekomendasikan latihan untuk siswa tingkat ${level} dengan nama ${name}` }],
+            max_tokens: 100
+          })
+        })
+        .then(response => response.json())
+        .then(data => {
+          const recommendation = data.choices[0].message.content;
+          const recElement = document.getElementById('recommendation');
+          recElement.style.display = 'block';
+          recElement.innerText = `Rekomendasi untuk ${name}: ${recommendation}`;
+          alert(`Terima kasih, ${name}! Pendaftaran sesi gratis untuk ${level} telah diterima. Kami akan menghubungi Anda di ${email} atau ${phone}.`);
+        })
+        .catch(error => {
+          handleError(new Error('Gagal mendapatkan rekomendasi: ' + error.message));
+          alert(`Terima kasih, ${name}! Pendaftaran sesi gratis untuk ${level} telah diterima. Kami akan menghubungi Anda di ${email} atau ${phone}.`);
+        });
+
+        // Simpan ke Firestore (opsional, jika ingin)
+        if (db) {
+          db.collection('registrations').add({
+            name: name,
+            email: email,
+            phone: phone,
+            level: level,
+            timestamp: new Date().toISOString()
+          }).catch(handleError);
+        }
+
         this.reset();
         bootstrap.Modal.getInstance(document.getElementById('registerModal')).hide();
       } else {
