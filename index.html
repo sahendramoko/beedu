@@ -461,7 +461,7 @@
                 <option value="Mahasiswa">Mahasiswa</option>
               </select>
             </div>
-            <div id="recommendation"></div> <!-- Tempat untuk rekomendasi -->
+            <div id="recommendation"></div>
             <button type="submit" class="btn btn-success w-100">Daftar Sekarang</button>
           </form>
         </div>
@@ -537,8 +537,8 @@
       handleError(new Error('Firebase initialization failed: ' + error.message));
     }
 
-    // API Key (Sementara di sini untuk pengujian, pindahkan ke backend nanti)
-    const API_KEY = 'xai-JRuKKPn6ohJsKuwDWjWHsiUGATno3SjOpLVVmxfTG15YgRnZ6ORrNFgXqfsy2Ol6m8oxuPxNterSW6D5';
+    // API Key (Gunakan key baru)
+    const API_KEY = 'xai-9kvvX2ufDj5BMUk7ypS0h0vPngkIVT7ZLlHR15PZD1szdWZgnD9DzoKZy8AtHpsICwMgw9DWa8f5ujE6';
 
     // Validate Email and WhatsApp
     function isValidEmail(email) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email); }
@@ -820,7 +820,7 @@
       const level = document.getElementById('level').value;
 
       if (name && email && phone && level) {
-        // Panggil API Grok untuk rekomendasi
+        // Panggil API Grok
         fetch('https://api.x.ai/v1/chat/completions', {
           method: 'POST',
           headers: {
@@ -833,20 +833,32 @@
             max_tokens: 100
           })
         })
-        .then(response => response.json())
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+          return response.json();
+        })
         .then(data => {
-          const recommendation = data.choices[0].message.content;
-          const recElement = document.getElementById('recommendation');
-          recElement.style.display = 'block';
-          recElement.innerText = `Rekomendasi untuk ${name}: ${recommendation}`;
-          alert(`Terima kasih, ${name}! Pendaftaran sesi gratis untuk ${level} telah diterima. Kami akan menghubungi Anda di ${email} atau ${phone}.`);
+          if (data.choices && data.choices.length > 0) {
+            const recommendation = data.choices[0].message.content;
+            const recElement = document.getElementById('recommendation');
+            recElement.style.display = 'block';
+            recElement.innerText = `Rekomendasi untuk ${name}: ${recommendation}`;
+          } else {
+            throw new Error('Tidak ada rekomendasi dalam respons.');
+          }
+          alert(`Terima kasih, ${name}! Pendaftaran sesi gratis untuk ${level} telah diterima.`);
         })
         .catch(error => {
-          handleError(new Error('Gagal mendapatkan rekomendasi: ' + error.message));
-          alert(`Terima kasih, ${name}! Pendaftaran sesi gratis untuk ${level} telah diterima. Kami akan menghubungi Anda di ${email} atau ${phone}.`);
+          console.error('API Error:', error);
+          const recElement = document.getElementById('recommendation');
+          recElement.style.display = 'block';
+          recElement.innerText = `Maaf, rekomendasi tidak tersedia saat ini. Coba lagi nanti.`;
+          alert(`Terima kasih, ${name}! Pendaftaran sesi gratis untuk ${level} telah diterima.`);
         });
 
-        // Simpan ke Firestore (opsional, jika ingin)
+        // Simpan ke Firestore
         if (db) {
           db.collection('registrations').add({
             name: name,
