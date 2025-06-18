@@ -458,11 +458,11 @@
           <button id="googleLoginParent" class="btn btn-primary w-100 mb-3">Login sebagai Orang Tua</button>
           <div class="mb-3">
             <label for="loginEmail" class="form-label">Email</label>
-            <input type="email" class="form-control" id="loginEmail" required>
+            <input type="email" class="form-control" id="loginEmail" autocomplete="email" required>
           </div>
           <div class="mb-3">
             <label for="loginPassword" class="form-label">Password</label>
-            <input type="password" class="form-control" id="loginPassword" required>
+            <input type="password" class="form-control" id="loginPassword" autocomplete="current-password" required>
           </div>
           <button id="emailLogin" class="btn btn-primary w-100">Login</button>
         </div>
@@ -482,19 +482,19 @@
           <form id="registrationForm">
             <div class="mb-3">
               <label for="name" class="form-label">Nama Lengkap</label>
-              <input type="text" class="form-control" id="name" required>
+              <input type="text" class="form-control" id="name" autocomplete="name" required>
             </div>
             <div class="mb-3">
               <label for="email" class="form-label">Email</label>
-              <input type="email" class="form-control" id="email" required>
+              <input type="email" class="form-control" id="email" autocomplete="email" required>
             </div>
             <div class="mb-3">
               <label for="phone" class="form-label">Nomor Telepon</label>
-              <input type="tel" class="form-control" id="phone" required>
+              <input type="tel" class="form-control" id="phone" autocomplete="tel" required>
             </div>
             <div class="mb-3">
               <label for="level" class="form-label">Tingkat Pendidikan</label>
-              <select class="form-select" id="level" required>
+              <select class="form-select" id="level" autocomplete="educational-level" required>
                 <option value="">Pilih Tingkat</option>
                 <option value="SD">SD</option>
                 <option value="SMP">SMP</option>
@@ -521,15 +521,15 @@
         <div class="modal-body">
           <div class="mb-3">
             <label for="profileName" class="form-label">Nama</label>
-            <input type="text" class="form-control" id="profileName" required>
+            <input type="text" class="form-control" id="profileName" autocomplete="name" required>
           </div>
           <div class="mb-3">
             <label for="profileEmail" class="form-label">Email</label>
-            <input type="email" class="form-control" id="profileEmail" required readonly>
+            <input type="email" class="form-control" id="profileEmail" autocomplete="email" required readonly>
           </div>
           <div class="mb-3" id="profileRoleField" style="display: none;">
             <label for="profileRole" class="form-label">Peran</label>
-            <select class="form-control" id="profileRole" disabled>
+            <select class="form-control" id="profileRole" autocomplete="role" disabled>
               <option value="student">Siswa</option>
               <option value="tutor">Tentor</option>
               <option value="parent">Orang Tua</option>
@@ -537,7 +537,7 @@
           </div>
           <div class="mb-3" id="profilePhotoField">
             <label for="profilePhoto" class="form-label">Foto Profil</label>
-            <input type="file" class="form-control" id="profilePhoto" accept="image/*">
+            <input type="file" class="form-control" id="profilePhoto" autocomplete="photo">
           </div>
           <button id="saveProfile" class="btn btn-primary w-100">Simpan</button>
         </div>
@@ -574,7 +574,9 @@
       auth = firebase.auth();
       db = firebase.firestore();
       storage = firebase.storage();
+      console.log('Firebase initialized successfully');
     } catch (error) {
+      console.error('Firebase initialization failed:', error.message);
       handleError(new Error('Firebase initialization failed: ' + error.message));
     }
 
@@ -586,12 +588,19 @@
     const googleProvider = new firebase.auth.GoogleAuthProvider();
     ['Student', 'Tutor', 'Parent'].forEach(role => {
       document.getElementById(`googleLogin${role}`)?.addEventListener('click', () => {
-        if (auth) auth.signInWithPopup(googleProvider).then((result) => {
-          const user = result.user;
-          sendEmailVerification(user);
-          saveUserToFirestore(user, role.toLowerCase());
-          updateUI(user);
-        }).catch(handleError);
+        if (auth) {
+          console.log(`Attempting Google login as ${role.toLowerCase()}`);
+          auth.signInWithPopup(googleProvider).then((result) => {
+            const user = result.user;
+            console.log('Google login successful:', user.uid);
+            sendEmailVerification(user);
+            saveUserToFirestore(user, role.toLowerCase());
+            updateUI(user);
+          }).catch(error => {
+            console.error('Google login failed:', error.message);
+            handleError(error);
+          });
+        }
       });
     });
 
@@ -600,17 +609,22 @@
       if (!auth) return;
       const email = document.getElementById('registerEmail').value.trim();
       const password = document.getElementById('registerPassword').value;
+      console.log('Attempting email registration:', { email, password });
       if (!isValidEmail(email) || password.length < 6) {
         handleError(new Error('Email atau password tidak valid!'));
         return;
       }
       auth.createUserWithEmailAndPassword(email, password).then((userCredential) => {
         const user = userCredential.user;
+        console.log('Email registration successful:', user.uid);
         sendEmailVerification(user);
         saveUserToFirestore(user, 'student');
         updateUI(user);
         document.getElementById('registerModal').querySelector('.btn-close')?.click();
-      }).catch(handleError);
+      }).catch(error => {
+        console.error('Email registration failed:', error.message);
+        handleError(error);
+      });
     });
 
     // Handle Email/Password Login
@@ -618,12 +632,14 @@
       if (!auth) return;
       const email = document.getElementById('loginEmail').value.trim();
       const password = document.getElementById('loginPassword').value;
+      console.log('Attempting email login:', { email });
       if (!isValidEmail(email)) {
         handleError(new Error('Email tidak valid!'));
         return;
       }
       auth.signInWithEmailAndPassword(email, password).then((userCredential) => {
         const user = userCredential.user;
+        console.log('Email login successful:', user.uid);
         if (!user.emailVerified) {
           sendEmailVerification(user);
           handleError(new Error('Silakan verifikasi email Anda!'));
@@ -631,21 +647,29 @@
           updateUI(user);
           document.getElementById('loginModal').querySelector('.btn-close')?.click();
         }
-      }).catch(handleError);
+      }).catch(error => {
+        console.error('Email login failed:', error.message);
+        handleError(error);
+      });
     });
 
     // Send Email Verification
     function sendEmailVerification(user) {
       if (user && !user.emailVerified) {
         user.sendEmailVerification().then(() => {
+          console.log('Email verification sent');
           alert('Link verifikasi email telah dikirim. Silakan cek inbox Anda!');
-        }).catch(handleError);
+        }).catch(error => {
+          console.error('Email verification failed:', error.message);
+          handleError(error);
+        });
       }
     }
 
     // Save User to Firestore
     function saveUserToFirestore(user, role = 'student') {
       if (!db) return;
+      console.log('Saving user to Firestore:', { uid: user.uid, role });
       db.collection('users').doc(user.uid).set({
         name: user.displayName || 'User',
         email: user.email,
@@ -656,7 +680,10 @@
         parentUid: role === 'student' ? '' : null,
         schedule: [],
         activePackage: ''
-      }, { merge: true }).catch(handleError);
+      }, { merge: true }).catch(error => {
+        console.error('Firestore save failed:', error.message);
+        handleError(error);
+      });
     }
 
     // Update UI
@@ -664,6 +691,7 @@
       const profileItem = document.getElementById('profileItem');
       const logoutItem = document.getElementById('logoutItem');
       const parentItem = document.getElementById('parentItem');
+      console.log('Updating UI for user:', user?.uid);
       if (user) {
         profileItem.style.display = 'block';
         logoutItem.style.display = 'block';
@@ -681,6 +709,7 @@
     // Load Student Calendar
     function loadStudentCalendar(user) {
       if (!user || !db) return;
+      console.log('Loading student calendar for:', user.uid);
       document.getElementById('main-content').innerHTML = `
         <div class="container">
           <div class="profile-section" data-aos="fade-up">
@@ -703,7 +732,10 @@
               }));
               successCallback(events);
             }
-          }).catch(failureCallback);
+          }).catch(error => {
+            console.error('Calendar events fetch failed:', error.message);
+            failureCallback(error);
+          });
         },
         dateClick: function(info) {
           const subject = prompt('Masukkan mata pelajaran untuk sesi ini:');
@@ -716,7 +748,10 @@
             }).then(() => {
               calendar.refetchEvents();
               alert('Jadwal berhasil ditambahkan!');
-            }).catch(handleError);
+            }).catch(error => {
+              console.error('Schedule update failed:', error.message);
+              handleError(error);
+            });
           }
         }
       });
@@ -726,6 +761,7 @@
     // Load Parent Data
     function loadParentData(user) {
       if (!user || !db) return;
+      console.log('Loading parent data for:', user.uid);
       document.getElementById('main-content').innerHTML = `
         <div class="container">
           <div class="profile-section" data-aos="fade-up">
@@ -753,7 +789,10 @@
               });
             });
             successCallback(events);
-          }).catch(failureCallback);
+          }).catch(error => {
+            console.error('Parent calendar events fetch failed:', error.message);
+            failureCallback(error);
+          });
         }
       });
       calendar.render();
@@ -763,12 +802,16 @@
           document.getElementById('parentSchedule').textContent = (data.schedule || []).map(s => s.date).join(', ') || 'Tidak ada jadwal';
           document.getElementById('parentPackage').textContent = data.activePackage || 'Tidak ada paket aktif';
         });
-      }).catch(handleError);
+      }).catch(error => {
+        console.error('Parent data fetch failed:', error.message);
+        handleError(error);
+      });
     }
 
     // Load Profile
     function loadProfile(user) {
       if (!user || !db) return;
+      console.log('Loading profile for:', user.uid);
       db.collection('users').doc(user.uid).get().then((doc) => {
         if (doc.exists) {
           const data = doc.data();
@@ -778,13 +821,17 @@
           roleSelect.value = data.role || 'student';
           document.getElementById('profileRoleField').style.display = user.role === 'admin' ? 'block' : 'none';
         }
-      }).catch(handleError);
+      }).catch(error => {
+        console.error('Profile load failed:', error.message);
+        handleError(error);
+      });
     }
 
     // Save Profile
     document.getElementById('saveProfile')?.addEventListener('click', () => {
       if (!auth.currentUser || !db) return;
       const user = auth.currentUser;
+      console.log('Attempting to save profile for:', user.uid);
       const name = document.getElementById('profileName').value.trim();
       const photoInput = document.getElementById('profilePhoto');
       const role = document.getElementById('profileRole').value;
@@ -805,7 +852,10 @@
             updateData.photoURL = photoURL;
             saveProfileToFirestore(user.uid, updateData);
           });
-        }).catch(handleError);
+        }).catch(error => {
+          console.error('Profile photo upload failed:', error.message);
+          handleError(error);
+        });
       } else {
         saveProfileToFirestore(user.uid, updateData);
       }
@@ -813,10 +863,14 @@
 
     function saveProfileToFirestore(uid, data) {
       db.collection('users').doc(uid).update(data).then(() => {
+        console.log('Profile saved successfully');
         alert('Profil berhasil diperbarui!');
         const profileModal = bootstrap.Modal.getInstance(document.getElementById('profileModal'));
         profileModal.hide();
-      }).catch(handleError);
+      }).catch(error => {
+        console.error('Profile save to Firestore failed:', error.message);
+        handleError(error);
+      });
     }
 
     // Handle Navigation
@@ -838,31 +892,42 @@
 
     // Logout
     document.getElementById('logoutBtn')?.addEventListener('click', () => {
-      if (auth) auth.signOut().then(() => updateUI(null)).catch(handleError);
+      if (auth) {
+        console.log('Attempting logout');
+        auth.signOut().then(() => {
+          console.log('Logout successful');
+          updateUI(null);
+        }).catch(error => {
+          console.error('Logout failed:', error.message);
+          handleError(error);
+        });
+      }
     });
 
-    // Handle Registration Form with Grok API via Vercel
+    // Handle Registration Form with Grok API
     document.getElementById('registrationForm')?.addEventListener('submit', function(e) {
       e.preventDefault();
       const name = document.getElementById('name').value;
       const email = document.getElementById('email').value;
       const phone = document.getElementById('phone').value;
       const level = document.getElementById('level').value;
+      console.log('Registration form submitted:', { name, email, phone, level });
 
       if (name && email && phone && level) {
-        // Panggil endpoint /api/grok untuk rekomendasi
         fetch('/api/grok', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ message: `Rekomendasikan latihan untuk siswa tingkat ${level} dengan nama ${name}` })
         })
         .then(response => {
+          console.log('Grok API response status:', response.status);
           if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
           }
           return response.json();
         })
         .then(data => {
+          console.log('Grok API response data:', data);
           if (data.reply) {
             const recommendation = data.reply;
             const recElement = document.getElementById('recommendation');
@@ -874,14 +939,13 @@
           alert(`Terima kasih, ${name}! Pendaftaran sesi gratis untuk ${level} telah diterima.`);
         })
         .catch(error => {
-          console.error('API Error:', error);
+          console.error('Grok API error:', error.message);
           const recElement = document.getElementById('recommendation');
           recElement.style.display = 'block';
           recElement.innerText = `Maaf, rekomendasi tidak tersedia saat ini. Coba lagi nanti.`;
           alert(`Terima kasih, ${name}! Pendaftaran sesi gratis untuk ${level} telah diterima.`);
         });
 
-        // Simpan ke Firestore
         if (db) {
           db.collection('registrations').add({
             name: name,
@@ -889,7 +953,11 @@
             phone: phone,
             level: level,
             timestamp: new Date().toISOString()
-          }).catch(handleError);
+          }).then(() => console.log('Registration saved to Firestore'))
+            .catch(error => {
+              console.error('Firestore registration save failed:', error.message);
+              handleError(error);
+            });
         }
 
         this.reset();
@@ -904,6 +972,7 @@
       const prompt = document.getElementById('grokPrompt').value;
       const responseDiv = document.getElementById('grokResponse');
       const loadingDiv = document.getElementById('grokLoading');
+      console.log('Sending prompt to Grok:', prompt);
 
       if (!prompt) {
         responseDiv.textContent = 'Masukkan pertanyaan terlebih dahulu.';
@@ -919,13 +988,16 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ message: prompt })
         });
+        console.log('API response status:', res.status);
         const data = await res.json();
+        console.log('API response data:', data);
         if (data.error) {
           responseDiv.textContent = `Error: ${data.error}`;
         } else {
           responseDiv.textContent = data.reply || 'Tidak ada respons dari Grok';
         }
       } catch (error) {
+        console.error('API fetch error:', error.message);
         responseDiv.textContent = 'Gagal terhubung ke Grok: ' + error.message;
       } finally {
         loadingDiv.style.display = 'none';
@@ -934,7 +1006,7 @@
 
     // Error Handler
     function handleError(error) {
-      console.error('Error:', error);
+      console.error('General error:', error.message);
       alert(error.message || 'Terjadi kesalahan. Coba lagi!');
     }
   </script>
