@@ -229,6 +229,24 @@
       border-radius: 10px;
       display: none;
     }
+    .grok-section {
+      padding: 20px;
+      text-align: center;
+      background-color: #fff;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      margin: 20px auto;
+      max-width: 600px;
+    }
+    #grokPrompt {
+      padding: 10px;
+      width: 70%;
+      margin-right: 10px;
+    }
+    #grokResponse {
+      margin-top: 10px;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
@@ -289,6 +307,18 @@
       <h1>BeEdu: Learn, Grow, Succeed</h1>
       <p>Les privat online personal untuk siswa SD-SMA dan mahasiswa!</p>
       <a href="#" class="btn btn-hero" data-bs-toggle="modal" data-bs-target="#registerModal">Daftar Sesi Gratis</a>
+    </div>
+  </section>
+
+  <!-- Grok Section -->
+  <section class="content-section">
+    <div class="container">
+      <div class="grok-section" data-aos="fade-up">
+        <h2>Tanya Grok</h2>
+        <input type="text" id="grokPrompt" placeholder="Tulis pertanyaan Anda...">
+        <button onclick="sendToGrok()">Kirim</button>
+        <p id="grokResponse"></p>
+      </div>
     </div>
   </section>
 
@@ -434,7 +464,7 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">Daftar Sesi Gratis</h5>
+          <h2 class="modal-title">Daftar Sesi Gratis</h2>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -537,9 +567,6 @@
       handleError(new Error('Firebase initialization failed: ' + error.message));
     }
 
-    // API Key (Gunakan key baru)
-    const API_KEY = 'xai-9kvvX2ufDj5BMUk7ypS0h0vPngkIVT7ZLlHR15PZD1szdWZgnD9DzoKZy8AtHpsICwMgw9DWa8f5ujE6';
-
     // Validate Email and WhatsApp
     function isValidEmail(email) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email); }
     function isValidWhatsapp(whatsapp) { return /^08[1-9][0-9]{8,11}$/.test(whatsapp); }
@@ -548,14 +575,6 @@
     const googleProvider = new firebase.auth.GoogleAuthProvider();
     ['Student', 'Tutor', 'Parent'].forEach(role => {
       document.getElementById(`googleLogin${role}`)?.addEventListener('click', () => {
-        if (auth) auth.signInWithPopup(googleProvider).then((result) => {
-          const user = result.user;
-          sendEmailVerification(user);
-          saveUserToFirestore(user, role.toLowerCase());
-          updateUI(user);
-        }).catch(handleError);
-      });
-      document.getElementById(`googleRegister${role}`)?.addEventListener('click', () => {
         if (auth) auth.signInWithPopup(googleProvider).then((result) => {
           const user = result.user;
           sendEmailVerification(user);
@@ -811,7 +830,7 @@
       if (auth) auth.signOut().then(() => updateUI(null)).catch(handleError);
     });
 
-    // Handle Registration Form with Grok API
+    // Handle Registration Form with Grok API via Vercel
     document.getElementById('registrationForm')?.addEventListener('submit', function(e) {
       e.preventDefault();
       const name = document.getElementById('name').value;
@@ -820,18 +839,11 @@
       const level = document.getElementById('level').value;
 
       if (name && email && phone && level) {
-        // Panggil API Grok
-        fetch('https://api.x.ai/v1/chat/completions', {
+        // Panggil backend Vercel untuk rekomendasi
+        fetch('https://beedu-backend-new.vercel.app/api/grok', {
           method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${API_KEY}`,
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            model: 'grok-3',
-            messages: [{ role: 'user', content: `Rekomendasikan latihan untuk siswa tingkat ${level} dengan nama ${name}` }],
-            max_tokens: 100
-          })
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ prompt: `Rekomendasikan latihan untuk siswa tingkat ${level} dengan nama ${name}` })
         })
         .then(response => {
           if (!response.ok) {
@@ -875,6 +887,24 @@
         alert('Silakan isi semua kolom!');
       }
     });
+
+    // Fungsi untuk Grok di halaman utama
+    async function sendToGrok() {
+      const prompt = document.getElementById('grokPrompt').value;
+      const responseDiv = document.getElementById('grokResponse');
+
+      try {
+        const res = await fetch('https://beedu-backend-new.vercel.app/api/grok', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ prompt })
+        });
+        const data = await res.json();
+        responseDiv.textContent = data.choices[0].message.content || 'Tidak ada respons';
+      } catch (error) {
+        responseDiv.textContent = 'Error: ' + error.message;
+      }
+    }
 
     // Error Handler
     function handleError(error) {
