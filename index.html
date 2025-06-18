@@ -890,21 +890,22 @@
 
     // Fungsi untuk Grok di halaman utama
     async function sendToGrok() {
-      const prompt = document.getElementById('grokPrompt').value;
-      const responseDiv = document.getElementById('grokResponse');
-
-      try {
+    const prompt = document.getElementById('grokPrompt').value;
+    const responseDiv = document.getElementById('grokResponse');
+    try {
         const res = await fetch('https://beedu-backend-new.vercel.app/api/grok', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ prompt })
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ prompt })
         });
         const data = await res.json();
         responseDiv.textContent = data.choices[0].message.content || 'Tidak ada respons';
-      } catch (error) {
+    } catch (error) {
         responseDiv.textContent = 'Error: ' + error.message;
-      }
     }
+}
 
     // Error Handler
     function handleError(error) {
