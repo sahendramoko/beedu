@@ -242,10 +242,20 @@
       padding: 10px;
       width: 70%;
       margin-right: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
     }
     #grokResponse {
       margin-top: 10px;
-      font-weight: bold;
+      font-weight: normal;
+      color: #333;
+      min-height: 20px;
+    }
+    .grok-loading {
+      display: none;
+      margin-top: 10px;
+      color: #007bff;
+      font-style: italic;
     }
   </style>
 </head>
@@ -316,7 +326,8 @@
       <div class="grok-section" data-aos="fade-up">
         <h2>Tanya Grok</h2>
         <input type="text" id="grokPrompt" placeholder="Tulis pertanyaan Anda...">
-        <button onclick="sendToGrok()">Kirim</button>
+        <button onclick="sendToGrok()" class="btn btn-primary">Kirim</button>
+        <div id="grokLoading" class="grok-loading">Memuat...</div>
         <p id="grokResponse"></p>
       </div>
     </div>
@@ -808,7 +819,7 @@
       }).catch(handleError);
     }
 
-    // Handle Navigation (Diperbaiki)
+    // Handle Navigation
     document.querySelectorAll('.nav-link, .dropdown-item').forEach(link => {
       link.addEventListener('click', (e) => {
         const href = link.getAttribute('href');
@@ -839,11 +850,11 @@
       const level = document.getElementById('level').value;
 
       if (name && email && phone && level) {
-        // Panggil backend Vercel untuk rekomendasi
-        fetch('https://beedu-backend-new.vercel.app/api/grok', {
+        // Panggil endpoint /api/grok untuk rekomendasi
+        fetch('/api/grok', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ prompt: `Rekomendasikan latihan untuk siswa tingkat ${level} dengan nama ${name}` })
+          body: JSON.stringify({ message: `Rekomendasikan latihan untuk siswa tingkat ${level} dengan nama ${name}` })
         })
         .then(response => {
           if (!response.ok) {
@@ -852,8 +863,8 @@
           return response.json();
         })
         .then(data => {
-          if (data.choices && data.choices.length > 0) {
-            const recommendation = data.choices[0].message.content;
+          if (data.reply) {
+            const recommendation = data.reply;
             const recElement = document.getElementById('recommendation');
             recElement.style.display = 'block';
             recElement.innerText = `Rekomendasi untuk ${name}: ${recommendation}`;
@@ -890,22 +901,36 @@
 
     // Fungsi untuk Grok di halaman utama
     async function sendToGrok() {
-    const prompt = document.getElementById('grokPrompt').value;
-    const responseDiv = document.getElementById('grokResponse');
-    try {
-        const res = await fetch('https://beedu-backend-new.vercel.app/api/grok', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ prompt })
+      const prompt = document.getElementById('grokPrompt').value;
+      const responseDiv = document.getElementById('grokResponse');
+      const loadingDiv = document.getElementById('grokLoading');
+
+      if (!prompt) {
+        responseDiv.textContent = 'Masukkan pertanyaan terlebih dahulu.';
+        return;
+      }
+
+      responseDiv.textContent = '';
+      loadingDiv.style.display = 'block';
+
+      try {
+        const res = await fetch('/api/grok', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: prompt })
         });
         const data = await res.json();
-        responseDiv.textContent = data.choices[0].message.content || 'Tidak ada respons';
-    } catch (error) {
-        responseDiv.textContent = 'Error: ' + error.message;
+        if (data.error) {
+          responseDiv.textContent = `Error: ${data.error}`;
+        } else {
+          responseDiv.textContent = data.reply || 'Tidak ada respons dari Grok';
+        }
+      } catch (error) {
+        responseDiv.textContent = 'Gagal terhubung ke Grok: ' + error.message;
+      } finally {
+        loadingDiv.style.display = 'none';
+      }
     }
-}
 
     // Error Handler
     function handleError(error) {
