@@ -1,44 +1,15 @@
 {
-  "version": 2,
-  "builds": [
-    {
-      "src": "api/grok.js",
-      "use": "@vercel/node"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/api/grok",
-      "dest": "api/grok.js",
-      "methods": ["GET", "POST", "OPTIONS"]
-    }
-  ],
-  "headers": [
-    {
-      "source": "/api/grok",
-      "headers": [
+    "version": 2,
+    "builds": [
         {
-          "key": "Access-Control-Allow-Origin",
-          "value": "https://beedu-six.vercel.app"
-        },
-        {
-          "key": "Access-Control-Allow-Methods",
-          "value": "GET, POST, OPTIONS"
-        },
-        {
-          "key": "Access-Control-Allow-Headers",
-          "value": "Content-Type, Authorization"
-        },
-        {
-          "key": "Access-Control-Max-Age",
-          "value": "86400"
+            "src": "api/grok.js",
+            "use": "@vercel/node"
         }
-      ]
-    }
-  ],
-  "functions": {
-    "api/grok.js": {
-      "runtime": "@vercel/node"
-    }
-  }
+    ],
+    "routes": [
+        {
+            "src": "/api/grok",
+            "dest": "api/grok.js"
+        }
+    ]
 }
