@@ -1,48 +1,46 @@
-const fetch = require('node-fetch');
+const axios = require('axios');
+const getRawBody = require('raw-body');
 
 module.exports = async (req, res) => {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Metode tidak diizinkan' });
+  res.setHeader("Access-Control-Allow-Origin", "https://beedu-six.vercel.app");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
   }
 
-  const { message } = req.body;
-  if (!message) {
-    return res.status(400).json({ error: 'Pesan diperlukan' });
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: "Method Not Allowed" });
   }
 
   try {
-    const response = await fetch('https://api.x.ai/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${process.env.GROK_API_KEY}`,
-      },
-      body: JSON.stringify({
-        messages: [
-          {
-            role: 'system',
-            content: 'Kamu BeEduAI, asisten AI yang membantu siswa BeEdu.',
-          },
-          {
-            role: 'user',
-            content: message,
-          },
-        ],
-        model: 'grok-3-latest',
-        stream: false,
-        temperature: 0,
-      }),
-    });
+    const raw = await getRawBody(req);
+    const body = JSON.parse(raw.toString());
 
-    const data = await response.json();
-    if (!response.ok) {
-      throw new Error(data.error?.message || 'Permintaan ke API Grok gagal');
+    const { prompt } = body || {};
+    if (!prompt) {
+      return res.status(400).json({ error: "Prompt is required" });
     }
 
-    const reply = data.choices[0]?.message?.content || 'Tidak ada respons dari Grok';
-    res.status(200).json({ reply });
-  } catch (error) {
-    console.error('Error:', error);
-    res.status(500).json({ error: 'Kesalahan server' });
+    const response = await axios.post('https://api.x.ai/v1/chat/completions', {
+      messages: [
+        { role: "system", content: "You are a concise assistant." },
+        { role: "user", content: prompt }
+      ],
+      model: "grok-3",
+      stream: false,
+      temperature: 0
+    }, {
+      headers: {
+        'Authorization': `Bearer ${process.env.XAI_API_KEY}`,
+        'Content-Type': 'application/json'
+      }
+    });
+
+    res.status(200).json(response.data);
+  } catch (err) {
+    console.error("ERROR:", err.message);
+    res.status(500).json({ error: err.message || "Internal Server Error" });
   }
 };
