@@ -1,15 +1,12 @@
 {
-  "name": "beedu",
+  "name": "beedu-backend-new",
   "version": "1.0.0",
-  "description": "Website BeEdu dengan integrasi API Grok",
-  "main": "index.js",
-  "scripts": {
-    "start": "vercel dev"
-  },
+  "type": "commonjs",
   "dependencies": {
-    "node-fetch": "^2.6.12"
+    "axios": "^1.6.0",
+    "raw-body": "^2.5.2"
   },
-  "engines": {
-    "node": "18.x"
+  "scripts": {
+    "start": "node api/grok.js"
   }
 }
