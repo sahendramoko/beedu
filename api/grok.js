@@ -21,7 +21,7 @@ module.exports = async (req, res) => {
         messages: [
           {
             role: 'system',
-            content: 'Kamu adalah Grok, asisten AI yang membantu siswa BeEdu.',
+            content: 'Kamu BeEduAI, asisten AI yang membantu siswa BeEdu.',
           },
           {
             role: 'user',
